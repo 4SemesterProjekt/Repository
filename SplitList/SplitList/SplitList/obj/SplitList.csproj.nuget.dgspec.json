@@ -1,25 +1,21 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Frederik Vestergaard\\Documents\\GitHub\\Repository\\SplitList\\SplitList\\SplitList\\SplitList.csproj": {}
+    "C:\\Users\\TCLaptop\\RiderProjects\\PRJ4\\SplitList\\SplitList\\SplitList\\SplitList.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Frederik Vestergaard\\Documents\\GitHub\\Repository\\SplitList\\SplitList\\SplitList\\SplitList.csproj": {
+    "C:\\Users\\TCLaptop\\RiderProjects\\PRJ4\\SplitList\\SplitList\\SplitList\\SplitList.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Frederik Vestergaard\\Documents\\GitHub\\Repository\\SplitList\\SplitList\\SplitList\\SplitList.csproj",
+        "projectUniqueName": "C:\\Users\\TCLaptop\\RiderProjects\\PRJ4\\SplitList\\SplitList\\SplitList\\SplitList.csproj",
         "projectName": "SplitList",
-        "projectPath": "C:\\Users\\Frederik Vestergaard\\Documents\\GitHub\\Repository\\SplitList\\SplitList\\SplitList\\SplitList.csproj",
-        "packagesPath": "C:\\Users\\Frederik Vestergaard\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Frederik Vestergaard\\Documents\\GitHub\\Repository\\SplitList\\SplitList\\SplitList\\obj\\",
+        "projectPath": "C:\\Users\\TCLaptop\\RiderProjects\\PRJ4\\SplitList\\SplitList\\SplitList\\SplitList.csproj",
+        "packagesPath": "C:\\Users\\TCLaptop\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\TCLaptop\\RiderProjects\\PRJ4\\SplitList\\SplitList\\SplitList\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Microsoft\\Xamarin\\NuGet\\"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Frederik Vestergaard\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "C:\\Users\\TCLaptop\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netstandard2.0"
@@ -67,7 +63,7 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.102\\RuntimeIdentifierGraph.json"
         }
       }
     }

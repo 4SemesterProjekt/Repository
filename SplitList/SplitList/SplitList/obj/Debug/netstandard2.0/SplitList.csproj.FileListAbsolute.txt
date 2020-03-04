@@ -16,3 +16,21 @@ C:\Users\Frederik Vestergaard\Documents\GitHub\Repository\SplitList\SplitList\Sp
 C:\Users\Frederik Vestergaard\Documents\GitHub\Repository\SplitList\SplitList\SplitList\obj\Debug\netstandard2.0\SplitList.dll
 C:\Users\Frederik Vestergaard\Documents\GitHub\Repository\SplitList\SplitList\SplitList\obj\Debug\netstandard2.0\ref\SplitList.dll
 C:\Users\Frederik Vestergaard\Documents\GitHub\Repository\SplitList\SplitList\SplitList\obj\Debug\netstandard2.0\SplitList.pdb
+C:\Users\TCLaptop\RiderProjects\PRJ4\SplitList\SplitList\SplitList\bin\Debug\netstandard2.0\SplitList.deps.json
+C:\Users\TCLaptop\RiderProjects\PRJ4\SplitList\SplitList\SplitList\bin\Debug\netstandard2.0\SplitList.dll
+C:\Users\TCLaptop\RiderProjects\PRJ4\SplitList\SplitList\SplitList\bin\Debug\netstandard2.0\ref\SplitList.dll
+C:\Users\TCLaptop\RiderProjects\PRJ4\SplitList\SplitList\SplitList\bin\Debug\netstandard2.0\SplitList.pdb
+C:\Users\TCLaptop\RiderProjects\PRJ4\SplitList\SplitList\SplitList\obj\Debug\netstandard2.0\SplitList.csprojAssemblyReference.cache
+C:\Users\TCLaptop\RiderProjects\PRJ4\SplitList\SplitList\SplitList\obj\Debug\netstandard2.0\App.xaml.g.cs
+C:\Users\TCLaptop\RiderProjects\PRJ4\SplitList\SplitList\SplitList\obj\Debug\netstandard2.0\Views\AboutPage.xaml.g.cs
+C:\Users\TCLaptop\RiderProjects\PRJ4\SplitList\SplitList\SplitList\obj\Debug\netstandard2.0\Views\ItemDetailPage.xaml.g.cs
+C:\Users\TCLaptop\RiderProjects\PRJ4\SplitList\SplitList\SplitList\obj\Debug\netstandard2.0\Views\ItemsPage.xaml.g.cs
+C:\Users\TCLaptop\RiderProjects\PRJ4\SplitList\SplitList\SplitList\obj\Debug\netstandard2.0\Views\MainPage.xaml.g.cs
+C:\Users\TCLaptop\RiderProjects\PRJ4\SplitList\SplitList\SplitList\obj\Debug\netstandard2.0\Views\MenuPage.xaml.g.cs
+C:\Users\TCLaptop\RiderProjects\PRJ4\SplitList\SplitList\SplitList\obj\Debug\netstandard2.0\Views\NewItemPage.xaml.g.cs
+C:\Users\TCLaptop\RiderProjects\PRJ4\SplitList\SplitList\SplitList\obj\Debug\netstandard2.0\SplitList.AssemblyInfoInputs.cache
+C:\Users\TCLaptop\RiderProjects\PRJ4\SplitList\SplitList\SplitList\obj\Debug\netstandard2.0\SplitList.AssemblyInfo.cs
+C:\Users\TCLaptop\RiderProjects\PRJ4\SplitList\SplitList\SplitList\obj\Debug\netstandard2.0\XamlC.stamp
+C:\Users\TCLaptop\RiderProjects\PRJ4\SplitList\SplitList\SplitList\obj\Debug\netstandard2.0\SplitList.dll
+C:\Users\TCLaptop\RiderProjects\PRJ4\SplitList\SplitList\SplitList\obj\Debug\netstandard2.0\ref\SplitList.dll
+C:\Users\TCLaptop\RiderProjects\PRJ4\SplitList\SplitList\SplitList\obj\Debug\netstandard2.0\SplitList.pdb
