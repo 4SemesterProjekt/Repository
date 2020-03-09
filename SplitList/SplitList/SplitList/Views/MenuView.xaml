@@ -4,8 +4,12 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:utility="clr-namespace:SplitList.Utility;assembly=SplitList"
+             xmlns:viewModels="clr-namespace:SplitList.ViewModels;assembly=SplitList"
              mc:Ignorable="d"
              x:Class="SplitList.Views.MenuView">
+    <ContentPage.BindingContext>
+        <viewModels:MenuViewModel/>
+    </ContentPage.BindingContext>
     <StackLayout>
         <utility:NavigationItem Text="Menu Item 1"/>
         <ContentView HeightRequest="1" BackgroundColor="Gray"/>

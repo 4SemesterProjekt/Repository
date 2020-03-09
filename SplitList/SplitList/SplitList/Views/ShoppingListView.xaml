@@ -3,13 +3,59 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:SplitList.ViewModels;assembly=SplitList"
+             xmlns:utility="clr-namespace:SplitList.Utility;assembly=SplitList"
              mc:Ignorable="d"
              x:Class="SplitList.Views.ShoppingListView">
+    <ContentPage.BindingContext>
+        <viewModels:ShoppingListViewModel/>
+    </ContentPage.BindingContext>
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <Grid MinimumHeightRequest="16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="10*"/>
+                    <ColumnDefinition Width="70*"/>
+                    <ColumnDefinition Width="20*"/>
+                </Grid.ColumnDefinitions>
+                <Label Text="Item" 
+                       Grid.Column="1"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Start"
+                       Margin="0,5,0,5"/>
+                <Label Text="Amount"
+                       Grid.Column="2"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Start"
+                       Margin="0,5,0,5"/>
+            </Grid>
+            <ContentView HeightRequest="1" BackgroundColor="Gray"/>
+            <ListView x:Name="ShoppingList" ItemsSource="{Binding Items}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="10*"/>
+                                    <ColumnDefinition Width="70*"/>
+                                    <ColumnDefinition Width="20*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Text="{Binding Path= Name}" 
+                                   Grid.Column="1"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Start"/>
+                                <Label Text="{Binding Path=Amount}"
+                                   Grid.Column="2"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Start"/>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <Image Source="{utility:ImageResource SplitListApp.Icons/plus.png}"></Image>
+
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
