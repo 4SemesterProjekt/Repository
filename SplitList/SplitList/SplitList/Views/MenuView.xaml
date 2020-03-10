@@ -11,8 +11,13 @@
         <viewModels:MenuViewModel/>
     </ContentPage.BindingContext>
     <StackLayout>
-        <utility:NavigationItem Text="Menu Item 1"/>
-        <ContentView HeightRequest="1" BackgroundColor="Gray"/>
-        <utility:NavigationItem Text="Menu Item 2"/>
+        <utility:NavigationItem Text="Shopping List" Command="{}"/>
+		<ContentView HeightRequest="2" BackgroundColor="Gray" Content="{}"/>
+        <utility:NavigationItem Text="Pantry"/>
+		<ContentView HeightRequest="2" BackgroundColor="Gray" Content="{Binding Path=NavigationItems}"/>
+		<utility:NavigationItem Text="Recipes"/>
+        <ContentView HeightRequest="2" BackgroundColor="Gray" Content="{Binding Path=NavigationItems}"/>
+
+
     </StackLayout>
 </ContentPage>

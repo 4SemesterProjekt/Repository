@@ -10,6 +10,8 @@
         <ColumnDefinition Width="50"/>
         <ColumnDefinition Width="*"/>
     </Grid.ColumnDefinitions>
+	
 
-    <Label Text="{Binding  Text, Source={x:Reference This}}" Grid.Column="1" />
+	<Label Text="{Binding  Text, Source={x:Reference This}}" Grid.Column="1" VerticalTextAlignment="Center" HorizontalOptions="Center"/>
+    
 </Grid>
