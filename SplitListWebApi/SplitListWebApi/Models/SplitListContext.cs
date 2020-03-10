@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace SplitListWebApi.Models
 {
-    public partial class DbContext : Microsoft.EntityFrameworkCore.DbContext
+    public partial class SplitListContext : Microsoft.EntityFrameworkCore.DbContext
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Group> Groups { get; set; }
@@ -13,13 +13,21 @@ namespace SplitListWebApi.Models
         public DbSet<Item> Items { get; set; }
         public DbSet<Recipe> Recipes { get; set; }
         
-        public DbContext()
+        public SplitListContext()
         {
         }
 
-        public DbContext(DbContextOptions<DbContext> options)
+        public SplitListContext(DbContextOptions<DbContext> options)
             : base(options)
         {
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            string connectionString =
+                "Server=tcp:semesterprojekt4.database.windows.net,1433;Initial Catalog=PRJ4DB;Persist Security Info=False;User ID=prj4;Password=Semesterprojekt4!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            optionsBuilder.UseSqlServer(connectionString);
+            base.OnConfiguring(optionsBuilder);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

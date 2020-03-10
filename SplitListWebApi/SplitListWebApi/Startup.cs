@@ -29,7 +29,7 @@ namespace SplitListWebApi
             string connectionString =
                 "Server=tcp:semesterprojekt4.database.windows.net,1433;Initial Catalog=PRJ4DB;Persist Security Info=False;User ID=prj4;Password=Semesterprojekt4!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
             services.AddControllers();
-            services.AddDbContext<SplitListWebApi.Models.DbContext>(options => options.UseSqlServer(connectionString));
+            services.AddDbContext<SplitListWebApi.Models.SplitListContext>(options => options.UseSqlServer(connectionString));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

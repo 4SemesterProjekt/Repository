@@ -10,6 +10,7 @@ namespace SplitListWebApi.Models
         public string Name { get; set; }
         
         [ForeignKey("GroupID")]
+        public int GroupID { get; set; }
         public Group Group { get; set; }
         
         

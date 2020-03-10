@@ -2,10 +2,24 @@
 
 namespace SplitListWebApi.Migrations
 {
-    public partial class ConvertedToContext : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Groups",
+                columns: table => new
+                {
+                    GroupID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true),
+                    OwnerID = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Groups", x => x.GroupID);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Items",
                 columns: table => new
@@ -47,6 +61,46 @@ namespace SplitListWebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Pantries",
+                columns: table => new
+                {
+                    PantryID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true),
+                    GroupID = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Pantries", x => x.PantryID);
+                    table.ForeignKey(
+                        name: "FK_Pantries_Groups_GroupID",
+                        column: x => x.GroupID,
+                        principalTable: "Groups",
+                        principalColumn: "GroupID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ShoppingLists",
+                columns: table => new
+                {
+                    ShoppingListID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true),
+                    GroupID = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ShoppingLists", x => x.ShoppingListID);
+                    table.ForeignKey(
+                        name: "FK_ShoppingLists_Groups_GroupID",
+                        column: x => x.GroupID,
+                        principalTable: "Groups",
+                        principalColumn: "GroupID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ItemRecipe",
                 columns: table => new
                 {
@@ -68,66 +122,6 @@ namespace SplitListWebApi.Migrations
                         principalTable: "Recipes",
                         principalColumn: "RecipeID",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Groups",
-                columns: table => new
-                {
-                    GroupID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true),
-                    OwnerID = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Groups", x => x.GroupID);
-                    table.ForeignKey(
-                        name: "FK_Groups_Users_OwnerID",
-                        column: x => x.OwnerID,
-                        principalTable: "Users",
-                        principalColumn: "UserID",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Pantries",
-                columns: table => new
-                {
-                    PantryID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true),
-                    GroupID = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Pantries", x => x.PantryID);
-                    table.ForeignKey(
-                        name: "FK_Pantries_Groups_GroupID",
-                        column: x => x.GroupID,
-                        principalTable: "Groups",
-                        principalColumn: "GroupID",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ShoppingLists",
-                columns: table => new
-                {
-                    ShoppingListID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true),
-                    GroupID = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ShoppingLists", x => x.ShoppingListID);
-                    table.ForeignKey(
-                        name: "FK_ShoppingLists_Groups_GroupID",
-                        column: x => x.GroupID,
-                        principalTable: "Groups",
-                        principalColumn: "GroupID",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -205,11 +199,6 @@ namespace SplitListWebApi.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Groups_OwnerID",
-                table: "Groups",
-                column: "OwnerID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ItemRecipe_RecipeID",
                 table: "ItemRecipe",
                 column: "RecipeID");
@@ -267,10 +256,10 @@ namespace SplitListWebApi.Migrations
                 name: "ShoppingLists");
 
             migrationBuilder.DropTable(
-                name: "Groups");
+                name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Groups");
         }
     }
 }
