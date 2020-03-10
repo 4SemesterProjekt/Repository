@@ -44,17 +44,24 @@
                                    Grid.Column="1"
                                    VerticalOptions="Center"
                                    HorizontalOptions="Start"/>
+                                <StackLayout Orientation="Horizontal" Grid.Column="2">
+                                <Image Source="{utility:ImageResource SplitList.EmbeddedResources.plus.png}"
+                                       Grid.Column="2"
+                                       />
                                 <Label Text="{Binding Path=Amount}"
-                                   Grid.Column="2"
+                                       Grid.Column="2"
                                    VerticalOptions="Center"
                                    HorizontalOptions="Start"/>
+                                </StackLayout>
+
                             </Grid>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
 
-            <Image Source="{utility:ImageResource SplitListApp.Icons/plus.png}"></Image>
+            
+                
 
         </StackLayout>
     </ContentPage.Content>
