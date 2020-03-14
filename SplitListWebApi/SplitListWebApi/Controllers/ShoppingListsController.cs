@@ -23,10 +23,17 @@ namespace SplitListWebApi.Controllers
         }
 
         // GET: api/ShoppingLists
+        //Task<ActionResult<IEnumerable<ShoppingList>>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ShoppingList>>> GetShoppingLists()
+        public async Task<ICollection<ShoppingList>> GetShoppingLists()
         {
-            return await _context.ShoppingLists.ToListAsync();
+            //return await _context.ShoppingLists.ToListAsync();
+            using (var context = _context)
+            {
+                var shoppingList = await context.ShoppingLists.ToListAsync();
+                await context.ShoppingLists.OfType<ShoppingListItem>().Include(i => i.Item).LoadAsync();
+                return shoppingList;
+            }
         }
 
         // GET: api/ShoppingLists/5
