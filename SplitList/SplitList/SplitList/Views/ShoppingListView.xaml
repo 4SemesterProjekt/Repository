@@ -8,8 +8,9 @@
              mc:Ignorable="d"
              x:Class="SplitList.Views.ShoppingListView">
     <ContentPage.BindingContext>
-        <viewModels:ShoppingListViewModel/>
+        <viewModels:ShoppingListViewModel x:Name="ShoppingListViewModel"/>
     </ContentPage.BindingContext>
+    
     <ContentPage.Content>
         <StackLayout>
             <Grid MinimumHeightRequest="16">
@@ -30,9 +31,9 @@
                        Margin="0,5,0,5"/>
             </Grid>
             <ContentView HeightRequest="1" BackgroundColor="Gray"/>
-            <ListView x:Name="ShoppingList" ItemsSource="{Binding Items}">
+            <ListView x:Name="ShoppingList" ItemsSource="{Binding Items}" SelectedItem="{Binding CurrentItem}">
                 <ListView.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate x:Name="ItemTemplate">
                         <ViewCell>
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -40,24 +41,57 @@
                                     <ColumnDefinition Width="70*"/>
                                     <ColumnDefinition Width="20*"/>
                                 </Grid.ColumnDefinitions>
-                                <Label Text="{Binding Path= Name}" 
+                                <Editor Text="{Binding Path=Name}" 
                                    Grid.Column="1"
                                    VerticalOptions="Center"
-                                   HorizontalOptions="Start"/>
+                                   HorizontalOptions="Start"
+                                   FontSize="16"
+                                   Placeholder="Item"
+                                   AutoSize="TextChanges"
+                                   IsTextPredictionEnabled="False"/>
                                 <StackLayout Orientation="Horizontal" Grid.Column="2">
-                                <Image Source="{utility:ImageResource SplitList.EmbeddedResources.plus.png}"
+                                <ImageButton Source="{utility:ImageResource SplitList.EmbeddedResources.plus.png}"
                                        Grid.Column="2"
-                                       />
+                                       WidthRequest="10"
+                                       VerticalOptions="Center"
+                                       BindingContext="{x:Reference ShoppingListViewModel}"
+                                       Command="{Binding IncItemAmountCommand}"/>
                                 <Label Text="{Binding Path=Amount}"
                                        Grid.Column="2"
-                                   VerticalOptions="Center"
-                                   HorizontalOptions="Start"/>
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="Start"
+                                       FontSize="16"/>
+                                <ImageButton Source="{utility:ImageResource SplitList.EmbeddedResources.minus.png}"
+                                       Grid.Column="2"
+                                       WidthRequest="10"
+                                       VerticalOptions="Center"
+                                       BindingContext="{x:Reference ShoppingListViewModel}"
+                                       Command="{Binding DecItemAmountCommand}"/>
                                 </StackLayout>
 
                             </Grid>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
+                <ListView.Footer>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="10*"/>
+                            <ColumnDefinition Width="70*"/>
+                            <ColumnDefinition Width="20*"/>
+                        </Grid.ColumnDefinitions>
+                        <ImageButton Source="{utility:ImageResource SplitList.EmbeddedResources.plus.png}"
+                                     x:Name="BtnAddItem"
+                                     Grid.Column="1"
+                                     WidthRequest="12"
+                                     VerticalOptions="Center"
+                                     HorizontalOptions="Start"
+                                     Margin="5,10,0,0"
+                                     Command="{Binding AddItemToListCommand}"
+                                     Released="BtnAddItem_OnReleased"
+                                     />
+                    </Grid>
+                </ListView.Footer>
             </ListView>
 
             
