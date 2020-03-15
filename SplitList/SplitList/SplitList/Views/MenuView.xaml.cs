@@ -15,6 +15,10 @@ namespace SplitList.Views
         public MenuView()
         {
             InitializeComponent();
+            NavListView = ListView;
         }
+
+        public static ListView NavListView { get; set; }
+
     }
 }
