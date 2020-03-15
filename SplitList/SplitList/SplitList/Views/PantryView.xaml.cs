@@ -10,7 +10,7 @@ using Xamarin.Forms.Xaml;
 namespace SplitList.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class PantryView : ContentView
+    public partial class PantryView : ContentPage
     {
         public PantryView()
         {

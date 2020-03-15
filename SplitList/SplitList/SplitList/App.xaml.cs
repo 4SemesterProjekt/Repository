@@ -10,12 +10,7 @@ namespace SplitList
         public App()
         {
             InitializeComponent();
-
-            MainPage = new MasterDetailPage()
-            {
-                Master = new MenuView() {Title = "Menu View"},
-                Detail = new NavigationPage(new ShoppingListView())
-            };
+            MainPage = new MDP();
         }
 
         protected override void OnStart()

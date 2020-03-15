@@ -11,13 +11,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="EmbeddedResources\checklist.png" />
+    <None Remove="EmbeddedResources\fridge.png" />
     <None Remove="EmbeddedResources\minus.png" />
     <None Remove="EmbeddedResources\plus.png" />
+    <None Remove="EmbeddedResources\recipe.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="EmbeddedResources\checklist.png" />
+    <EmbeddedResource Include="EmbeddedResources\fridge.png" />
     <EmbeddedResource Include="EmbeddedResources\minus.png" />
     <EmbeddedResource Include="EmbeddedResources\plus.png" />
+    <EmbeddedResource Include="EmbeddedResources\recipe.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,7 +37,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Utility\NavigationItem.xaml">
+    <EmbeddedResource Update="Views\MDP.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\MenuView.xaml">
