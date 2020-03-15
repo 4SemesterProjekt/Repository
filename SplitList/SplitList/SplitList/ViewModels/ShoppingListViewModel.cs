@@ -56,8 +56,11 @@ namespace SplitList.ViewModels
 
         public void IncItemAmountCommandExecute()
         {
-            if (CurrentItem.Amount < 99)
-                CurrentItem.Amount++;
+            if (CurrentItem != null)
+            {
+                if (CurrentItem.Amount < 99)
+                    CurrentItem.Amount++;
+            }
         }
 
         private ICommand _decItemAmountCommand;
@@ -73,8 +76,11 @@ namespace SplitList.ViewModels
 
         public void DecItemAmountCommandExecute()
         {
-            if (CurrentItem.Amount > 0)
-                CurrentItem.Amount--;
+            if (CurrentItem != null)
+            {
+                if (CurrentItem.Amount > 0)
+                    CurrentItem.Amount--;
+            }
         }
 
         #endregion
