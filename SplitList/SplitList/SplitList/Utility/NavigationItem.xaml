@@ -10,9 +10,8 @@
         <ColumnDefinition Width="50"/>
         <ColumnDefinition Width="*"/>
     </Grid.ColumnDefinitions>
+	
 
 	<Label Text="{Binding  Text, Source={x:Reference This}}" Grid.Column="1" VerticalTextAlignment="Center" HorizontalOptions="Center"/>
-	<Grid.GestureRecognizers>
-		<TapGestureRecognizer Command="{Binding Text, Source={x:Reference This}}" CommandParameter="{Binding CommandParameter, Source={x:Reference This}}" />
-	</Grid.GestureRecognizers>
+    
 </Grid>

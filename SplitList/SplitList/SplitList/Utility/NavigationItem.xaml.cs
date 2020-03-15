@@ -40,29 +40,5 @@ namespace SplitList.Utility
                 OnPropertyChanged();
             }
         }
-
-        public static readonly BindableProperty CommandParameterProperty = BindableProperty.Create(
-            nameof(CommandParameter),
-            typeof(string),
-            typeof(NavigationItem),
-            string.Empty,
-            propertyChanging: (bindable, oldValue, newValue) =>
-            {
-                var ctrl = (NavigationItem)bindable;
-                ctrl.CommandParameter = (string)newValue;
-            },
-            defaultBindingMode: BindingMode.OneWay);
-
-        private string _commandParameter;
-
-        public string CommandParameter
-        {
-            get { return _commandParameter; }
-            set
-            {
-                _commandParameter = value;
-                OnPropertyChanged();
-            }
-        }
     }
 }

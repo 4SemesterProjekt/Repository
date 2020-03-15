@@ -2,35 +2,25 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
-using System.Windows.Input;
-using Prism.Commands;
 using Prism.Mvvm;
 using SplitList.Utility;
-using SplitList.Views;
-using Xamarin.Forms;
 
 namespace SplitList.ViewModels
 {
-    public class MenuViewModel
+    public class MenuViewModel : BindableBase
     {
         public MenuViewModel()
         {
-            
+            _navigationItems = new ObservableCollection<NavigationItem>();
+            _navigationItems.Add(new NavigationItem());
         }
 
-        private ICommand _navigationCommand;
-        public ICommand NavigationCommand
+        public ObservableCollection<NavigationItem> _navigationItems;
+
+        public ObservableCollection<NavigationItem> NavigationItems
         {
-            get => _navigationCommand ?? (_navigationCommand = new DelegateCommand(() =>
-            {
-                var newShoppingListView = new ShoppingListView();
-                var newPantryView = new PantryView();
-
-                switch(CommandParameter)
-                {
-
-                }
-            });
+            get => _navigationItems; 
+            set => SetProperty(ref _navigationItems, value);
         }
     }
 }
