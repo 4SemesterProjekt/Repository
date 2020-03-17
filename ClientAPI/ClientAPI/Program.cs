@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 namespace ClientAPI
@@ -13,25 +12,29 @@ namespace ClientAPI
     {
         private static readonly HttpClient client = new HttpClient();
         
-        private static async Task Main(string[] args)
+        private static void Main(string[] args)
         {
-            var repositories = await ProcessRepositories();
-
-            foreach (var user in repositories)
+            ClientAPI cAPI = new ClientAPI();
+            var username = cAPI.Write();
+            foreach(var name in username)
             {
-                Console.WriteLine(user.Name);
+                Console.WriteLine(name);
             }
         }
         
-        private static async Task<List<User>> ProcessRepositories()
+        public class ClientAPI
         {
-            var streamTask = client.GetStreamAsync("https://splitlistwebapi.azurewebsites.net/api/Users");
-            var repositories = await JsonSerializer.DeserializeAsync<List<User>>(await streamTask);
-
-            User user = new User(){Name = "Testing"};
-            string output = JsonConvert.SerializeObject(user);
-            
-            return repositories;
+            public List<string> Write()
+            {
+                var read_user = client.GetStringAsync("https://splitlistwebapi.azurewebsites.net/api/Users").Result;
+                var users = JsonConvert.DeserializeObject<List<User>>(read_user);
+                List<string> usernames = new List<string>();
+                foreach(var user in users)
+                {
+                    usernames.Add(user.name);
+                }
+                return usernames;
+            }
         }
     }
 }

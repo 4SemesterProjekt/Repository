@@ -7,14 +7,11 @@ namespace ClientAPI
 {
     public class User
     {
-        [JsonPropertyName("userID")]
-        public int UserID { get; set; }
+        public int userID { get; set; }
         
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
+        public string name { get; set; }
         
-        [JsonPropertyName("userGroups")]
-        public ICollection<UserGroup> UserGroups { get; set; }
+        public ICollection<UserGroup> userGroups { get; set; }
     }
 
     public class UserGroup
