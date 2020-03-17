@@ -10,6 +10,7 @@ namespace SplitListWebApi.Models
         public DbSet<Group> Groups { get; set; }
         public DbSet<Pantry> Pantries { get; set; }
         public DbSet<ShoppingList> ShoppingLists { get; set; }
+        public DbSet<ShoppingListItem> ShoppingListItems { get; set; }
         public DbSet<Item> Items { get; set; }
         public DbSet<Recipe> Recipes { get; set; }
         

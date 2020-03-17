@@ -3,9 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.WebEncoders.Testing;
 using SplitListWebApi.Models;
 
@@ -25,29 +30,64 @@ namespace SplitListWebApi.Controllers
         // GET: api/ShoppingLists
         //Task<ActionResult<IEnumerable<ShoppingList>>
         [HttpGet]
-        public async Task<ICollection<ShoppingList>> GetShoppingLists()
+        public async Task<object> GetShoppingLists()
         {
-            //return await _context.ShoppingLists.ToListAsync();
-            using (var context = _context)
-            {
-                var shoppingList = await context.ShoppingLists.ToListAsync();
-                await context.ShoppingLists.OfType<ShoppingListItem>().Include(i => i.Item).LoadAsync();
-                return shoppingList;
-            }
+            return await _context.ShoppingLists
+                .Join(
+                    _context.Groups,
+                    sl => sl.GroupID,
+                    g => g.GroupID,
+                    (sl, g) => new
+                    {
+                        ShoppingListName = sl.Name,
+                        GroupName = g.Name
+                    }
+                    )
+                .ToListAsync();
         }
 
-        // GET: api/ShoppingLists/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ShoppingList>> GetShoppingList(int id)
+        // Returns all shopping lists for a specific group
+        // Task<ActionResult<ShoppingList>>
+        [HttpGet("group/{id}")]
+        public async Task<object> GetShoppingList(int id)
         {
-            var shoppingList = await _context.ShoppingLists.FindAsync(id);
+            var shoppingLists = await _context.ShoppingLists
+                .Where(sl => sl.GroupID == id)
+                .ToListAsync();
 
-            if (shoppingList == null)
+            if (shoppingLists == null)
             {
                 return NotFound();
             }
 
-            return shoppingList;
+            return shoppingLists.Join(
+                _context.Groups,
+                sl => sl.GroupID,
+                g => g.GroupID,
+                (sl, g) => new
+                {
+                    ShoppingListName = sl.Name,
+                    GroupName = g.Name
+                }
+            );
+        }
+
+        [HttpGet("{id}")]
+        public async Task<object> GetShoppingLists(int id)
+        {
+            return await _context.ShoppingLists
+                .Where(sl => sl.ShoppingListID == id)
+                .SelectMany(it => it.ShoppingListItems)
+                .Join(
+                    _context.Items,
+                    sli => sli.ShoppingListID,
+                    i => i.ItemID,
+                    (sli, i) => new
+                    {
+                        ItemName = sli.Item.Name,
+                        Quantity = sli.Amount
+                    }
+                ).ToListAsync();
         }
 
         // PUT: api/ShoppingLists/5
