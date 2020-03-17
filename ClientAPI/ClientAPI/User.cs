@@ -1,14 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace ClientAPI
 {
     public class User
     {
+        [JsonPropertyName("userID")]
         public int UserID { get; set; }
+        
+        [JsonPropertyName("name")]
         public string Name { get; set; }
         
+        [JsonPropertyName("userGroups")]
         public ICollection<UserGroup> UserGroups { get; set; }
     }
 

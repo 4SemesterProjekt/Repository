@@ -8,13 +8,9 @@ namespace ClientAPI
     {
         public int GroupID { get; set; }
         public string Name { get; set; }
-        
-        [ForeignKey("OwnerID")]
-        public User Owner { get; set; }
-        
+        public int OwnerID { get; set; }
         public ICollection<Pantry> Pantries { get; set; }
         public ICollection<ShoppingList> ShoppingLists { get; set; }
-        
         public ICollection<UserGroup> UserGroups { get; set; }
     }
 }
