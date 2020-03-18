@@ -10,11 +10,14 @@ namespace SplitList.Models
 {
     public class ShoppingList : BindableBase
     {
-        public ShoppingList()
+        public ShoppingList(string name)
         {
             Items = new ObservableCollection<Item>();
+            Name = name;
         }
 
+        public string Name { get; set; }
         public ObservableCollection<Item> Items { get; set; }
+
     }
 }

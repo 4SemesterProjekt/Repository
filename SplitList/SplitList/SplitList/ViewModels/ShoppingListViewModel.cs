@@ -15,7 +15,7 @@ namespace SplitList.ViewModels
     {
         public ShoppingListViewModel()
         {
-            ShoppingList = new ShoppingList();
+            ShoppingList = new ShoppingList("Groceries");
             ShoppingList.Items.Add(new Item("Banana", 4, "Fruit"));
             ShoppingList.Items.Add(new Item("Apple", 3, "Fruit"));
             ShoppingList.Items.Add(new Item("Milk", 1, "Dairy"));

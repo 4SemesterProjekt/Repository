@@ -13,7 +13,8 @@ namespace SplitList.ViewModels
     {
         public MultiShopListViewModel()
         {
-            
+            Lists = new ObservableCollection<ShoppingList>();
+            Lists.Add(new ShoppingList("Groceries"));
         }
 
         #region Properties
@@ -24,6 +25,14 @@ namespace SplitList.ViewModels
         {
             get => _lists;
             set => SetProperty(ref _lists, value);
+        }
+
+        private ShoppingList _currentList;
+
+        public ShoppingList CurrentList
+        {
+            get => _currentList;
+            set => SetProperty(ref _currentList, value);
         }
 
         #endregion
