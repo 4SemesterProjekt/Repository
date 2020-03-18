@@ -83,6 +83,20 @@ namespace SplitList.ViewModels
             }
         }
 
+
+        private ICommand _addItemToListCommand;
+        public ICommand AddItemToListCommand
+        {
+            get
+            {
+                return _addItemToListCommand ?? (_addItemToListCommand = new DelegateCommand(AddItemToListCommandExecute));
+            }
+        }
+
+        public void AddItemToListCommandExecute()
+        {
+            Items.Add(new Item("",1));
+        }
         #endregion
     }
 }

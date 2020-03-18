@@ -88,8 +88,7 @@
                                      HorizontalOptions="Start"
                                      Margin="5,10,0,0"
                                      Command="{Binding AddItemToListCommand}"
-                                     Released="BtnAddItem_OnReleased"
-                                     />
+                        />
                     </Grid>
                 </ListView.Footer>
             </ListView>
