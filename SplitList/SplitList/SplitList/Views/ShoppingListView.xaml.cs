@@ -17,11 +17,5 @@ namespace SplitList.Views
         {
             InitializeComponent();
         }
-
-        //private void BtnAddItem_OnReleased(object sender, EventArgs e)
-        //{
-        //    var vm = BindingContext as ShoppingListViewModel;
-        //    vm.Items.Add(new Item("", 1));
-        //}
     }
 }
