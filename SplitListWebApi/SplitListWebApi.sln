@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SplitListWebApi", "SplitListWebApi\SplitListWebApi.csproj", "{1D3C1E20-99B8-4AFD-A483-E0274633216A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SplitListWebApi.Tests", "SplitListWebApi.Tests\SplitListWebApi.Tests.csproj", "{126F5C99-116B-42E7-8F3D-E74559274587}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SplitListWebApi.Tests", "SplitListWebApi.Tests\SplitListWebApi.Tests.csproj", "{126F5C99-116B-42E7-8F3D-E74559274587}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiFormat", "ApiFormat\ApiFormat.csproj", "{BEA31F3B-ED30-4892-8E00-6F3F6459B5D8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{126F5C99-116B-42E7-8F3D-E74559274587}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{126F5C99-116B-42E7-8F3D-E74559274587}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{126F5C99-116B-42E7-8F3D-E74559274587}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEA31F3B-ED30-4892-8E00-6F3F6459B5D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEA31F3B-ED30-4892-8E00-6F3F6459B5D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEA31F3B-ED30-4892-8E00-6F3F6459B5D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEA31F3B-ED30-4892-8E00-6F3F6459B5D8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

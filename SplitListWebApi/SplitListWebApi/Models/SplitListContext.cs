@@ -18,7 +18,7 @@ namespace SplitListWebApi.Models
         {
         }
 
-        public SplitListContext(DbContextOptions<DbContext> options)
+        public SplitListContext(DbContextOptions<SplitListContext> options)
             : base(options)
         {
         }
@@ -27,7 +27,9 @@ namespace SplitListWebApi.Models
         {
             string connectionString =
                 "Server=tcp:semesterprojekt4.database.windows.net,1433;Initial Catalog=PRJ4DB;Persist Security Info=False;User ID=prj4;Password=Semesterprojekt4!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-            optionsBuilder.UseSqlServer(connectionString);
+            
+            //optionsBuilder.UseSqlServer(connectionString);
+            
             base.OnConfiguring(optionsBuilder);
         }
 

@@ -12,6 +12,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.WebEncoders.Testing;
+using Newtonsoft.Json;
 using SplitListWebApi.Models;
 
 namespace SplitListWebApi.Controllers
@@ -30,20 +31,19 @@ namespace SplitListWebApi.Controllers
         // GET: api/ShoppingLists
         //Task<ActionResult<IEnumerable<ShoppingList>>
         [HttpGet]
-        public async Task<object> GetShoppingLists()
+        public /*async*/ Task<object> GetShoppingLists()
         {
-            return await _context.ShoppingLists
-                .Join(
-                    _context.Groups,
-                    sl => sl.GroupID,
-                    g => g.GroupID,
-                    (sl, g) => new
-                    {
-                        ShoppingListName = sl.Name,
-                        GroupName = g.Name
-                    }
-                    )
-                .ToListAsync();
+            /*var shoppingLists = await _context.ShoppingLists
+                .Select(sl => new ShoppingListDBF()
+                {
+                    shoppingListID = sl.ShoppingListID,
+                    shoppingListName = sl.Name,
+                    shoppingListGroupID = sl.GroupID,
+                    shoppingListGroupName = sl.Group.Name
+                }).ToListAsync();
+
+            return shoppingLists;*/
+            return null;
         }
 
         // Returns all shopping lists for a specific group
@@ -75,6 +75,19 @@ namespace SplitListWebApi.Controllers
         [HttpGet("{id}")]
         public async Task<object> GetShoppingLists(int id)
         {
+            /*_context.Update(_context.ShoppingLists
+                .Where(sl => sl.ShoppingListID == id)
+                .SelectMany(it => it.ShoppingListItems)
+                .Join(
+                    _context.Items,
+                    sli => sli.ShoppingListID,
+                    i => i.ItemID,
+                    (sli, i) => new
+                    {
+                        ItemName = sli.Item.Name,
+                        Quantity = sli.Amount
+                    }
+                ).ToList());*/
             return await _context.ShoppingLists
                 .Where(sl => sl.ShoppingListID == id)
                 .SelectMany(it => it.ShoppingListItems)
