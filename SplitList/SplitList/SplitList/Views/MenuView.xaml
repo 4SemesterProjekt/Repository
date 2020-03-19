@@ -15,7 +15,7 @@
     <ListView x:Name="ListView" RowHeight="70" x:FieldModifier="public">
         <ListView.ItemsSource>
             <x:Array Type="{x:Type models:MenuViewItem}">
-                <models:MenuViewItem Title="Shopping list" ImageSource="{utility:ImageResource SplitList.EmbeddedResources.checklist.png}" TargetType="{x:Type view:ShoppingListView}"/>
+                <models:MenuViewItem Title="Shopping list" ImageSource="{utility:ImageResource SplitList.EmbeddedResources.checklist.png}" TargetType="{x:Type view:MultiShopListView}"/>
                 <models:MenuViewItem Title="Pantry" ImageSource="{utility:ImageResource SplitList.EmbeddedResources.fridge.png}" TargetType="{x:Type view:PantryView}"/>
                 <models:MenuViewItem Title="Recipe" ImageSource="{utility:ImageResource SplitList.EmbeddedResources.recipe.png}" TargetType="{x:Type view:RecipeView}"/>
             </x:Array>

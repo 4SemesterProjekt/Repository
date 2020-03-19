@@ -29,21 +29,19 @@
                        />
                 <ContentView Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" HeightRequest="1" BackgroundColor="gray"></ContentView>
 
-                <ListView x:Name="ShoppingLists"
-                          ItemsSource="{Binding Lists}"
-                          CachingStrategy="RecycleElement"
-                          Grid.Column="1"
-                          Grid.Row="2">
+                
+                    <ListView x:Name="ShoppingLists"
+                              ItemsSource="{Binding Lists}"
+                              CachingStrategy="RecycleElement"
+                              Grid.Row="2"
+                              Grid.Column="0"
+                              Grid.ColumnSpan="2">
 
+                    </ListView>
+                
+                
 
-                    <!--Built in Cells-->
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <TextCell Text="{Binding .}" d:Text="{Binding .}" />
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-
-                </ListView>
+                
             </Grid>
         </StackLayout>
     </ContentPage.Content>
