@@ -5,6 +5,7 @@ using System.Net.Http.Headers;
 using System.Reflection;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
+using DatabaseEntries;
 
 namespace ClientAPI
 {
