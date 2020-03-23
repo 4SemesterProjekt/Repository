@@ -12,8 +12,7 @@ namespace SplitListWebApi.Repository
         ShoppingList FindShoppingList(int id);
         void DeleteShoppingList(ShoppingListFormat shoppingList);
         void UpdateShoppingList(ShoppingListFormat shoppingList);
-        List<ShoppingList> GetShoppingLists();
-        //List<ShoppingList> GetShoppingLists(int id);
+        //List<ShoppingListFormat> GetShoppingLists();
         // Add interface to criteria
     }
 
@@ -21,9 +20,9 @@ namespace SplitListWebApi.Repository
     {
         SplitListContext context;
 
-        public ShoppingListRepository(DbContextOptions<SplitListContext> options)
+        public ShoppingListRepository(SplitListContext Context)
         {
-            context = new SplitListContext(options);
+            context = Context;
         }
 
         public void AddShoppingList(ShoppingListFormat shoppingList)
@@ -61,9 +60,22 @@ namespace SplitListWebApi.Repository
             }
         }
 
-        public List<ShoppingList> GetShoppingLists()
+        public object GetShoppingLists()
         {
-            return context.ShoppingLists.ToList();
+            List<ShoppingListFormat> repoList = new List<ShoppingListFormat>();
+            var contextLists = context.ShoppingLists.ToList();
+            foreach (ShoppingList list in contextLists)
+            {
+                var temp = new ShoppingListFormat()
+                {
+                    shoppingListID = list.ShoppingListID,
+                    shoppingListGroupID = list.GroupID,
+                    shoppingListGroupName = list.Group.Name,
+                    shoppingListName = list.Name
+                };
+                repoList.Add(temp);
+            }
+            return repoList;
         }
 
         public ShoppingList LoadToModel(ShoppingListFormat shoppingList)
@@ -77,5 +89,6 @@ namespace SplitListWebApi.Repository
                 ShoppingListItems = new List<ShoppingListItem>()
             };
         }
+
     }
 }

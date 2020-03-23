@@ -14,6 +14,8 @@ using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.WebEncoders.Testing;
 using Newtonsoft.Json;
 using SplitListWebApi.Models;
+using SplitListWebApi.Repository;
+using ApiFormat;
 
 namespace SplitListWebApi.Controllers
 {
@@ -22,17 +24,20 @@ namespace SplitListWebApi.Controllers
     public class ShoppingListsController : ControllerBase
     {
         private readonly SplitListContext _context;
+        private ShoppingListRepository repo;
 
         public ShoppingListsController(SplitListContext context)
         {
             _context = context;
+            //repo = new ShoppingListRepository(context);
         }
 
         // GET: api/ShoppingLists
-        //Task<ActionResult<IEnumerable<ShoppingList>>
         [HttpGet]
-        public /*async*/ Task<object> GetShoppingLists()
+        public object GetShoppingLists()
         {
+
+
             /*var shoppingLists = await _context.ShoppingLists
                 .Select(sl => new ShoppingListDBF()
                 {
@@ -43,7 +48,8 @@ namespace SplitListWebApi.Controllers
                 }).ToListAsync();
 
             return shoppingLists;*/
-            return null;
+            repo = new ShoppingListRepository(_context);
+            return repo.GetShoppingLists();
         }
 
         // Returns all shopping lists for a specific group

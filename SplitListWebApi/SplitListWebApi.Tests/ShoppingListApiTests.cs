@@ -54,12 +54,12 @@ namespace SplitListWebApi.Tests
                 shoppingListGroupID = 1,
                 shoppingListGroupName = "Group1"
             };
-
-            ShoppingListRepository repo = new ShoppingListRepository(options);
-            repo.AddShoppingList(list);
-
             using (var context = new SplitListContext(options))
             {
+                ShoppingListRepository repo = new ShoppingListRepository(context);
+                repo.AddShoppingList(list);
+
+            
                 Assert.AreEqual(1, context.ShoppingLists.Count());
                 Assert.AreEqual("ShoppingList1", context.ShoppingLists.First().Name);
             }
