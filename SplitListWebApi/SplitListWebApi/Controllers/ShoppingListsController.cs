@@ -34,7 +34,7 @@ namespace SplitListWebApi.Controllers
 
         // GET: api/ShoppingLists
         [HttpGet]
-        public object GetShoppingLists()
+        public ShoppingListFormat GetShoppingLists()
         {
 
 

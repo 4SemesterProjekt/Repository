@@ -60,9 +60,9 @@ namespace SplitListWebApi.Repository
             }
         }
 
-        public object GetShoppingLists()
+        public ShoppingListFormat GetShoppingLists()
         {
-            List<ShoppingListFormat> repoList = new List<ShoppingListFormat>();
+            /*List<ShoppingListFormat> repoList = new List<ShoppingListFormat>();
             var contextLists = context.ShoppingLists.ToList();
             foreach (ShoppingList list in contextLists)
             {
@@ -74,7 +74,16 @@ namespace SplitListWebApi.Repository
                     shoppingListName = list.Name
                 };
                 repoList.Add(temp);
-            }
+            }*/
+            var contextLists = context.ShoppingLists.FirstOrDefault();
+            var repoList = new ShoppingListFormat()
+            {
+                shoppingListID = contextLists.ShoppingListID,
+                shoppingListName = contextLists.Name,
+                shoppingListGroupID = contextLists.GroupID,
+                shoppingListGroupName = contextLists.Group.Name
+            };
+
             return repoList;
         }
 
