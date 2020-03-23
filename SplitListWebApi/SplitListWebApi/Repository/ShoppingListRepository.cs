@@ -3,17 +3,19 @@ using System.Linq;
 using SplitListWebApi.Models;
 using ApiFormat;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace SplitListWebApi.Repository
 {
     public interface IShoppingListRepository
     {
         void AddShoppingList(ShoppingListFormat shoppingList);
-        ShoppingList FindShoppingList(int id);
         void DeleteShoppingList(ShoppingListFormat shoppingList);
         void UpdateShoppingList(ShoppingListFormat shoppingList);
-        //List<ShoppingListFormat> GetShoppingLists();
-        // Add interface to criteria
+        Task<List<ItemFormat>> GetShoppingListByID(int ID);
+        Task<List<ShoppingListFormat>> GetShoppingListsByGroupID(int GroupID);
+        
+        // Consider adding interface to criteria
     }
 
     public class ShoppingListRepository : IShoppingListRepository
@@ -25,70 +27,106 @@ namespace SplitListWebApi.Repository
             context = Context;
         }
 
-        public void AddShoppingList(ShoppingListFormat shoppingList)
+        public async void AddShoppingList(ShoppingListFormat shoppingList)
         {
-            ShoppingList list = LoadToModel(shoppingList);
+            ShoppingList list = await LoadToModel(shoppingList);
             context.ShoppingLists.Add(list);
             context.SaveChanges();
         }
 
-        public ShoppingList FindShoppingList(int id)
+        public async void DeleteShoppingList(ShoppingListFormat shoppingList)
         {
-            return context.ShoppingLists.Find(id);
-        }
-
-        public void DeleteShoppingList(ShoppingListFormat shoppingList)
-        {
-            ShoppingList list = LoadToModel(shoppingList);
-            if (context.ShoppingLists.Find(list.ShoppingListID) != null)
+            ShoppingList list = await LoadToModel(shoppingList);
+            if (await context.ShoppingLists.FindAsync(list.ShoppingListID) != null)
             {
                 context.ShoppingLists.Remove(list);
             }
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
-        public void UpdateShoppingList(ShoppingListFormat shoppingList)
+        public async void UpdateShoppingList(ShoppingListFormat shoppingList)
         {
-            ShoppingList list = LoadToModel(shoppingList);
-            if (context.ShoppingLists.Find(list.ShoppingListID) == null)
+            ShoppingList list = await LoadToModel(shoppingList);
+            if (await context.ShoppingLists.FindAsync(list.ShoppingListID) == null)
             {
                 AddShoppingList(shoppingList);
             }
             else
             {
-                context.ShoppingLists.Update(list);
+               context.ShoppingLists.Update(list);
             }
         }
 
-        public object GetShoppingLists()
+        public async Task<List<ShoppingListFormat>> GetShoppingLists()
         {
             List<ShoppingListFormat> repoList = new List<ShoppingListFormat>();
-            var contextLists = context.ShoppingLists.ToList();
+            var contextLists = await context.ShoppingLists
+                .Include(a => a.Group)
+                .ToListAsync();
+
             foreach (ShoppingList list in contextLists)
             {
-                var temp = new ShoppingListFormat()
+                repoList.Add( new ShoppingListFormat()
                 {
                     shoppingListID = list.ShoppingListID,
                     shoppingListGroupID = list.GroupID,
                     shoppingListGroupName = list.Group.Name,
                     shoppingListName = list.Name
-                };
-                repoList.Add(temp);
+                });
             }
             return repoList;
         }
 
-        public ShoppingList LoadToModel(ShoppingListFormat shoppingList)
+        public async Task<List<ShoppingListFormat>> GetShoppingListsByGroupID(int GroupID)
         {
-            return new Models.ShoppingList()
+            List<ShoppingListFormat> repoList = new List<ShoppingListFormat>();
+            var contextLists = await context.ShoppingLists
+                .Include(g => g.Group)
+                .Where(a => a.GroupID == GroupID)
+                .ToListAsync();
+
+            foreach (ShoppingList list in contextLists)
+            {
+                repoList.Add(new ShoppingListFormat()
+                {
+                    shoppingListID = list.ShoppingListID,
+                    shoppingListGroupID = list.GroupID,
+                    shoppingListGroupName = list.Group.Name,
+                    shoppingListName = list.Name
+                });
+            }
+            return repoList;
+        }
+
+        public async Task<List<ItemFormat>> GetShoppingListByID(int ID)
+        {
+            return await context.ShoppingLists
+                .Where(sl => sl.ShoppingListID == ID)
+                .SelectMany(it => it.ShoppingListItems)
+                .Join(
+                    context.Items,
+                    sli => sli.ShoppingListID,
+                    i => i.ItemID,
+                    (sli, i) => new ItemFormat()
+                    {
+                        ItemID = sli.ItemID,
+                        Name = sli.Item.Name,
+                        Amount = sli.Amount,
+                        Type = sli.Item.Type
+                    }
+                ).ToListAsync();
+        }
+
+        public async Task<ShoppingList> LoadToModel(ShoppingListFormat shoppingList)
+        {
+            return new ShoppingList()
             {
                 Name = shoppingList.shoppingListName,
-                Group = context.Groups.Find(shoppingList.shoppingListGroupID),
+                Group = await context.Groups.FindAsync(shoppingList.shoppingListGroupID),
                 GroupID = shoppingList.shoppingListGroupID,
                 ShoppingListID = shoppingList.shoppingListID,
                 ShoppingListItems = new List<ShoppingListItem>()
             };
         }
-
     }
 }

@@ -9,8 +9,5 @@ namespace ApiFormat
         public int GroupID { get; set; }
         public string Name { get; set; }
         public int OwnerID { get; set; }
-        public List<PantryFormat> Pantries { get; set; }
-        public List<ShoppingListFormat> ShoppingLists { get; set; }
-        public List<GroupFormat> UserGroups { get; set; }
     }
 }
