@@ -10,7 +10,7 @@ namespace SplitListWebApi.Repository
     public interface IShoppingListRepository
     {
         void AddShoppingList(ShoppingListFormat shoppingList);
-        void DeleteShoppingList(ShoppingListFormat shoppingList);
+        Task DeleteShoppingList(ShoppingListFormat shoppingList);
         void UpdateShoppingList(ShoppingListFormat shoppingList);
         Task<List<ItemFormat>> GetShoppingListByID(int ID);
         Task<List<ShoppingListFormat>> GetShoppingListsByGroupID(int GroupID);
@@ -27,17 +27,17 @@ namespace SplitListWebApi.Repository
             context = Context;
         }
 
-        public async void AddShoppingList(ShoppingListFormat shoppingList)
+        public void AddShoppingList(ShoppingListFormat shoppingList)
         {
-            ShoppingList list = await LoadToModel(shoppingList);
+            ShoppingList list = LoadToModel(shoppingList).Result;
             context.ShoppingLists.Add(list);
             context.SaveChanges();
         }
 
-        public async void DeleteShoppingList(ShoppingListFormat shoppingList)
+        public async Task DeleteShoppingList(ShoppingListFormat shoppingList)
         {
-            ShoppingList list = await LoadToModel(shoppingList);
-            if (await context.ShoppingLists.FindAsync(list.ShoppingListID) != null)
+            ShoppingList list = await context.ShoppingLists.FindAsync(shoppingList.shoppingListID);
+            if ( list != null)
             {
                 context.ShoppingLists.Remove(list);
             }
@@ -46,14 +46,16 @@ namespace SplitListWebApi.Repository
 
         public async void UpdateShoppingList(ShoppingListFormat shoppingList)
         {
-            ShoppingList list = await LoadToModel(shoppingList);
-            if (await context.ShoppingLists.FindAsync(list.ShoppingListID) == null)
+            ShoppingList list = await context.ShoppingLists.FindAsync(shoppingList.shoppingListID);
+            if (list == null)
             {
                 AddShoppingList(shoppingList);
             }
             else
             {
-               context.ShoppingLists.Update(list);
+               // List<ItemFormat> shoppingListItems = await GetShoppingListByID(list.ShoppingListID);
+
+                context.ShoppingLists.Update(list);
             }
         }
 
@@ -122,10 +124,11 @@ namespace SplitListWebApi.Repository
             return new ShoppingList()
             {
                 Name = shoppingList.shoppingListName,
-                Group = await context.Groups.FindAsync(shoppingList.shoppingListGroupID),
+                //Nedenstående giver fejlen "No such table: Group" i LoadToModel testen
+                //Group = await context.Groups.FindAsync(shoppingList.shoppingListGroupID),
                 GroupID = shoppingList.shoppingListGroupID,
                 ShoppingListID = shoppingList.shoppingListID,
-                ShoppingListItems = new List<ShoppingListItem>()
+                ShoppingListItems = new List<ShoppingListItem>() //Skal denne ændres og anvedes i Update()?
             };
         }
     }
