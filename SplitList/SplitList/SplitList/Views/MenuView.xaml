@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:utility="clr-namespace:SplitList.Utility;assembly=SplitList"
+             xmlns:viewModels="clr-namespace:SplitList.ViewModels;assembly=SplitList"
+             xmlns:system="clr-namespace:System;assembly=netstandard"
+             xmlns:models="clr-namespace:SplitList.Models;assembly=SplitList"
+             xmlns:view="clr-namespace:SplitList.Views;assembly=SplitList"
+             mc:Ignorable="d"
+             Title="MenuPage"
+             x:Class="SplitList.Views.MenuView">
+
+    <ListView x:Name="ListView" RowHeight="70" x:FieldModifier="public">
+        <ListView.ItemsSource>
+            <x:Array Type="{x:Type models:MenuViewItem}">
+                <models:MenuViewItem Title="Shopping list" ImageSource="{utility:ImageResource SplitList.EmbeddedResources.checklist.png}" TargetType="{x:Type view:ShoppingListView}"/>
+                <models:MenuViewItem Title="Pantry" ImageSource="{utility:ImageResource SplitList.EmbeddedResources.fridge.png}" TargetType="{x:Type view:PantryView}"/>
+                <models:MenuViewItem Title="Recipe" ImageSource="{utility:ImageResource SplitList.EmbeddedResources.recipe.png}" TargetType="{x:Type view:RecipeView}"/>
+            </x:Array>
+        </ListView.ItemsSource>
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <ViewCell>
+                    <Grid HeightRequest="60">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Image Source="{Binding ImageSource}"
+                               WidthRequest="40"
+                               Margin="10"
+                               VerticalOptions="Center"
+                               HorizontalOptions="Center"
+                               Grid.Column="0"/>
+                        <Label Text="{Binding Title}"
+                               FontSize="20"
+                               TextColor="Gray"
+                               Grid.Column="1"
+                               VerticalOptions="Center"
+                               HorizontalOptions="Center"/>
+                    </Grid>
+                </ViewCell>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+
+    </ListView>
+</ContentPage>
