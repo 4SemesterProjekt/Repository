@@ -14,7 +14,7 @@ namespace SplitListWebApi.Controllers
     public class ShoppingListsController : ControllerBase
     {
         private readonly SplitListContext _context;
-        private ShoppingListRepository repo;
+        private IShoppingListRepository repo;
 
         public ShoppingListsController(SplitListContext context)
         {
@@ -33,18 +33,17 @@ namespace SplitListWebApi.Controllers
         [HttpGet("{id}")]
         public ShoppingListDTO GetShoppingLists(int id)
         {
-            return  repo.GetShoppingListByID(id);
+            return repo.GetShoppingListByID(id);
         }
          
         // PUT: api/ShoppingLists/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutShoppingList(int id, ShoppingListDTO shoppingList)
+        public void PutShoppingList(int id)
         {
-            repo.UpdateShoppingList(shoppingList);
-
-            return NoContent();
+            ShoppingListDTO list = repo.GetShoppingListByID(id);
+            repo.UpdateShoppingList(list);
         }
 
         // POST: api/ShoppingLists

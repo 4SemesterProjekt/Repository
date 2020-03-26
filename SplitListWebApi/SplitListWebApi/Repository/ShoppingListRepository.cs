@@ -4,23 +4,21 @@ using SplitListWebApi.Models;
 using ApiFormat;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace SplitListWebApi.Repository
 {
     public interface IShoppingListRepository
     {
-        void AddShoppingList(ShoppingListDTO shoppingList);
-        Task DeleteShoppingList(ShoppingListDTO shoppingList);
+        void DeleteShoppingList(ShoppingListDTO shoppingList);
         void UpdateShoppingList(ShoppingListDTO shoppingList);
-        Task<List<ItemDTO>> GetShoppingListByID(int ID);
-        Task<List<ShoppingListDTO>> GetShoppingListsByGroupID(int GroupID);
-        
-        // Consider adding interface to criteria
+        List<ShoppingListDTO> GetShoppingListsByGroupID(int GroupID);
+        ShoppingListDTO GetShoppingListByID(int ID);
     }
 
-    public class ShoppingListRepository //: IShoppingListRepository
+    public class ShoppingListRepository : IShoppingListRepository
     {
-        SplitListContext context;
+        private SplitListContext context;
 
         public ShoppingListRepository(SplitListContext Context)
         {
@@ -62,24 +60,53 @@ namespace SplitListWebApi.Repository
                     context.ShoppingLists.Update(list);
                     context.SaveChanges();
                 }
-                
-                foreach (ItemDTO item in shoppingList.Items)
-                {
-                    context.Items.Update(new Item
-                    {
-                        ItemID = item.ItemID,
-                        Name = item.Name,
-                        Type = item.Type
-                    });
 
-                    context.ShoppingListItems.Update(new ShoppingListItem
-                    {
-                        ShoppingListID = shoppingList.shoppingListID,
-                        ItemID = item.ItemID,
-                        Amount = item.Amount
-                    });
+                if (shoppingList.Items == null)
+                {
+                    shoppingList.Items = new List<ItemDTO>();
                 }
-                context.SaveChanges();
+                else
+                {
+                    foreach (ItemDTO item in shoppingList.Items)
+                    {
+                        Item itemInDb = context.Items.Find(item.ItemID);
+                        if (itemInDb != null)
+                        {
+                            itemInDb.Name = item.Name;
+                            itemInDb.Type = item.Type;
+                            context.Items.Update(itemInDb);
+                            context.SaveChanges();
+                        }
+                        else
+                        {
+                            context.Items.Add(new Item
+                            {
+                                ItemID = item.ItemID,
+                                Name = item.Name,
+                                Type = item.Type
+                            });
+                            context.SaveChanges();
+                        }
+
+                        ShoppingListItem slItemInDb = context.ShoppingListItems.Find(shoppingList.shoppingListID, item.ItemID);
+                        if (slItemInDb != null)
+                        {
+                            slItemInDb.Amount = item.Amount;
+                            context.ShoppingListItems.Update(slItemInDb);
+                            context.SaveChanges();
+                        }
+                        else
+                        {
+                            context.ShoppingListItems.Add(new ShoppingListItem
+                            {
+                                ShoppingListID = shoppingList.shoppingListID,
+                                ItemID = item.ItemID,
+                                Amount = item.Amount
+                            });
+                            context.SaveChanges();
+                        }
+                    }
+                }
             }
             
         }
@@ -130,29 +157,33 @@ namespace SplitListWebApi.Repository
             ShoppingList dbList = context.ShoppingLists.Find(ID);
             if (dbList != null)
             {
-
                 ShoppingListDTO list = new ShoppingListDTO()
                 {
                     shoppingListID = dbList.ShoppingListID,
                     shoppingListGroupID = dbList.GroupID,
-                    shoppingListName = dbList.Name
+                    shoppingListName = dbList.Name,
+                    Items = new List<ItemDTO>()
                 };
-                //Query doesnt work :)
-                list.Items = context.ShoppingLists
+                
+                List<ShoppingListItem> shoppingListItems = context.ShoppingLists
                     .Where(sl => sl.ShoppingListID == ID)
-                    .SelectMany(it => it.ShoppingListItems)
-                    .Join(
-                        context.Items,
-                        sli => sli.ShoppingListID,
-                        i => i.ItemID,
-                        (sli, i) => new ItemDTO()
+                    .Include(sli => sli.ShoppingListItems)
+                    .ThenInclude(it => it.Item)
+                    .SelectMany(sl => sl.ShoppingListItems)
+                    .ToList();
+                if (shoppingListItems != null)
+                {
+                    foreach (var item in shoppingListItems)
+                    {
+                        list.Items.Add(new ItemDTO()
                         {
-                            ItemID = sli.ItemID,
-                            Name = sli.Item.Name,
-                            Amount = sli.Amount,
-                            Type = sli.Item.Type
-                        }
-                    ).ToList();
+                            Amount = item.Amount,
+                            ItemID = item.ItemID,
+                            Name = item.Item.Name,
+                            Type = item.Item.Type
+                        });
+                    }
+                }
 
                 list.shoppingListGroupName = context.Groups.Find(list.shoppingListGroupID).Name;
                 return list;
