@@ -8,6 +8,6 @@ namespace ApiFormat
     {
         public int UserID { get; set; }
         public string Name { get; set; }
-        //public List<> UserGroups { get; set; }
+        public List<GroupDTO> Groups { get; set; }
     }
 }
