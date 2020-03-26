@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ApiFormat
 {
-    class RecipeFormat
+    class RecipeDTO
     {
     }
 }

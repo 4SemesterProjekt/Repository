@@ -2,13 +2,13 @@
 
 namespace ApiFormat
 {
-    public class ShoppingListFormat
+    public class ShoppingListDTO
     {
         public int shoppingListID { get; set; }
         public string shoppingListName { get; set; }
         public int shoppingListGroupID { get; set; }
         public string shoppingListGroupName { get; set; }
-        public List<ItemFormat> Items { get; set; }
+        public List<ItemDTO> Items { get; set; }
 
     }
 }

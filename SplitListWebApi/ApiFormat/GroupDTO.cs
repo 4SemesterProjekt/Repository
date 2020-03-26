@@ -4,10 +4,10 @@ using System.Text;
 
 namespace ApiFormat
 {
-    class UserFormat
+    class GroupDTO
     {
-        public int UserID { get; set; }
+        public int GroupID { get; set; }
         public string Name { get; set; }
-        //public List<> UserGroups { get; set; }
+        public int OwnerID { get; set; }
     }
 }

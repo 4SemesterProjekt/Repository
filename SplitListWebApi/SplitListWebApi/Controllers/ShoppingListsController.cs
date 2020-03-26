@@ -14,7 +14,7 @@ namespace SplitListWebApi.Controllers
     public class ShoppingListsController : ControllerBase
     {
         private readonly SplitListContext _context;
-        private IShoppingListRepository repo;
+        private ShoppingListRepository repo;
 
         public ShoppingListsController(SplitListContext context)
         {
@@ -24,23 +24,23 @@ namespace SplitListWebApi.Controllers
 
         // Returns all shopping lists for a specific group
         [HttpGet("group/{id}")]
-        public async Task<List<ShoppingListFormat>> GetShoppingList(int id)
+        public List<ShoppingListDTO> GetShoppingList(int id)
         {
-            return await repo.GetShoppingListsByGroupID(id);
+            return repo.GetShoppingListsByGroupID(id);
         }
 
         //Returns all items in specific shoppinglist
         [HttpGet("{id}")]
-        public async Task<List<ItemFormat>> GetShoppingLists(int id)
+        public ShoppingListDTO GetShoppingLists(int id)
         {
-            return await repo.GetShoppingListByID(id);
+            return  repo.GetShoppingListByID(id);
         }
-
+         
         // PUT: api/ShoppingLists/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutShoppingList(int id, ShoppingListFormat shoppingList)
+        public async Task<IActionResult> PutShoppingList(int id, ShoppingListDTO shoppingList)
         {
             repo.UpdateShoppingList(shoppingList);
 
@@ -61,7 +61,7 @@ namespace SplitListWebApi.Controllers
 
         // DELETE: api/ShoppingLists/5
         [HttpDelete("{id}")]
-        public void DeleteShoppingList(ShoppingListFormat list)
+        public void DeleteShoppingList(ShoppingListDTO list)
         {
             repo.DeleteShoppingList(list);
         }

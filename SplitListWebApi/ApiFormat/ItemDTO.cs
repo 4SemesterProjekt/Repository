@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ApiFormat
 {
-    public class ItemFormat
+    public class ItemDTO
     {
         public int ItemID { get; set; }
         public string Name { get; set; }
