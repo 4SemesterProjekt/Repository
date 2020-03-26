@@ -27,7 +27,9 @@
                        Grid.Row="0"
                        Margin="0,5"
                        />
-                <ContentView Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" HeightRequest="1" BackgroundColor="gray"></ContentView>
+                <ContentView Grid.Column="0" Grid.ColumnSpan="2" 
+                             Grid.Row="1" HeightRequest="1" 
+                             BackgroundColor="gray"/>
 
                 
                     <ListView x:Name="ShoppingLists"
