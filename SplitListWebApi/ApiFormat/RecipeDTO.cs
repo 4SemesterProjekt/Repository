@@ -6,5 +6,8 @@ namespace ApiFormat
 {
     class RecipeDTO
     {
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public List<ItemDTO> Items { get; set; }
     }
 }

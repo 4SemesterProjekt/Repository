@@ -27,10 +27,10 @@ namespace SplitListWebApi.Repository
 
         public void DeleteShoppingList(ShoppingListDTO shoppingList)
         {
-
+            // Missing validation for OwnerID. Only owner should be able to delete shoppinglist.
             ShoppingList list = LoadToModel(shoppingList);
 
-            if ( list != null)
+            if (list != null)
             {
                 context.ShoppingLists.Remove(list);
 

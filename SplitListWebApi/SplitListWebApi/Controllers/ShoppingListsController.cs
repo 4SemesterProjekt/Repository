@@ -29,45 +29,26 @@ namespace SplitListWebApi.Controllers
             return repo.GetShoppingListsByGroupID(id);
         }
 
-        //Returns all items in specific shoppinglist
+        // Returns ShoppingListDTO object for a specific shoppinglist ID
         [HttpGet("{id}")]
         public ShoppingListDTO GetShoppingLists(int id)
         {
             return repo.GetShoppingListByID(id);
         }
-         
-        // PUT: api/ShoppingLists/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPut("{id}")]
-        public void PutShoppingList(int id)
-        {
-            ShoppingListDTO list = repo.GetShoppingListByID(id);
-            repo.UpdateShoppingList(list);
-        }
 
         // POST: api/ShoppingLists
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+        // Updates/Creates shoppinglist from parameter.
         [HttpPost]
-        public async Task<ActionResult<ShoppingList>> PostShoppingList(ShoppingList shoppingList)
+        public void PostShoppingList(ShoppingListDTO shoppingList)
         {
-            _context.ShoppingLists.Add(shoppingList);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetShoppingList", new { id = shoppingList.ShoppingListID }, shoppingList);
+            repo.UpdateShoppingList(shoppingList);
         }
 
-        // DELETE: api/ShoppingLists/5
-        [HttpDelete("{id}")]
+        // DELETE: api/ShoppingLists
+        [HttpDelete]
         public void DeleteShoppingList(ShoppingListDTO list)
         {
             repo.DeleteShoppingList(list);
-        }
-
-        private bool ShoppingListExists(int id)
-        {
-            return _context.ShoppingLists.Any(e => e.ShoppingListID == id);
         }
     }
 }

@@ -6,9 +6,10 @@ namespace ApiFormat
 {
     class PantryDTO
     {
-        public int PantryID { get; set; }
+        public int ID { get; set; }
         public string Name { get; set; }
         public int GroupID { get; set; }
-        public List<ItemDTO> PantryItems { get; set; }
+        public string GroupName { get; set; }
+        public List<ItemDTO> Items { get; set; }
     }
 }
