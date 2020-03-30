@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using SplitList.Models;
 using SplitList.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -11,12 +10,12 @@ using Xamarin.Forms.Xaml;
 namespace SplitList.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class ShoppingListView : ContentPage
+    public partial class MultiShopListView : ContentPage
     {
-        public ShoppingListView(ShoppingList shoppingList)
+        public MultiShopListView()
         {
             InitializeComponent();
-            ShoppingListViewModel.ShoppingList = shoppingList;
+            BindingContext = new MultiShopListViewModel(Navigation);
         }
     }
 }

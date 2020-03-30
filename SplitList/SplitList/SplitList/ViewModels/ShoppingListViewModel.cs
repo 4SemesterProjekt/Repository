@@ -15,20 +15,21 @@ namespace SplitList.ViewModels
     {
         public ShoppingListViewModel()
         {
-            _items = new ObservableCollection<Item>();
-            _items.Add(new Item("Banana", 4, "Fruit"));
-            _items.Add(new Item("Apple", 3, "Fruit"));
-            _items.Add(new Item("Milk", 1, "Dairy"));
-            _items.Add(new Item("Rye Bread", 1, "Bread"));
+            //ShoppingList = new ShoppingList("Groceries");
+            //ShoppingList.Items.Add(new Item("Banana", 4, "Fruit"));
+            //ShoppingList.Items.Add(new Item("Apple", 3, "Fruit"));
+            //ShoppingList.Items.Add(new Item("Milk", 1, "Dairy"));
+            //ShoppingList.Items.Add(new Item("Rye Bread", 1, "Bread"));
         }
 
         #region Properties
-        
-        private ObservableCollection<Item> _items;
-        public ObservableCollection<Item> Items
+
+        private ShoppingList _shoppingList;
+
+        public ShoppingList ShoppingList
         {
-            get => _items;
-            set => SetProperty(ref _items, value);
+            get => _shoppingList;
+            set => SetProperty(ref _shoppingList, value);
         }
 
         private Item _currentItem;
@@ -95,7 +96,7 @@ namespace SplitList.ViewModels
 
         public void AddItemToListCommandExecute()
         {
-            Items.Add(new Item("",1));
+            ShoppingList.Items.Add(new Item("", 1));
         }
         #endregion
     }
