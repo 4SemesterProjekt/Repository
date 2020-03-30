@@ -9,11 +9,4 @@
   <MasterDetailPage.Master>
     <view:MenuView/>
   </MasterDetailPage.Master>
-  <MasterDetailPage.Detail>
-    <NavigationPage>
-      <x:Arguments>
-        <view:MultiShopListView/>
-      </x:Arguments>
-    </NavigationPage>
-  </MasterDetailPage.Detail>
 </MasterDetailPage>

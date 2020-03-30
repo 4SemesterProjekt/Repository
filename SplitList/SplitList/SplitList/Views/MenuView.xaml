@@ -45,6 +45,5 @@
                 </ViewCell>
             </DataTemplate>
         </ListView.ItemTemplate>
-
     </ListView>
 </ContentPage>
