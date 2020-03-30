@@ -9,7 +9,13 @@ namespace SemesterProjekt4SQLStruktur
         {
             using (var db = new DbContext())
             {
-                
+                var karl = new User(){Name="Karl Jørgen"};
+                var karlsGruppe = new Group(){Name="Karls Gruppe", Owner = karl};
+                var karlsShoppingList = new ShoppingList(){Name = "Karls Gruppes Shoppinglist", Group = karlsGruppe};
+                var KarlGruppeShadow = new UserGroup(){Group = karlsGruppe, User = karl};
+
+                db.Add(karlsShoppingList);
+                db.SaveChanges();
             }
         }
     }
