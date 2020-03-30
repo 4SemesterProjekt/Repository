@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ApiFormat
 {
-    class RecipeDTO
+    public class RecipeDTO
     {
         public int ID { get; set; }
         public string Name { get; set; }

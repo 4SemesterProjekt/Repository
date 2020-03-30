@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ApiFormat
 {
-    class UserDTO
+    public class UserDTO
     {
         public int UserID { get; set; }
         public string Name { get; set; }

@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SplitListWebApi.Models;
 
 namespace SplitListWebApi.Migrations
 {
     [DbContext(typeof(SplitListContext))]
-    partial class SplitListContextModelSnapshot : ModelSnapshot
+    [Migration("20200330085334_AddedDbSetForPantryItems")]
+    partial class AddedDbSetForPantryItems
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -187,7 +189,7 @@ namespace SplitListWebApi.Migrations
 
                     b.HasIndex("GroupID");
 
-                    b.ToTable("UserGroups");
+                    b.ToTable("UserGroup");
                 });
 
             modelBuilder.Entity("SplitListWebApi.Models.ItemRecipe", b =>
