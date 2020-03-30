@@ -15,11 +15,11 @@ namespace SplitList.ViewModels
     {
         public ShoppingListViewModel()
         {
-            ShoppingList = new ShoppingList("Groceries");
-            ShoppingList.Items.Add(new Item("Banana", 4, "Fruit"));
-            ShoppingList.Items.Add(new Item("Apple", 3, "Fruit"));
-            ShoppingList.Items.Add(new Item("Milk", 1, "Dairy"));
-            ShoppingList.Items.Add(new Item("Rye Bread", 1, "Bread"));
+            //ShoppingList = new ShoppingList("Groceries");
+            //ShoppingList.Items.Add(new Item("Banana", 4, "Fruit"));
+            //ShoppingList.Items.Add(new Item("Apple", 3, "Fruit"));
+            //ShoppingList.Items.Add(new Item("Milk", 1, "Dairy"));
+            //ShoppingList.Items.Add(new Item("Rye Bread", 1, "Bread"));
         }
 
         #region Properties

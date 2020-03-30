@@ -13,9 +13,10 @@ namespace SplitList.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ShoppingListView : ContentPage
     {
-        public ShoppingListView()
+        public ShoppingListView(ShoppingList shoppingList)
         {
             InitializeComponent();
+            ShoppingListViewModel.ShoppingList = shoppingList;
         }
     }
 }

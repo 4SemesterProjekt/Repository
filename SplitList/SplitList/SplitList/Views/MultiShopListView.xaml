@@ -4,11 +4,11 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:SplitList.ViewModels;assembly=SplitList"
+             xmlns:b="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
              mc:Ignorable="d"
              x:Class="SplitList.Views.MultiShopListView">
-    <ContentPage.BindingContext>
-        <viewModels:MultiShopListViewModel x:Name="MultiShopListViewModel"/>
-    </ContentPage.BindingContext>
+
+
     <ContentPage.Content>
         <StackLayout>
             <Grid>
@@ -34,11 +34,32 @@
                 
                     <ListView x:Name="ShoppingLists"
                               ItemsSource="{Binding Lists}"
+                              SelectedItem="{Binding CurrentList}"
                               CachingStrategy="RecycleElement"
                               Grid.Row="2"
                               Grid.Column="0"
                               Grid.ColumnSpan="2">
-
+                        <ListView.Behaviors>
+                        <b:EventToCommandBehavior Command="{Binding ListTappedCommand}"
+                                                          EventName="ItemTapped"/>
+                        </ListView.Behaviors>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="10*"/>
+                                            <ColumnDefinition Width="90*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label Text="{Binding Name}"
+                                               Grid.Column="1"
+                                               VerticalOptions="Center"
+                                               HorizontalOptions="Start"
+                                               FontSize="16"></Label>
+                                    </Grid>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
                     </ListView>
                 
                 
