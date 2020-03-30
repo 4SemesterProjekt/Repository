@@ -55,7 +55,7 @@ namespace SplitList.ViewModels
             get => _listTappedCommand ?? (_listTappedCommand = new DelegateCommand(NavigationDownExecute));
         }
 
-        async void NavigationDownExecute()
+        async void NavigationDownExecute() //Inserts UI-layer on top of the previous one, to easily implement navigation.
         {
             await Navigation.PushAsync(new ShoppingListView(CurrentList));
         }
