@@ -10,8 +10,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="DatabaseEntries">
-      <HintPath>..\..\DLLs\DatabaseEntries\DatabaseEntries.dll</HintPath>
+    <Reference Include="ApiFormat">
+      <HintPath>..\..\DLLs\ApiFormat\ApiFormat.dll</HintPath>
     </Reference>
   </ItemGroup>
 
