@@ -386,7 +386,7 @@ namespace SplitListWebApi.Tests
         }
 
         [Test]
-        public void UpdateShoppinglistItemsWhenFound()
+        public void UpdateShoppingListAddsItems()
         {
             using (var context = new SplitListContext(options))
             {
@@ -477,6 +477,67 @@ namespace SplitListWebApi.Tests
                         }
                     }
                 }
+            }
+        }
+
+        [Test]
+        public void UpdateShoppingListDeletesItems()
+        {
+            using (var context = new SplitListContext(options))
+            {
+                context.Database.EnsureCreated();
+            }
+
+            using (var context = new SplitListContext(options))
+            {
+                context.Groups.Add(new Group()
+                {
+                    Name = "Group1",
+                    OwnerID = 1,
+                    Pantries = null,
+                    ShoppingLists = null,
+                    UserGroups = null
+                });
+                context.SaveChanges();
+            }
+
+            ShoppingListDTO list = new ShoppingListDTO()
+            {
+                shoppingListName = "ShoppingList1",
+                shoppingListGroupID = 1,
+                shoppingListGroupName = "Group1",
+                shoppingListID = 1,
+                Items = new List<ItemDTO>()
+                {
+                    new ItemDTO()
+                    {
+                        Amount = 1,
+                        ItemID = 1,
+                        Type = "Fruit",
+                        Name = "Banana"
+                    },
+                    new ItemDTO()
+                    {
+                        Amount = 1,
+                        ItemID = 2,
+                        Type = "Fruit",
+                        Name = "Apple"
+                    }
+                }
+            };
+
+            using (var context = new SplitListContext(options))
+            {
+                ShoppingListRepository repo = new ShoppingListRepository(context);
+                repo.UpdateShoppingList(list);
+                Assert.AreEqual("ShoppingList1", context.ShoppingLists.FirstOrDefault().Name);
+                Assert.AreEqual(1, context.ShoppingLists.Count());
+
+                list.Items.RemoveAt(1);
+
+                repo.UpdateShoppingList(list);
+
+                Assert.AreEqual(1, context.ShoppingListItems.Count());
             }
         }
     }
