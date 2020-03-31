@@ -1,43 +1,66 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Text;
+using ApiFormat;
 using Prism.Mvvm;
+using SplitList.Annotations;
+using Xamarin.Forms;
 
 namespace SplitList.Models
 {
-    public class Item : BindableBase
+    public class Item : INotifyPropertyChanged
     {
         public Item(string name, int amount, string category = "")
-        {
+        { 
+            ItemDto = new ItemDTO();
             Name = name;
             Amount = (amount > 0 ? amount : 1);
             Category = category;
         }
 
-        private string _name;
-        private double _price;
-        private int _amount;
-        private string _category;
+        public Item(ItemDTO itemDto)
+        {
+            ItemDto = itemDto;
+        }
+
+        public ItemDTO ItemDto { get; set; }
 
         public string Name
         {
-            get => _name;
-            set => SetProperty(ref _name, value);
-        }
-        public double Price
-        {
-            get => _price;
-            set => SetProperty(ref _price, value);
+            get => ItemDto.Name;
+            set
+            {
+                ItemDto.Name = value;
+                OnPropertyChanged(nameof(Name));
+            }
         }
         public int Amount
         {
-            get => _amount;
-            set => SetProperty(ref _amount, value);
+            get => ItemDto.Amount;
+            set
+            {
+                ItemDto.Amount = value;
+                OnPropertyChanged(nameof(Amount));
+            }
         }
         public string Category
         {
-            get => _category;
-            set => SetProperty(ref _category, value);
+            get => ItemDto.Type;
+            set
+            {
+                ItemDto.Type = value;
+                OnPropertyChanged(nameof(Category));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

@@ -38,6 +38,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="ApiFormat">
+      <HintPath>..\..\..\DLLs\ApiFormat\ApiFormat.dll</HintPath>
+    </Reference>
+    <Reference Include="ClientLibForAPI">
+      <HintPath>DLLs\ClientLibApi\ClientLibForAPI.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Update="Views\MDP.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
