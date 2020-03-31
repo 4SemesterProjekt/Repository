@@ -4,4 +4,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="if not exist $(SolutionDir)\..\DLLs mkdir $(SolutionDir)\..\DLLs&#xD;&#xA;if not exist $(SolutionDir)\..\DLLs\$(ProjectName) mkdir $(SolutionDir)\..\DLLs\$(ProjectName)&#xD;&#xA;copy /y $(OutDir)* $(SolutionDir)..\DLLs\$(ProjectName)" />
+  </Target>
+
 </Project>
