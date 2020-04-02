@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ClientLibAPI;
+using SplitList.Mapping;
 using SplitList.Models;
 using SplitList.ViewModels;
 using Xamarin.Forms;
@@ -16,7 +18,7 @@ namespace SplitList.Views
         public ShoppingListView(ShoppingList shoppingList)
         {
             InitializeComponent();
-            ShoppingListViewModel.ShoppingList = shoppingList;
+            //ShoppingListViewModel.ShoppingList = ShoppingListMapper.ShoppingListDtoToShoppingList(SerializerShoppingList.GetShoppingListByShoppinglistId(shoppingList.ShoppingListId).Result);
         }
     }
 }

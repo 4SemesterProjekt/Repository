@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace ClientLibForAPI
 {
-    class Shoppinglist
+    public class SerializerShoppingList
     {
         private static readonly HttpClient client = new HttpClient();
         const string URL = "https://splitlistwebapi.azurewebsites.net/api/ShoppingLists/";
 
 
         //Return list of shoppinglistDTO based on GroupId
-        public async Task<List<ShoppingListDTO>> GetShoppingListByGroupId(int GroupId)
+        public static async Task<List<ShoppingListDTO>> GetShoppingListByGroupId(int GroupId)
         {
             var ShoppinglistsByIDString = await client.GetStringAsync($"{URL}group/{GroupId}");
             var ShoppinglistsByGroupID = JsonConvert.DeserializeObject<List<ShoppingListDTO>>(ShoppinglistsByIDString);
@@ -23,7 +23,7 @@ namespace ClientLibForAPI
 
         }
         //Return a shoppinglistDTO based on ShoppinglistId
-        public async Task<ShoppingListDTO> GetShoppingListByShoppinglistId(int ShoppinglistId)
+        public static async Task<ShoppingListDTO> GetShoppingListByShoppinglistId(int ShoppinglistId)
         {
             var ShoppinglistsByIdString = await client.GetStringAsync($"{URL}{ ShoppinglistId}");
             var ShoppinglistsByID = JsonConvert.DeserializeObject<ShoppingListDTO>(ShoppinglistsByIdString);
@@ -36,7 +36,7 @@ namespace ClientLibForAPI
         // Updates/Creates shoppinglist from parameter.
         // if ID == 0(default) create new ShoppingListDTO
         // if ID exist database edit entity with that specific ID.
-        public async Task<HttpResponseMessage> PostShoppingList(ShoppingListDTO shoppingList)
+        public static async Task<HttpResponseMessage> PostShoppingList(ShoppingListDTO shoppingList)
         {
             var ShoppinglistContext =JsonConvert.SerializeObject(shoppingList, Formatting.None);
             using (var request = new HttpRequestMessage(HttpMethod.Post, URL))
@@ -54,7 +54,7 @@ namespace ClientLibForAPI
         // DELETE: Delete element
         // If ID exist in DB remove entity with that ID
         // if ID doesnt exist, do notning. 
-        public async Task<HttpResponseMessage> DeleteShoppingList(ShoppingListDTO shoppingList) 
+        public static async Task<HttpResponseMessage> DeleteShoppingList(ShoppingListDTO shoppingList) 
         {
             var ShoppinglistContext = JsonConvert.SerializeObject(shoppingList, Formatting.None);
             using (var request = new HttpRequestMessage(HttpMethod.Delete, URL)) 

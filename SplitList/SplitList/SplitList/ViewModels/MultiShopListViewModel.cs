@@ -4,13 +4,14 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Windows.Input;
+using ClientLibAPI;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation.Xaml;
+using SplitList.Mapping;
 using SplitList.Models;
 using SplitList.Views;
 using Xamarin.Forms;
-
 namespace SplitList.ViewModels
 {
     public class MultiShopListViewModel : BindableBase
@@ -19,12 +20,10 @@ namespace SplitList.ViewModels
         {
             Navigation = navigation;
             Lists = new ObservableCollection<ShoppingList>();
-            Lists.Add(new ShoppingList("Groceries"));
-            Lists.Add(new ShoppingList("Drinks"));
+            Lists = ListMapper.ListToObservableCollection(SerializerShoppingList.GetShoppingListByGroupId(1).Result);
         }
 
         #region Properties
-
         private INavigation Navigation { get; set; }
 
         private ObservableCollection<ShoppingList> _lists;

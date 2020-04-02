@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="System.Runtime" Version="4.3.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,4 +20,7 @@
     </Reference>
   </ItemGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="if not exist $(SolutionDir)\..\DLLs mkdir $(SolutionDir)\..\DLLs&#xD;&#xA;if not exist $(SolutionDir)\..\DLLs\$(ProjectName) mkdir $(SolutionDir)\..\DLLs\$(ProjectName)&#xD;&#xA;copy /y $(OutDir)* $(SolutionDir)..\DLLs\$(ProjectName)" />
+  </Target>
 </Project>

@@ -5,8 +5,10 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Windows.Input;
 using ApiFormat;
+using ClientLibAPI;
 using Prism.Commands;
 using Prism.Mvvm;
+using SplitList.Mapping;
 using SplitList.Models;
 using Xamarin.Forms;
 
@@ -16,11 +18,7 @@ namespace SplitList.ViewModels
     {
         public ShoppingListViewModel()
         {
-            //ShoppingList = new ShoppingList("Groceries");
-            //ShoppingList.Items.Add(new Item("Banana", 4, "Fruit"));
-            //ShoppingList.Items.Add(new Item("Apple", 3, "Fruit"));
-            //ShoppingList.Items.Add(new Item("Milk", 1, "Dairy"));
-            //ShoppingList.Items.Add(new Item("Rye Bread", 1, "Bread"));
+            ShoppingList = new ShoppingList();
         }
 
         #region Properties
