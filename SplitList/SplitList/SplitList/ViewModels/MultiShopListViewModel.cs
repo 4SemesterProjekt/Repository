@@ -20,7 +20,7 @@ namespace SplitList.ViewModels
         {
             Navigation = navigation;
             Lists = new ObservableCollection<ShoppingList>();
-            Lists = ListMapper.ListToObservableCollection(SerializerShoppingList.GetShoppingListByGroupId(1).Result);
+            Lists = ListMapper.ListToObservableCollection(SerializerShoppingList.GetShoppingListByGroupId(1));
         }
 
         #region Properties

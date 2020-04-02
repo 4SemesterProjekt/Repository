@@ -18,7 +18,7 @@ namespace SplitList.Views
         public ShoppingListView(ShoppingList shoppingList)
         {
             InitializeComponent();
-            //ShoppingListViewModel.ShoppingList = ShoppingListMapper.ShoppingListDtoToShoppingList(SerializerShoppingList.GetShoppingListByShoppinglistId(shoppingList.ShoppingListId).Result);
+            ShoppingListViewModel.ShoppingList = ShoppingListMapper.ShoppingListDtoToShoppingList(SerializerShoppingList.GetShoppingListByShoppingListId(shoppingList.ShoppingListId));
         }
     }
 }

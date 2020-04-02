@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -11,25 +12,26 @@ namespace ClientLibAPI
 {
     public static class SerializerShoppingList
     {
-        private static readonly HttpClient client = new HttpClient();
+        static readonly HttpClient client = new HttpClient();
         const string URL = "https://splitlistwebapi.azurewebsites.net/api/ShoppingLists/";
 
         //Return list of shoppinglistDTO based on GroupId
-        public static async Task<List<ShoppingListDTO>> GetShoppingListByGroupId(int GroupId)
+        public static List<ShoppingListDTO> GetShoppingListByGroupId(int GroupId)
         {
-            var ShoppinglistsByIDString = await client.GetStringAsync($"{URL}group/{GroupId}");
-            var ShoppinglistsByGroupID = JsonConvert.DeserializeObject<List<ShoppingListDTO>>(ShoppinglistsByIDString);
-            return ShoppinglistsByGroupID;
-
+            HttpResponseMessage response = client.GetAsync($"{URL}group/{GroupId}").Result;
+            response.EnsureSuccessStatusCode();
+            string responseBody = response.Content.ReadAsStringAsync().Result;
+            List<ShoppingListDTO> ShoppingListsByGroupID = JsonConvert.DeserializeObject<List<ShoppingListDTO>>(responseBody);
+            return ShoppingListsByGroupID;
         }
         //Return a shoppinglistDTO based on ShoppinglistId
-        public static async Task<ShoppingListDTO> GetShoppingListByShoppinglistId(int ShoppinglistId)
+        public static ShoppingListDTO GetShoppingListByShoppingListId(int ShoppinglistId)
         {
-            var ShoppinglistsByIdString = await client.GetStringAsync($"{URL}{ ShoppinglistId}");
-            var ShoppinglistsByID = JsonConvert.DeserializeObject<ShoppingListDTO>(ShoppinglistsByIdString);
-            return ShoppinglistsByID;
-
-
+            HttpResponseMessage response = client.GetAsync($"{URL}{ShoppinglistId}").Result;
+                response.EnsureSuccessStatusCode();
+                string responseBody = response.Content.ReadAsStringAsync().Result;
+                ShoppingListDTO ShoppingListItemsByID = JsonConvert.DeserializeObject<ShoppingListDTO>(responseBody);
+                return ShoppingListItemsByID;
         }
 
         // POST: api/ShoppingLists
