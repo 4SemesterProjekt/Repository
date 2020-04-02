@@ -12,38 +12,35 @@ using Xamarin.Forms;
 
 namespace SplitList.Models
 {
-    public class ShoppingList : INotifyPropertyChanged
+    public class ShoppingList : BindableBase
     {
+        public ShoppingList()
+        {
+            Items = new ObservableCollection<Item>();
+            Name = "";
+        }
         public ShoppingList(string name)
         {
             Items = new ObservableCollection<Item>();
             Name = name;
         }
 
-        public ShoppingList(ShoppingListDTO shoppingListDto)
-        {
-            ShoppingListDto = shoppingListDto;
-            Items = new ObservableCollection<Item>(shoppingListDto.Items);
-        }
-        public ShoppingListDTO ShoppingListDto { get; set; }
+        public int ShoppingListId { get; set; }
+        private string _name;
         public string Name
         {
-            get => ShoppingListDto.shoppingListName;
-            set
-            {
-                ShoppingListDto.shoppingListName = value;
-                OnPropertyChanged(nameof(Name));
-            }
+            get => _name;
+            set => SetProperty(ref _name, value);
+
         }
 
-        public ObservableCollection<Item> Items { get; set; }
+        private ObservableCollection<Item> _items;
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        public ObservableCollection<Item> Items
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            get => _items;
+            set => SetProperty(ref _items, value);
         }
+
     }
 }

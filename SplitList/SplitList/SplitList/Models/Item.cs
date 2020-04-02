@@ -10,57 +10,46 @@ using Xamarin.Forms;
 
 namespace SplitList.Models
 {
-    public class Item : INotifyPropertyChanged
+    public class Item : BindableBase
     {
+        public Item()
+        {
+            Name = "";
+            Amount = 1;
+        }
         public Item(string name, int amount, string category = "")
-        { 
-            ItemDto = new ItemDTO();
+        {
             Name = name;
             Amount = (amount > 0 ? amount : 1);
             Category = category;
         }
 
-        public Item(ItemDTO itemDto)
-        {
-            ItemDto = itemDto;
-        }
-
-        public ItemDTO ItemDto { get; set; }
+        public int ItemId { get; set; }
+        private string _name;
+        private string _category;
+        private int _amount;
 
         public string Name
         {
-            get => ItemDto.Name;
-            set
-            {
-                ItemDto.Name = value;
-                OnPropertyChanged(nameof(Name));
-            }
+            get => _name;
+            set => SetProperty(ref _name, value);
+
         }
-        public int Amount
-        {
-            get => ItemDto.Amount;
-            set
-            {
-                ItemDto.Amount = value;
-                OnPropertyChanged(nameof(Amount));
-            }
-        }
+
         public string Category
         {
-            get => ItemDto.Type;
-            set
-            {
-                ItemDto.Type = value;
-                OnPropertyChanged(nameof(Category));
-            }
+            get => _category;
+            set => SetProperty(ref _category, value);
+
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        public int Amount
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            get => _amount;
+            set => SetProperty(ref _amount, value);
+
         }
+
+
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Windows.Input;
+using ApiFormat;
 using Prism.Commands;
 using Prism.Mvvm;
 using SplitList.Models;
@@ -96,7 +97,7 @@ namespace SplitList.ViewModels
 
         public void AddItemToListCommandExecute()
         {
-            ShoppingList.Items.Add(new Item("", 1));
+            ShoppingList.Items.Add(new Item("",1));
         }
         #endregion
     }
