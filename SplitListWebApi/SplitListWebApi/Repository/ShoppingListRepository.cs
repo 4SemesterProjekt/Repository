@@ -11,7 +11,7 @@ namespace SplitListWebApi.Repository
     public interface IShoppingListRepository
     {
         void DeleteShoppingList(ShoppingListDTO shoppingList);
-        void UpdateShoppingList(ShoppingListDTO shoppingList);
+        ShoppingListDTO UpdateShoppingList(ShoppingListDTO shoppingList);
         List<ShoppingListDTO> GetShoppingListsByGroupID(int GroupID);
         ShoppingListDTO GetShoppingListByID(int ID);
     }
@@ -109,9 +109,15 @@ namespace SplitListWebApi.Repository
             }
         }
 
-        public void UpdateShoppingList(ShoppingListDTO shoppingList)
+        public ShoppingListDTO UpdateShoppingList(ShoppingListDTO shoppingList)
         {
             ShoppingList list = LoadToModel(shoppingList);
+
+            if (shoppingList.shoppingListID <= 0)
+            {
+                shoppingList.shoppingListID = list.ShoppingListID;
+            }
+
             if (list != null)
             {
                 list.Name = shoppingList.shoppingListName;
@@ -128,6 +134,7 @@ namespace SplitListWebApi.Repository
                     AddItemsToShoppingList(shoppingList);
                 }
             }
+            return shoppingList;
         }
 
         public List<ShoppingListDTO> GetShoppingLists()

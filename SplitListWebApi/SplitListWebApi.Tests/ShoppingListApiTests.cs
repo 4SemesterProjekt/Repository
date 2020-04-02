@@ -324,13 +324,13 @@ namespace SplitListWebApi.Tests
                 ShoppingListRepository repo = new ShoppingListRepository(context);
                 for (var i = 0; i < amount; ++i)
                 {
-                    repo.UpdateShoppingList(new ShoppingListDTO()
+                    ShoppingListDTO dto = repo.UpdateShoppingList(new ShoppingListDTO()
                     {
-                        shoppingListID = i + 1,
                         shoppingListName = $"ShoppingList{i + 1}",
                         shoppingListGroupID = 1,
                         shoppingListGroupName = "Group1"
                     });
+                    Assert.AreEqual(dto.shoppingListID, i+1);
                 }
                 Assert.AreEqual(amount, context.ShoppingLists.Count());
             }

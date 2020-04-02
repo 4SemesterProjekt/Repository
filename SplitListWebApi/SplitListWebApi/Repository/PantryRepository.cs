@@ -85,6 +85,7 @@ namespace SplitListWebApi.Repository
         public void UpdatePantry(PantryDTO pantry)
         {
             Pantry dbPantry = LoadToModel(pantry);
+
             if (dbPantry != null)
             {
                 if (pantry.Name != dbPantry.Name)
@@ -141,6 +142,14 @@ namespace SplitListWebApi.Repository
                     }
                 }
             }
+        }
+
+        public PantryDTO AddPantry(PantryDTO newPantry)
+        {
+            PantryDTO newPantryDTO = newPantry;
+            Pantry pantryModel = LoadToModel(newPantry);
+            newPantryDTO.ID = pantryModel.PantryID;
+            return newPantryDTO;
         }
 
         private Pantry LoadToModel(PantryDTO pantry)
