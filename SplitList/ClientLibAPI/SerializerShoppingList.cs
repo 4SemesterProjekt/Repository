@@ -38,18 +38,14 @@ namespace ClientLibAPI
         // Updates/Creates shoppinglist from parameter.
         // if ID == 0(default) create new ShoppingListDTO
         // if ID exist database edit entity with that specific ID.
-        public static async Task<HttpResponseMessage> PostShoppingList(ShoppingListDTO shoppingList)
+        public static HttpResponseMessage PostShoppingList(ShoppingListDTO shoppingList)
         {
             var ShoppinglistContext = JsonConvert.SerializeObject(shoppingList, Formatting.None);
             using (var request = new HttpRequestMessage(HttpMethod.Post, URL))
             {
-
                 var httpContext = new StringContent(ShoppinglistContext, Encoding.UTF8, "application/json");
                 request.Content = httpContext;
-
-                return await client.SendAsync(request);
-
-
+                return client.SendAsync(request).Result;
             }
         }
 
