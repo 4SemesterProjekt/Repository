@@ -13,9 +13,12 @@ namespace SplitList.Mapping
             ShoppingList newList = new ShoppingList();
             newList.Name = dto.shoppingListName;
             newList.ShoppingListId = dto.shoppingListID;
-            foreach (var dtoItem in dto.Items)
+            if (dto.Items != null)
             {
-                newList.Items.Add(ItemMapper.ItemDtoToItem(dtoItem));
+                foreach (var dtoItem in dto.Items)
+                {
+                    newList.Items.Add(ItemMapper.ItemDtoToItem(dtoItem));
+                }
             }
             return newList;
         }
@@ -25,9 +28,12 @@ namespace SplitList.Mapping
             ShoppingListDTO newDtoList = new ShoppingListDTO();
             newDtoList.shoppingListName = list.Name;
             newDtoList.shoppingListID = list.ShoppingListId;
-            foreach (var listItem in list.Items)
+            if (list.Items != null)
             {
-                newDtoList.Items.Add(ItemMapper.ItemToItemDto(listItem));
+                foreach (var listItem in list.Items)
+                {
+                    newDtoList.Items.Add(ItemMapper.ItemToItemDto(listItem));
+                }
             }
             return newDtoList;
         }
