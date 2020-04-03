@@ -35,7 +35,7 @@
                 <ListView.ItemTemplate>
                     <DataTemplate x:Name="ItemTemplate">
                         <ViewCell>
-                            <Grid>
+                            <Grid >
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="10*"/>
                                     <ColumnDefinition Width="70*"/>
@@ -51,18 +51,15 @@
                                    IsTextPredictionEnabled="False"/>
                                 <StackLayout Orientation="Horizontal" Grid.Column="2">
                                 <ImageButton Source="{utility:ImageResource SplitList.EmbeddedResources.plus.png}"
-                                       Grid.Column="2"
                                        WidthRequest="10"
                                        VerticalOptions="Center"
                                        BindingContext="{x:Reference ShoppingListViewModel}"
                                        Command="{Binding IncItemAmountCommand}"/>
                                 <Label Text="{Binding Path=Amount}"
-                                       Grid.Column="2"
                                        VerticalOptions="Center"
                                        HorizontalOptions="Start"
                                        FontSize="16"/>
                                 <ImageButton Source="{utility:ImageResource SplitList.EmbeddedResources.minus.png}"
-                                       Grid.Column="2"
                                        WidthRequest="10"
                                        VerticalOptions="Center"
                                        BindingContext="{x:Reference ShoppingListViewModel}"

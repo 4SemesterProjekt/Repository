@@ -17,7 +17,7 @@ namespace ClientLibAPI
         //Return list of shoppinglistDTO based on GroupId
         public static async Task<List<ShoppingListDTO>> GetShoppingListByGroupId(int GroupId)
         {
-            var ShoppinglistsByIDString = await client.GetStringAsync($"{URL}group/{GroupId}");
+            var ShoppinglistsByIDString = client.GetStringAsync($"{URL}group/{GroupId}").GetAwaiter().GetResult();
             var ShoppinglistsByGroupID = JsonConvert.DeserializeObject<List<ShoppingListDTO>>(ShoppinglistsByIDString);
             return ShoppinglistsByGroupID;
 
@@ -25,7 +25,7 @@ namespace ClientLibAPI
         //Return a shoppinglistDTO based on ShoppinglistId
         public static async Task<ShoppingListDTO> GetShoppingListByShoppinglistId(int ShoppinglistId)
         {
-            var ShoppinglistsByIdString = await client.GetStringAsync($"{URL}{ ShoppinglistId}");
+            var ShoppinglistsByIdString = client.GetStringAsync($"{URL}{ ShoppinglistId}").GetAwaiter().GetResult();
             var ShoppinglistsByID = JsonConvert.DeserializeObject<ShoppingListDTO>(ShoppinglistsByIdString);
             return ShoppinglistsByID;
 
@@ -46,7 +46,6 @@ namespace ClientLibAPI
                 request.Content = httpContext;
 
                 return await client.SendAsync(request);
-
 
             }
         }
