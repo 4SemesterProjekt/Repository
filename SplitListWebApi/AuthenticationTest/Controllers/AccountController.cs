@@ -50,7 +50,8 @@ namespace AuthenticationTest.Controllers
             {
                 Email = info.Principal.FindFirst(ClaimTypes.Email).Value,
                 UserName = info.Principal.FindFirst(ClaimTypes.Email).Value,
-                Id = info.Principal.FindFirst(ClaimTypes.NameIdentifier).Value
+                Id = info.Principal.FindFirst(ClaimTypes.NameIdentifier).Value,
+                EmailConfirmed = true
             };
 
             var loginInfo = new UserLoginInfo(info.LoginProvider, info.ProviderKey, info.Principal.FindFirst(ClaimTypes.Name).Value);
