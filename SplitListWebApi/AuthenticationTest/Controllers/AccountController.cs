@@ -44,41 +44,34 @@ namespace AuthenticationTest.Controllers
         [Route("[action]")]
         public async Task<IActionResult> GoogleResponse()
         {
-            ExternalLoginInfo info = await _signInManager.GetExternalLoginInfoAsync();
-            if (info == null)
-                return BadRequest("Login-user not found");
+            var info = await _signInManager.GetExternalLoginInfoAsync();
 
-            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false);
-            string[] userInfo =
-                {info.Principal.FindFirst(ClaimTypes.Name).Value, info.Principal.FindFirst(ClaimTypes.Email).Value, info.Principal.FindFirst(ClaimTypes.NameIdentifier).Value};
+            var user = new IdentityUser
+            {
+                Email = info.Principal.FindFirst(ClaimTypes.Email).Value,
+                UserName = info.Principal.FindFirst(ClaimTypes.Email).Value,
+                Id = info.Principal.FindFirst(ClaimTypes.NameIdentifier).Value
+            };
+
+            var loginInfo = new UserLoginInfo(info.LoginProvider, info.ProviderKey, info.Principal.FindFirst(ClaimTypes.Name).Value);
+
+            var result = await _signInManager.ExternalLoginSignInAsync(loginInfo.LoginProvider, loginInfo.ProviderKey, false);
+
             if (result.Succeeded)
-                return Ok(userInfo);
+                return Ok(user);
             else
             {
-                IdentityUser user = new IdentityUser
-                {
-                    Email = info.Principal.FindFirst(ClaimTypes.Email).Value,
-                    UserName = info.Principal.FindFirst(ClaimTypes.Email).Value,
-                    Id = info.Principal.FindFirst(ClaimTypes.NameIdentifier).Value
-                };
+                var identityResult = await _userManager.CreateAsync(user);
+                
+                if (!identityResult.Succeeded) return Forbid();
+                identityResult = await _userManager.AddLoginAsync(user, info);
 
-                IdentityResult identResult = await _userManager.CreateAsync(user);
-                if (!identResult.Succeeded) return Forbid();
-                identResult = await _userManager.AddLoginAsync(user, info);
-
-                if (!identResult.Succeeded) return Forbid();
+                if (!identityResult.Succeeded) return Forbid();
                 await _signInManager.SignInAsync(user, false);
 
-                return Ok(userInfo);
+                return Ok(user);
 
             }
-        }
-
-        [AllowAnonymous]
-        [Route("[action]")]
-        public string Login()
-        {
-            return "Login Reached";
         }
     }
 }
