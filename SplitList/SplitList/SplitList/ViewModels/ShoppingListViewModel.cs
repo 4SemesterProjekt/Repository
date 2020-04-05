@@ -79,7 +79,7 @@ namespace SplitList.ViewModels
         {
             if (CurrentItem != null)
             {
-                if (CurrentItem.Amount > 0)
+                if (CurrentItem.Amount > 1)
                     CurrentItem.Amount--;
             }
         }
