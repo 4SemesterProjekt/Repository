@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -12,7 +14,7 @@ namespace SplitList.ViewModels
 {
     class LoginViewModel
     {
-        private Uri AuthenticationUri = new Uri(""); //URL på vores webapi, som appen skal requeste et link til en loginside fra.
+        private Uri AuthenticationUri = new Uri("https://localhost:44393/weatherforecast"); //URL på vores webapi, som appen skal requeste et link til en loginside fra.
         private Uri CallBackUri = new Uri("SplitList://"); //URL til vores app, som loginsiden bruger til at åbne for appen, når login er gennemført.
 
         private ICommand _LoginCommand;
@@ -22,28 +24,22 @@ namespace SplitList.ViewModels
         }
 
         //Laver en http-request til vores web-api, bliver viderestillet til Google-login-siden. Efter login sendes brugeren tilbage til appen via callbackURL.
-        public void LoginCommandExecute()
+        public async void LoginCommandExecute()
         {
-            var authResult = WebAuthenticator.AuthenticateAsync(AuthenticationUri, CallBackUri);
+            WebAuthenticatorResult authResult;
+            string accessToken;
 
-            var accesToken = authResult?.Result;
-
-            if(accesToken != null)
+            try
             {
-                //To Do: Send accesToken til web-api og åben for MultiShopListView.
+                authResult = await WebAuthenticator.AuthenticateAsync(AuthenticationUri, CallBackUri);
 
-
+                accessToken = authResult?.AccessToken;
             }
-            else
+            catch (System.Threading.Tasks.TaskCanceledException e)
             {
-                Application.Current.MainPage.DisplayAlert("Error", "Login failed. Try again.", "OK");
+                await Application.Current.MainPage.DisplayAlert("Error", "Login failed. Try again.", "OK");
             }
-
 
         }
     }
-
-
-
-
 }
