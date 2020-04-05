@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ApiFormat;
 using ClientLibAPI;
 using SplitList.Mapping;
 using SplitList.Models;
@@ -19,6 +20,11 @@ namespace SplitList.Views
         {
             InitializeComponent();
             ShoppingListViewModel.ShoppingList = ShoppingListMapper.ShoppingListDtoToShoppingList(SerializerShoppingList.GetShoppingListByShoppinglistId(shoppingList.ShoppingListId).Result);
+        }
+
+        private async void Button_OnClicked(object sender, EventArgs e)
+        {
+            await SerializerShoppingList.PostShoppingList(ShoppingListMapper.ShoppingListToShoppingListDto(ShoppingListViewModel.ShoppingList));
         }
     }
 }

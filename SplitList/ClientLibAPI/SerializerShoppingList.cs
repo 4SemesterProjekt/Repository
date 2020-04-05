@@ -28,8 +28,7 @@ namespace ClientLibAPI
             var ShoppinglistsByIdString = client.GetStringAsync($"{URL}{ ShoppinglistId}").GetAwaiter().GetResult();
             var ShoppinglistsByID = JsonConvert.DeserializeObject<ShoppingListDTO>(ShoppinglistsByIdString);
             return ShoppinglistsByID;
-
-
+            
         }
 
         // POST: api/ShoppingLists

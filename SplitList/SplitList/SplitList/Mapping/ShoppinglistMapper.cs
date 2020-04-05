@@ -26,6 +26,7 @@ namespace SplitList.Mapping
         public static ShoppingListDTO ShoppingListToShoppingListDto(ShoppingList list)
         {
             ShoppingListDTO newDtoList = new ShoppingListDTO();
+            newDtoList.Items = new List<ItemDTO>();
             newDtoList.shoppingListName = list.Name;
             newDtoList.shoppingListID = list.ShoppingListId;
             if (list.Items != null)

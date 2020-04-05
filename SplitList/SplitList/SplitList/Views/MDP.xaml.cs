@@ -14,7 +14,9 @@ namespace SplitList.Views
     {
         public MDP()
         {
+            
             InitializeComponent();
+            Master = new MenuView();
             Detail = new NavigationPage(new MultiShopListView());
             MenuView.NavListView.ItemSelected += OnItemSelected;
         }

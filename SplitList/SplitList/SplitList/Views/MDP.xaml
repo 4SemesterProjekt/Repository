@@ -6,7 +6,4 @@
              mc:Ignorable="d"
              x:Class="SplitList.Views.MDP"
              xmlns:view="clr-namespace:SplitList.Views">
-  <MasterDetailPage.Master>
-    <view:MenuView/>
-  </MasterDetailPage.Master>
 </MasterDetailPage>

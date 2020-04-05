@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Windows.Input;
+using ApiFormat;
 using ClientLibAPI;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -21,7 +22,7 @@ namespace SplitList.ViewModels
             Navigation = navigation;
             _page = page;
             Lists = new ObservableCollection<ShoppingList>();
-            Lists = ListMapper.ListToObservableCollection(SerializerShoppingList.GetShoppingListByGroupId(1));
+            Lists = ListMapper.ListToObservableCollection(SerializerShoppingList.GetShoppingListByGroupId(1).Result);
         }
 
         #region Properties

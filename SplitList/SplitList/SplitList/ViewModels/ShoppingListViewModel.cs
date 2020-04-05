@@ -21,6 +21,7 @@ namespace SplitList.ViewModels
             ShoppingList = new ShoppingList();
         }
 
+        
         #region Properties
 
         private ShoppingList _shoppingList;
