@@ -2,33 +2,36 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace SemesterProjekt4SQLStruktur
+namespace SplitListWebApi.Models
 {
-    public partial class DbContext : Microsoft.EntityFrameworkCore.DbContext
+    public partial class SplitListContext : Microsoft.EntityFrameworkCore.DbContext
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<Pantry> Pantries { get; set; }
         public DbSet<ShoppingList> ShoppingLists { get; set; }
+        public DbSet<ShoppingListItem> ShoppingListItems { get; set; }
         public DbSet<Item> Items { get; set; }
         public DbSet<Recipe> Recipes { get; set; }
-        
-        public DbContext()
+        public DbSet<PantryItem> PantryItems { get; set; }
+        public DbSet<UserGroup> UserGroups { get; set; }
+        public SplitListContext()
         {
         }
 
-        public DbContext(DbContextOptions<DbContext> options)
+        public SplitListContext(DbContextOptions<SplitListContext> options)
             : base(options)
         {
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=tcp:semesterprojekt4.database.windows.net,1433;Initial Catalog=PRJ4;Persist Security Info=False;User ID=prj4;Password=Semesterprojekt4!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
-            }
+            string connectionString =
+                "Server=tcp:semesterprojekt4.database.windows.net,1433;Initial Catalog=PRJ4DB;Persist Security Info=False;User ID=prj4;Password=Semesterprojekt4!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            
+            //optionsBuilder.UseSqlServer(connectionString);
+            
+            base.OnConfiguring(optionsBuilder);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

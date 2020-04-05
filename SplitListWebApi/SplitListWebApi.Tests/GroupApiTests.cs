@@ -4,7 +4,6 @@ using ApiFormat;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
-using SplitListWebApi.Areas.Identity.Data;
 using SplitListWebApi.Models;
 using SplitListWebApi.Repository;
 
@@ -45,13 +44,13 @@ namespace SplitListWebApi.Tests
                 GroupDTO group = new GroupDTO()
                 {
                     Name = "Group1",
-                    OwnerID = "1"
+                    OwnerID = 1
                 };
                 groupRepo.AddGroup(group);
 
                 Assert.AreEqual(1, context.Groups.Count());
                 Assert.AreEqual("Group1", context.Groups.FirstOrDefault().Name);
-                Assert.AreEqual("1", context.Groups.FirstOrDefault().OwnerID);
+                Assert.AreEqual(1, context.Groups.FirstOrDefault().OwnerID);
                 Assert.AreEqual(1, context.Groups.FirstOrDefault().GroupID);
             }
         }
@@ -68,7 +67,7 @@ namespace SplitListWebApi.Tests
                 GroupDTO group = new GroupDTO()
                 {
                     Name = "Group1",
-                    OwnerID = "1",
+                    OwnerID = 1,
                     GroupID = 1
                 };
                 groupRepo.AddGroup(group);
@@ -90,7 +89,7 @@ namespace SplitListWebApi.Tests
                 GroupDTO group = new GroupDTO()
                 {
                     Name = "Group1",
-                    OwnerID = "1",
+                    OwnerID = 1,
                     GroupID = 1
                 };
                 groupRepo.AddGroup(group);
@@ -98,7 +97,7 @@ namespace SplitListWebApi.Tests
                 User user1 = new User()
                 {
                     Name = "User1",
-                    Id = "1"
+                    UserID = 1
                 };
 
                 context.Users.Add(user1);
@@ -107,7 +106,7 @@ namespace SplitListWebApi.Tests
                 User user2 = new User()
                 {
                     Name = "User2",
-                    Id = "2"
+                    UserID = 2
                 };
 
                 context.Users.Add(user2);
@@ -116,13 +115,13 @@ namespace SplitListWebApi.Tests
                 UserGroup userGroup1 = new UserGroup()
                 {
                     GroupID = 1,
-                    Id = "1"
+                    UserID = 1
                 };
 
                 UserGroup userGroup2 = new UserGroup()
                 {
                     GroupID = 1,
-                    Id = "2"
+                    UserID = 2
                 };
 
                 List<User> users = new List<User>()
@@ -140,7 +139,7 @@ namespace SplitListWebApi.Tests
                 for (int i = 0; i < 2; i++)
                 {
                     Assert.AreEqual(users[i].Name, usersDTO[i].Name);
-                    Assert.AreEqual(users[i].Id, usersDTO[i].Id);
+                    Assert.AreEqual(users[i].UserID, usersDTO[i].UserID);
                 }
             }
         }
@@ -157,17 +156,17 @@ namespace SplitListWebApi.Tests
                 GroupDTO group = new GroupDTO()
                 {
                     Name = "Group1",
-                    OwnerID = "1",
+                    OwnerID = 1,
                     GroupID = 1
                 };
                 groupRepo.AddGroup(group);
 
                 group.Name = "GroupUpdated";
-                group.OwnerID = "2";
+                group.OwnerID = 2;
                 groupRepo.UpdateGroup(group);
 
                 Assert.AreEqual("GroupUpdated", context.Groups.FirstOrDefault().Name);
-                Assert.AreEqual("2", context.Groups.FirstOrDefault().OwnerID);
+                Assert.AreEqual(2, context.Groups.FirstOrDefault().OwnerID);
             }
         }
 
@@ -183,14 +182,14 @@ namespace SplitListWebApi.Tests
                 GroupDTO group = new GroupDTO()
                 {
                     Name = "Group1",
-                    OwnerID = "1",
+                    OwnerID = 1,
                     GroupID = 1
                 };
                 groupRepo.AddGroup(group);
 
                 group.Users = new List<UserDTO>()
                 {
-                    new UserDTO() { Name = "User1", Id = "1"}
+                    new UserDTO() { Name = "User1", UserID = 1}
                 };
 
                 groupRepo.UpdateGroup(group);
@@ -199,7 +198,7 @@ namespace SplitListWebApi.Tests
 
                 group.Users.Add(new UserDTO()
                 {
-                    Name = "User2", Id = "2"
+                    Name = "User2", UserID = 2
                 });
 
                 groupRepo.UpdateGroup(group);
@@ -226,15 +225,15 @@ namespace SplitListWebApi.Tests
                 GroupDTO group = new GroupDTO()
                 {
                     Name = "Group1",
-                    OwnerID = "1",
+                    OwnerID = 1,
                     GroupID = 1
                 };
                 groupRepo.AddGroup(group);
 
                 group.Users = new List<UserDTO>()
                 {
-                    new UserDTO() { Name = "User1", Id = "1"},
-                    new UserDTO() { Name = "User2", Id = "2"}
+                    new UserDTO() { Name = "User1", UserID = 1},
+                    new UserDTO() { Name = "User2", UserID = 2}
                 };
 
                 groupRepo.UpdateGroup(group);
@@ -261,15 +260,15 @@ namespace SplitListWebApi.Tests
                 GroupDTO group = new GroupDTO()
                 {
                     Name = "Group1",
-                    OwnerID = "1",
+                    OwnerID = 1,
                     GroupID = 1
                 };
                 groupRepo.AddGroup(group);
 
                 group.Users = new List<UserDTO>()
                 {
-                    new UserDTO() {Name = "User1", Id = "1"},
-                    new UserDTO() {Name = "User2", Id = "2"}
+                    new UserDTO() {Name = "User1", UserID = 1},
+                    new UserDTO() {Name = "User2", UserID = 2}
                 };
 
                 groupRepo.UpdateGroup(group);
@@ -277,7 +276,7 @@ namespace SplitListWebApi.Tests
                 UserDTO owner = groupRepo.GetOwnerOfGroup(group);
 
                 Assert.AreEqual("User1", owner.Name);
-                Assert.AreEqual("1", owner.Id);
+                Assert.AreEqual(1, owner.UserID);
             }
         }
 
@@ -293,15 +292,15 @@ namespace SplitListWebApi.Tests
                 GroupDTO group = new GroupDTO()
                 {
                     Name = "Group1",
-                    OwnerID = "1",
+                    OwnerID = 1,
                     GroupID = 1
                 };
                 groupRepo.AddGroup(group);
 
                 group.Users = new List<UserDTO>()
                 {
-                    new UserDTO() {Name = "User1", Id = "1"},
-                    new UserDTO() {Name = "User2", Id = "2"}
+                    new UserDTO() {Name = "User1", UserID = 1},
+                    new UserDTO() {Name = "User2", UserID = 2}
                 };
 
                 groupRepo.UpdateGroup(group);
@@ -310,7 +309,7 @@ namespace SplitListWebApi.Tests
 
                 Assert.AreEqual("Group1", correctGroup.Name);
                 Assert.AreEqual(1, correctGroup.GroupID);
-                Assert.AreEqual("1", correctGroup.OwnerID);
+                Assert.AreEqual(1, correctGroup.OwnerID);
                 Assert.AreEqual(2, correctGroup.Users.Count);
             }
         }
