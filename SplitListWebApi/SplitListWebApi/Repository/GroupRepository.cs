@@ -38,35 +38,73 @@ namespace SplitListWebApi.Repository
             }
             else return null;
         }
-        public void UpdateGroup(GroupDTO group)
-        {
-            Group dbGroup = LoadToModel(group);
-            if (dbGroup != null)
-            {
-                dbGroup.Name = group.Name;
-                dbGroup.OwnerID = group.OwnerID;
 
-                if (group.Users == null)
+        private void RemoveUsersFromGroup(GroupDTO group)
+        {
+            List<UserGroup> dbUsersInGroup = context.UserGroups
+                .Where(ug => ug.GroupID == group.GroupID)
+                .Include(ug => ug.User)
+                .ToList();
+
+            foreach (UserGroup userGroup in dbUsersInGroup)
+            {
+                UserDTO userToRemove = group.Users.Find(u => u.UserID == userGroup.UserID);
+                if (userToRemove == null)
                 {
-                    group.Users = new List<UserDTO>();
+                    context.UserGroups.Remove(userGroup);
+                }
+            }
+        }
+
+        private void AddUsersToGroup(GroupDTO group)
+        {
+            foreach (UserDTO user in group.Users)
+            {
+                User userModel = context.Users.Find(user.UserID);
+                if (userModel != null)
+                {
+                    userModel.Name = user.Name;
+                    context.Users.Update(userModel);
+                    context.SaveChanges();
                 }
                 else
                 {
-                    List<UserGroup> dbUserInGroup = context.UserGroups
-                        .Where(ug => ug.GroupID == group.GroupID)
-                        .Include(ug => ug.User)
-                        .ToList();
-
-                    foreach (UserGroup dbUserGroup in dbUserInGroup)
+                    // Modify to complete microsoft identity ( use user repo )
+                    context.Users.Add(new User()
                     {
-                        group.Users.Add(new UserDTO()
-                        {
-                            Name = dbUserGroup.User.Name,
-                            UserID = dbUserGroup.User.UserID
-                        });
-                        context.SaveChanges();
-                    }
+                        UserID = user.UserID,
+                        Name = user.Name
+                    });
+                    context.SaveChanges();
                 }
+
+                UserGroup userGroupModel = context.UserGroups.Find(user.UserID, group.GroupID);
+                if (userGroupModel == null)
+                {
+                    context.UserGroups.Add(new UserGroup()
+                    {
+                        UserID = user.UserID,
+                        GroupID = group.GroupID
+                    });
+                    context.SaveChanges();
+                }
+            }
+        }
+
+        public void UpdateGroup(GroupDTO group)
+        {
+            Group dbGroup = LoadToModel(group);
+            dbGroup.Name = group.Name;
+            dbGroup.OwnerID = group.OwnerID;
+
+            if (group.Users == null)
+            {
+                group.Users = new List<UserDTO>();
+            }
+            else
+            {
+                RemoveUsersFromGroup(group);
+                AddUsersToGroup(group);
             }
         }
         public void AddGroup(GroupDTO group)

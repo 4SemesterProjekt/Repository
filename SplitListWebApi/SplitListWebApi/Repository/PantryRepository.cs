@@ -9,17 +9,19 @@ namespace SplitListWebApi.Repository
     public interface IPantryRepository
     {
             void DeletePantry( PantryDTO pantry);
-            void UpdatePantry( PantryDTO pantry);
+            PantryDTO UpdatePantry( PantryDTO pantry);
             PantryDTO GetPantryFromGroupID(int groupID);
     }
 
     public class PantryRepository : IPantryRepository
     {
         private SplitListContext context;
+        private IItemRepository itemRepo;
 
         public PantryRepository(SplitListContext Context)
         {
             context = Context;
+            itemRepo = new ItemRepository(context);
         }
 
         public void DeletePantry(PantryDTO pantry)
@@ -32,7 +34,7 @@ namespace SplitListWebApi.Repository
                 {
                     foreach (ItemDTO item in pantry.Items)
                     {
-                        PantryItem dbItem = context.PantryItems.Find(item.ItemID);
+                        PantryItem dbItem = context.PantryItems.Find(pantry.ID, item.ItemID);
                         if (dbItem != null)
                         {
                             context.PantryItems.Remove(dbItem);
@@ -82,17 +84,66 @@ namespace SplitListWebApi.Repository
             else return null;
         }
 
-        public void UpdatePantry(PantryDTO pantry)
+        private void RemoveItemsFromPantry(PantryDTO pantry)
         {
-            Pantry dbPantry = LoadToModel(pantry);
-            if (dbPantry != null)
+            List<PantryItem> dbItemsInPantry = context.PantryItems
+                .Where(pi => pi.PantryID == pantry.ID)
+                .Include(it => it.Item)
+                .ToList();
+
+            foreach (PantryItem pantryItem in dbItemsInPantry)
             {
-                if (pantry.Name != dbPantry.Name)
+                ItemDTO itemToRemove = pantry.Items.Find(it => it.ItemID == pantryItem.ItemID);
+                if (itemToRemove == null)
                 {
-                    dbPantry.Name = pantry.Name;
-                    context.Pantries.Update(dbPantry);
+                    context.PantryItems.Remove(pantryItem);
+                }
+            }
+            context.SaveChanges();
+        }
+
+        private void AddItemsToPantry(PantryDTO pantry)
+        {
+            foreach (ItemDTO item in pantry.Items)
+            {
+                Item itemModel = itemRepo.LoadToModel(item);
+                if (item.ItemID <= 0)
+                    item.ItemID = itemModel.ItemID;
+
+                PantryItem pantryItemModel = context.PantryItems.Find(pantry.ID, item.ItemID);
+                if (pantryItemModel != null)
+                {
+                    pantryItemModel.Amount = item.Amount;
+                    context.Update(pantryItemModel);
                     context.SaveChanges();
                 }
+                else
+                {
+                    context.PantryItems.Add(new PantryItem()
+                    {
+                        ItemID = item.ItemID,
+                        Amount = item.Amount,
+                        PantryID = pantry.ID
+                    });
+                    context.SaveChanges();
+                }
+            }
+        }
+
+        public PantryDTO UpdatePantry(PantryDTO pantry)
+        {
+            Pantry dbPantry = LoadToModel(pantry);
+
+            if (dbPantry != null)
+            {
+                if (pantry.ID <= 0)
+                {
+                    pantry.ID = dbPantry.PantryID;
+                }
+
+                dbPantry.Name = pantry.Name;
+                context.Pantries.Update(dbPantry);
+                context.SaveChanges();
 
                 if (pantry.Items == null)
                 {
@@ -100,47 +151,11 @@ namespace SplitListWebApi.Repository
                 }
                 else
                 {
-                    foreach (ItemDTO item in pantry.Items)
-                    {
-                        Item dbItem = context.Items.Find(item.ItemID);
-                        if (dbItem != null)
-                        {
-                            dbItem.Name = item.Name;
-                            dbItem.Type = item.Type;
-                            context.Items.Update(dbItem);
-                            context.SaveChanges();
-                        }
-                        else
-                        {
-                            context.Items.Add(new Item()
-                            {
-                                ItemID = item.ItemID,
-                                Name = item.Name,
-                                Type = item.Type
-                            });
-                            context.SaveChanges();
-                        }
-
-                        PantryItem dbPantryItem = context.PantryItems.Find(pantry.ID, item.ItemID);
-                        if (dbPantryItem != null)
-                        {
-                            dbPantryItem.Amount = item.Amount;
-                            context.PantryItems.Update(dbPantryItem);
-                            context.SaveChanges();
-                        }
-                        else
-                        {
-                            context.PantryItems.Add(new PantryItem() 
-                            { 
-                                ItemID = item.ItemID,
-                                PantryID = pantry.ID,
-                                Amount = item.Amount
-                            });
-                            context.SaveChanges();
-                        }
-                    }
+                    RemoveItemsFromPantry(pantry);
+                    AddItemsToPantry(pantry);
                 }
             }
+            return pantry;
         }
 
         private Pantry LoadToModel(PantryDTO pantry)
