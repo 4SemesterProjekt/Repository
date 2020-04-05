@@ -42,9 +42,8 @@ namespace ClientLibForAPI
             var testerforItem = SerializerShoppingList.GetShoppingListByShoppinglistId(3).Result;
             testerforItem.Items.Add(new ItemDTO()
             {
-                ItemID = 1,
-                Name = "Banan",
-                Type = "Frugt",
+                ItemID = 0,
+                Name = "Gifler",
                 Amount = 3
 
                
