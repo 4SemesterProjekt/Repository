@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Android.Support.Design.Behavior;
 using Prism.Commands;
 using Prism.Mvvm;
 using SplitList.Views;
@@ -27,7 +28,7 @@ namespace SplitList.ViewModels
         public async void LoginCommandExecute()
         {
             WebAuthenticatorResult authResult;
-            string accessToken;
+            string accessToken = "";
 
             try
             {
@@ -37,9 +38,17 @@ namespace SplitList.ViewModels
             }
             catch (System.Threading.Tasks.TaskCanceledException e)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", "Login failed. Try again.", "OK");
+
             }
 
+            if(accessToken != "")
+            {
+                //Application.Current.MainPage = new MDP();
+            }
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", "Login failed. Try again.", "OK");
+            }
         }
     }
 }
