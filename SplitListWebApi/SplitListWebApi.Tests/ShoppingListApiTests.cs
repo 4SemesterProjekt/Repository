@@ -6,8 +6,6 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
-using SplitListWebApi.Areas.Identity.Data;
-using SplitListWebApi.Areas.Identity.Data.Models;
 using SplitListWebApi.Models;
 using SplitListWebApi.Repository;
 
@@ -51,7 +49,7 @@ namespace SplitListWebApi.Tests
                 {
                     GroupID = 1,
                     Name = "JordkimsGruppe",
-                    OwnerID = "1",
+                    OwnerID = 1,
                     Pantries = null,
                     ShoppingLists = null,
                     UserGroups = null
@@ -93,7 +91,7 @@ namespace SplitListWebApi.Tests
                 {
                     GroupID = 1,
                     Name = "Group1",
-                    OwnerID = "1",
+                    OwnerID = 1,
                     Pantries = null,
                     ShoppingLists = null,
                     UserGroups = null
@@ -138,7 +136,7 @@ namespace SplitListWebApi.Tests
                 {
                     GroupID = 1,
                     Name = "JordkimsGruppe",
-                    OwnerID = "1",
+                    OwnerID = 1,
                     Pantries = null,
                     ShoppingLists = null,
                     UserGroups = null
@@ -181,7 +179,7 @@ namespace SplitListWebApi.Tests
                 {
                     GroupID = 1,
                     Name = "JordkimsGruppe",
-                    OwnerID = "1",
+                    OwnerID = 1,
                     Pantries = null,
                     ShoppingLists = null,
                     UserGroups = null
@@ -239,7 +237,7 @@ namespace SplitListWebApi.Tests
                 {
                     GroupID = 1,
                     Name = "JordkimsGruppe",
-                    OwnerID = "1",
+                    OwnerID = 1,
                     Pantries = null,
                     ShoppingLists = null,
                     UserGroups = null
@@ -277,7 +275,7 @@ namespace SplitListWebApi.Tests
                 {
                     GroupID = 1,
                     Name = "JordkimsGruppe",
-                    OwnerID = "1",
+                    OwnerID = 1,
                 };
 
                 context.Groups.Add(jørgensGruppe);
@@ -313,7 +311,7 @@ namespace SplitListWebApi.Tests
                 context.Groups.Add(new Group()
                 {
                     Name = "Group1",
-                    OwnerID = "1"
+                    OwnerID = 1
                 });
                 context.SaveChanges();
             }
@@ -348,7 +346,7 @@ namespace SplitListWebApi.Tests
                 context.Groups.Add(new Group()
                 {
                     Name = "Group1",
-                    OwnerID = "1"
+                    OwnerID = 1
                 });
                 context.SaveChanges();
             }
@@ -393,7 +391,7 @@ namespace SplitListWebApi.Tests
                 context.Groups.Add(new Group()
                 {
                     Name = "Group1",
-                    OwnerID = "1"
+                    OwnerID = 1
                 });
                 context.SaveChanges();
             }
@@ -483,7 +481,7 @@ namespace SplitListWebApi.Tests
                 context.Groups.Add(new Group()
                 {
                     Name = "Group1",
-                    OwnerID = "1"
+                    OwnerID = 1
                 });
                 context.SaveChanges();
             }

@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore.Internal;
 using SplitListWebApi.Models;
 using SplitListWebApi.Repository;
 using ApiFormat;
-using SplitListWebApi.Areas.Identity.Data;
 
 namespace SplitListWebApi.Controllers
 {

@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SplitListWebApi.Areas.Identity.Data;
 using SplitListWebApi.Models;
 
 namespace SplitListWebApi.Controllers
@@ -48,9 +47,9 @@ namespace SplitListWebApi.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(string id, User user)
+        public async Task<IActionResult> PutUser(int id, User user)
         {
-            if (id != user.Id)
+            if (id != user.UserID)
             {
                 return BadRequest();
             }
@@ -85,7 +84,7 @@ namespace SplitListWebApi.Controllers
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUser", new { id = user.Id }, user);
+            return CreatedAtAction("GetUser", new { id = user.UserID }, user);
         }
 
         // DELETE: api/Users/5
@@ -104,9 +103,9 @@ namespace SplitListWebApi.Controllers
             return user;
         }
 
-        private bool UserExists(string id)
+        private bool UserExists(int id)
         {
-            return _context.Users.Any(e => e.Id == id);
+            return _context.Users.Any(e => e.UserID == id);
         }
     }
 }
