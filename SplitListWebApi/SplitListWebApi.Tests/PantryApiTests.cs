@@ -235,6 +235,7 @@ namespace SplitListWebApi.Tests
                 repo.DeletePantry(pantry);
 
                 Assert.AreEqual(0, context.PantryItems.Count());
+                Assert.AreEqual(0, context.Pantries.Count());
             }
         }
 

@@ -403,18 +403,19 @@ namespace SplitListWebApi.Tests
                 shoppingListName = "ShoppingList1",
                 shoppingListGroupID = 1,
                 shoppingListGroupName = "Group1",
-                shoppingListID = 1,
                 Items = new List<ItemDTO>()
                 {
                     new ItemDTO()
                     {
                         Amount = 1,
+                        ItemID = 0,
                         Type = "Fruit",
                         Name = "Banana"
                     },
                     new ItemDTO()
                     {
                         Amount = 1,
+                        ItemID = 0,
                         Type = "Fruit",
                         Name = "Apple"
                     }
@@ -427,6 +428,7 @@ namespace SplitListWebApi.Tests
                 repo.UpdateShoppingList(list);
                 Assert.AreEqual("ShoppingList1", context.ShoppingLists.FirstOrDefault().Name);
                 Assert.AreEqual(1, context.ShoppingLists.Count());
+                Assert.AreEqual(2, context.ShoppingListItems.Count());
 
                 ShoppingListDTO modifiedList = new ShoppingListDTO()
                 {
