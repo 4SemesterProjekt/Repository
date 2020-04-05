@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using ApiFormat;
 using Microsoft.AspNetCore.Mvc;
+using SplitListWebApi.Areas.Identity.Data;
 using SplitListWebApi.Models;
 using SplitListWebApi.Repository;
 

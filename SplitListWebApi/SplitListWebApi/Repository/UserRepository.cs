@@ -3,6 +3,8 @@ using System.Linq;
 using SplitListWebApi.Models;
 using ApiFormat;
 using Microsoft.EntityFrameworkCore;
+using SplitListWebApi.Areas.Identity.Data;
+using SplitListWebApi.Areas.Identity.Data.Models;
 
 namespace SplitListWebApi.Repository
 {
@@ -29,7 +31,7 @@ namespace SplitListWebApi.Repository
             {
                 //May be flawed and only return 1 single group
                 List<Group> userGroups = context.UserGroups
-                    .Where(ug => ug.UserID == user.UserID)
+                    .Where(ug => ug.Id == user.Id)
                     .Include(g => g.Group)
                     .Select(ug => ug.Group)
                     .ToList();
@@ -52,7 +54,7 @@ namespace SplitListWebApi.Repository
 
         private User LoadToModel(UserDTO user)
         {
-            User dbUser = context.Users.Find(user.UserID);
+            User dbUser = context.Users.Find(user.Id);
 
             if (dbUser != null)
                 return dbUser;

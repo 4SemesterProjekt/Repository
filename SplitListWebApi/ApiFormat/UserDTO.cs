@@ -6,7 +6,7 @@ namespace ApiFormat
 {
     public class UserDTO
     {
-        public int UserID { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
         public List<GroupDTO> Groups { get; set; }
     }

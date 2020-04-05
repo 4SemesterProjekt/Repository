@@ -1,4 +1,6 @@
 ﻿using ApiFormat;
+using SplitListWebApi.Areas.Identity.Data;
+using SplitListWebApi.Areas.Identity.Data.Models;
 using SplitListWebApi.Models;
 
 namespace SplitListWebApi.Repository
