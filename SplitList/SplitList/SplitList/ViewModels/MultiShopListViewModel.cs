@@ -76,7 +76,8 @@ namespace SplitList.ViewModels
             string result = await _page.DisplayPromptAsync("New shoppingList","Enter a name for your shoppinglist");
             if(result != null)
             {
-                Lists.Add(new ShoppingList(result));
+                var newList = new ShoppingList(result);
+                //var listReturned = await SerializerShoppingList.PostShoppingList(ShoppingListMapper.ShoppingListToShoppingListDto(newList));
             }
         }
 

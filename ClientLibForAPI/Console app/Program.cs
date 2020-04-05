@@ -39,16 +39,18 @@ namespace ClientLibForAPI
             var d = SerializerShoppingList.PostShoppingList(shoppinglistByID).Result;
 
 
-            var shoppinglistByIDTESTER = new ShoppingListDTO()
+            var testerforItem = SerializerShoppingList.GetShoppingListByShoppinglistId(3).Result;
+            testerforItem.Items.Add(new ItemDTO()
             {
-                shoppingListName = "TESTERer",
-                Items = null,
-                shoppingListGroupName = "Karls Gruppe",
-                shoppingListGroupID = 1
+                ItemID = 1,
+                Name = "Banan",
+                Type = "Frugt",
+                Amount = 3
 
-            };
+               
+            });
 
-            var NewShoppinglist = SerializerShoppingList.PostShoppingList(shoppinglistByIDTESTER).Result;
+            var NewShoppinglist = SerializerShoppingList.PostShoppingList(testerforItem).Result;
             
            
             Console.WriteLine($"{NewShoppinglist.shoppingListID}, {NewShoppinglist.shoppingListGroupName}, {NewShoppinglist.shoppingListName}");
