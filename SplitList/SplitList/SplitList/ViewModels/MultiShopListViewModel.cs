@@ -17,12 +17,13 @@ namespace SplitList.ViewModels
 {
     public class MultiShopListViewModel : BindableBase
     {
-        public MultiShopListViewModel(INavigation navigation, Page page)
+        public MultiShopListViewModel(INavigation navigation, Page page, int groupId)
         {
             Navigation = navigation;
             _page = page;
+            GroupId = groupId;
             Lists = new ObservableCollection<ShoppingList>();
-            Lists = ListMapper.ListToObservableCollection(SerializerShoppingList.GetShoppingListByGroupId(1).Result);
+            Lists = ListMapper.ListToObservableCollection(SerializerShoppingList.GetShoppingListByGroupId(GroupId).Result);
         }
 
         #region Properties
@@ -30,6 +31,13 @@ namespace SplitList.ViewModels
         private Page _page;
 
         private INavigation Navigation { get; set; }
+
+        private int _groupId;
+        public int GroupId
+        {
+            get => _groupId;
+            set => SetProperty(ref _groupId, value);
+        }
 
         private ObservableCollection<ShoppingList> _lists;
 
@@ -80,7 +88,7 @@ namespace SplitList.ViewModels
             string result = await _page.DisplayPromptAsync("New shoppingList","Enter a name for your shoppinglist");
             if(!string.IsNullOrEmpty(result))
             {
-                var newList = new ShoppingList(result);
+                var newList = new ShoppingList(result,GroupId);
                 var listDTO = ShoppingListMapper.ShoppingListToShoppingListDto(newList);
                 var listReturned = await SerializerShoppingList.PostShoppingList(listDTO);
                 Lists.Add(ShoppingListMapper.ShoppingListDtoToShoppingList(listReturned));
