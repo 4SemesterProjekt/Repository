@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Net.Mime;
 
-namespace SplitListWebApi.Models
+namespace SplitListWebApi.Areas.Identity.Data.Models
 {
     public class Recipe
     {

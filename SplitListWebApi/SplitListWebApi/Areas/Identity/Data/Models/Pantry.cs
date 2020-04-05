@@ -1,25 +1,25 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SplitListWebApi.Models
+namespace SplitListWebApi.Areas.Identity.Data.Models
 {
-    public class ShoppingList
+    public class Pantry
     {
-        public int ShoppingListID { get; set; }
+        public int PantryID { get; set; }
         public string Name { get; set; }
         
         [ForeignKey("GroupID")]
         public int GroupID { get; set; }
         public Group Group { get; set; }
         
-        public ICollection<ShoppingListItem> ShoppingListItems { get; set; }
+        
+        public ICollection<PantryItem> PantryItems { get; set; }
     }
 
-    public class ShoppingListItem
+    public class PantryItem
     {
-        public int ShoppingListID { get; set; }
-        public ShoppingList ShoppingList { get; set; }
+        public int PantryID { get; set; }
+        public Pantry Pantry { get; set; }
         
         public int ItemID { get; set; }
         public Item Item { get; set; }

@@ -1,20 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
+using SplitListWebApi.Areas.Identity.Data.Models;
 
 namespace SplitListWebApi.Models
 {
-    public class User
+    public class User : IdentityUser
     {
-        public int UserID { get; set; }
         public string Name { get; set; }
-        
         public ICollection<UserGroup> UserGroups { get; set; }
     }
 
     public class UserGroup
     {
-        public int UserID { get; set; }
+        public string Id { get; set; }
         public User User { get; set; }
         
         public int GroupID { get; set; }

@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+using SplitListWebApi.Areas.Identity.Data.Models;
+using SplitListWebApi.Models;
 
-namespace SplitListWebApi.Models
+namespace SplitListWebApi.Areas.Identity.Data
 {
-    public partial class SplitListContext : Microsoft.EntityFrameworkCore.DbContext
+   public partial class SplitListContext : IdentityDbContext<User>
     {
-        public DbSet<User> Users { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<Pantry> Pantries { get; set; }
         public DbSet<ShoppingList> ShoppingLists { get; set; }
@@ -26,23 +26,19 @@ namespace SplitListWebApi.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string connectionString =
-                "Server=tcp:semesterprojekt4.database.windows.net,1433;Initial Catalog=PRJ4DB;Persist Security Info=False;User ID=prj4;Password=Semesterprojekt4!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-            
-            //optionsBuilder.UseSqlServer(connectionString);
-            
             base.OnConfiguring(optionsBuilder);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             //Setup for User-Group Many-to-Many
-            modelBuilder.Entity<UserGroup>().HasKey(ug => new {ug.UserID, ug.GroupID});
+            modelBuilder.Entity<UserGroup>().HasKey(ug => new {ug.Id, ug.GroupID});
             
             modelBuilder.Entity<UserGroup>()
                 .HasOne(ug => ug.User)
                 .WithMany(u => u.UserGroups)
-                .HasForeignKey(ug => ug.UserID);
+                .HasForeignKey(ug => ug.Id);
 
             modelBuilder.Entity<UserGroup>()
                 .HasOne(ug => ug.Group)

@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using SplitListWebApi.Models;
 
-namespace SplitListWebApi.Models
+namespace SplitListWebApi.Areas.Identity.Data.Models
 {
     public class Item
     {
