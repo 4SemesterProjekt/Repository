@@ -59,7 +59,8 @@ namespace SplitList.ViewModels
             get => _listTappedCommand ?? (_listTappedCommand = new DelegateCommand(OpenShoppinglistExecute));
         }
 
-        async void OpenShoppinglistExecute() //Inserts UI-layer on top of the previous one, to easily implement navigation.
+        //Inserts UI-layer on top of the previous one, to easily implement navigation
+        async void OpenShoppinglistExecute() 
         {
             await Navigation.PushAsync(new ShoppingListView(CurrentList));
         }
@@ -71,13 +72,18 @@ namespace SplitList.ViewModels
             get => _addShoppingListCommand ?? (_addShoppingListCommand = new DelegateCommand(AddShoppingListExecute));
         }
 
+        //The function called when you click the add button to add a new shoppinglist
+        //Adds the list if the ok button is pressed and the name is not null or empty
+        //Does nothing if cancel is pressed
         async void AddShoppingListExecute()
         {
             string result = await _page.DisplayPromptAsync("New shoppingList","Enter a name for your shoppinglist");
-            if(result != null)
+            if(!string.IsNullOrEmpty(result))
             {
                 var newList = new ShoppingList(result);
-                //var listReturned = await SerializerShoppingList.PostShoppingList(ShoppingListMapper.ShoppingListToShoppingListDto(newList));
+                var listDTO = ShoppingListMapper.ShoppingListToShoppingListDto(newList);
+                var listReturned = await SerializerShoppingList.PostShoppingList(listDTO);
+                Lists.Add(ShoppingListMapper.ShoppingListDtoToShoppingList(listReturned));
             }
         }
 

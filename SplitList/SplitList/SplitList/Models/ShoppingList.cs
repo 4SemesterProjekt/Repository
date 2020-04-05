@@ -18,14 +18,19 @@ namespace SplitList.Models
         {
             Items = new ObservableCollection<Item>();
             Name = "";
+            ShoppingListId = 0;
+            GroupId = 1;
         }
         public ShoppingList(string name)
         {
             Items = new ObservableCollection<Item>();
             Name = name;
+            ShoppingListId = 0;
+            GroupId = 1;
         }
 
         public int ShoppingListId { get; set; }
+        public int GroupId { get; set; }
         private string _name;
         public string Name
         {

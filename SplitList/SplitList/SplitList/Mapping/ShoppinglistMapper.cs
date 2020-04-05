@@ -13,6 +13,7 @@ namespace SplitList.Mapping
             ShoppingList newList = new ShoppingList();
             newList.Name = dto.shoppingListName;
             newList.ShoppingListId = dto.shoppingListID;
+            newList.GroupId = dto.shoppingListGroupID;
             if (dto.Items != null)
             {
                 foreach (var dtoItem in dto.Items)
@@ -29,6 +30,7 @@ namespace SplitList.Mapping
             newDtoList.Items = new List<ItemDTO>();
             newDtoList.shoppingListName = list.Name;
             newDtoList.shoppingListID = list.ShoppingListId;
+            newDtoList.shoppingListGroupID = list.GroupId;
             if (list.Items != null)
             {
                 foreach (var listItem in list.Items)
