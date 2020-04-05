@@ -16,7 +16,7 @@ namespace AuthenticationTest.Areas.Identity
         {
             builder.ConfigureServices((context, services) => {
                 services.AddDbContext<AuthenticationTestContext>(options =>
-                    options.UseSqlite(
+                    options.UseInMemoryDatabase(
                         context.Configuration.GetConnectionString("AuthenticationTestContextConnection")));
 
                 services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)

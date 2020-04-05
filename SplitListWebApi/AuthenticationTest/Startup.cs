@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,6 +39,12 @@ namespace AuthenticationTest
                     options.ClientId = "19678358422-ciecen8r69ja6ji2d6o1ikrm5fdjrh1a.apps.googleusercontent.com";
                     options.ClientSecret = "0y3MWqxCffaoe2IiVXzQrd61";
                 });
+            services.Configure<IdentityUser>(options =>
+                {
+                    options.TwoFactorEnabled = false;
+                    options.AccessFailedCount = 5;
+                }
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
