@@ -51,7 +51,7 @@ namespace SplitListWebApi.Tests
 
                 Assert.AreEqual(1, context.Groups.Count());
                 Assert.AreEqual("Group1", context.Groups.FirstOrDefault().Name);
-                Assert.AreEqual(1, context.Groups.FirstOrDefault().OwnerID);
+                Assert.AreEqual("1", context.Groups.FirstOrDefault().OwnerID);
                 Assert.AreEqual(1, context.Groups.FirstOrDefault().GroupID);
             }
         }
@@ -167,7 +167,7 @@ namespace SplitListWebApi.Tests
                 groupRepo.UpdateGroup(group);
 
                 Assert.AreEqual("GroupUpdated", context.Groups.FirstOrDefault().Name);
-                Assert.AreEqual(2, context.Groups.FirstOrDefault().OwnerID);
+                Assert.AreEqual("2", context.Groups.FirstOrDefault().OwnerID);
             }
         }
 
@@ -277,7 +277,7 @@ namespace SplitListWebApi.Tests
                 UserDTO owner = groupRepo.GetOwnerOfGroup(group);
 
                 Assert.AreEqual("User1", owner.Name);
-                Assert.AreEqual(1, owner.Id);
+                Assert.AreEqual("1", owner.Id);
             }
         }
 
@@ -310,7 +310,7 @@ namespace SplitListWebApi.Tests
 
                 Assert.AreEqual("Group1", correctGroup.Name);
                 Assert.AreEqual(1, correctGroup.GroupID);
-                Assert.AreEqual(1, correctGroup.OwnerID);
+                Assert.AreEqual("1", correctGroup.OwnerID);
                 Assert.AreEqual(2, correctGroup.Users.Count);
             }
         }
