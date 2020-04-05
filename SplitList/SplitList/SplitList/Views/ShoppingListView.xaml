@@ -70,9 +70,6 @@
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
-                <ListView.GestureRecognizers>
-                    <
-                </ListView.GestureRecognizers>
                 <ListView.Footer>
                     <Grid>
                         <Grid.ColumnDefinitions>
