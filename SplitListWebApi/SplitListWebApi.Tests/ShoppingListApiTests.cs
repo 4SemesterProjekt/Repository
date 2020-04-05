@@ -311,10 +311,7 @@ namespace SplitListWebApi.Tests
                 context.Groups.Add(new Group()
                 {
                     Name = "Group1",
-                    OwnerID = 1,
-                    Pantries = null,
-                    ShoppingLists = null,
-                    UserGroups = null
+                    OwnerID = 1
                 });
                 context.SaveChanges();
             }
@@ -349,10 +346,7 @@ namespace SplitListWebApi.Tests
                 context.Groups.Add(new Group()
                 {
                     Name = "Group1",
-                    OwnerID = 1,
-                    Pantries = null,
-                    ShoppingLists = null,
-                    UserGroups = null
+                    OwnerID = 1
                 });
                 context.SaveChanges();
             }
@@ -361,8 +355,7 @@ namespace SplitListWebApi.Tests
             {
                 shoppingListName = "ShoppingList1",
                 shoppingListGroupID = 1,
-                shoppingListGroupName = "Group1",
-                shoppingListID = 1
+                shoppingListGroupName = "Group1"
             };
 
             using (var context = new SplitListContext(options))
@@ -398,10 +391,7 @@ namespace SplitListWebApi.Tests
                 context.Groups.Add(new Group()
                 {
                     Name = "Group1",
-                    OwnerID = 1,
-                    Pantries = null,
-                    ShoppingLists = null,
-                    UserGroups = null
+                    OwnerID = 1
                 });
                 context.SaveChanges();
             }
@@ -417,14 +407,12 @@ namespace SplitListWebApi.Tests
                     new ItemDTO()
                     {
                         Amount = 1,
-                        ItemID = 1,
                         Type = "Fruit",
                         Name = "Banana"
                     },
                     new ItemDTO()
                     {
                         Amount = 1,
-                        ItemID = 2,
                         Type = "Fruit",
                         Name = "Apple"
                     }
@@ -449,14 +437,12 @@ namespace SplitListWebApi.Tests
                         new ItemDTO()
                         {
                             Amount = 3,
-                            ItemID = 1,
                             Type = "Fruit",
                             Name = "Banana"
                         },
                         new ItemDTO()
                         {
                             Amount = 5,
-                            ItemID = 2,
                             Type = "Fruit",
                             Name = "Apple"
                         }
@@ -493,10 +479,7 @@ namespace SplitListWebApi.Tests
                 context.Groups.Add(new Group()
                 {
                     Name = "Group1",
-                    OwnerID = 1,
-                    Pantries = null,
-                    ShoppingLists = null,
-                    UserGroups = null
+                    OwnerID = 1
                 });
                 context.SaveChanges();
             }
@@ -512,14 +495,12 @@ namespace SplitListWebApi.Tests
                     new ItemDTO()
                     {
                         Amount = 1,
-                        ItemID = 1,
                         Type = "Fruit",
                         Name = "Banana"
                     },
                     new ItemDTO()
                     {
                         Amount = 1,
-                        ItemID = 2,
                         Type = "Fruit",
                         Name = "Apple"
                     }

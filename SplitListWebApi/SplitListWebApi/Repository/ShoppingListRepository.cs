@@ -19,10 +19,12 @@ namespace SplitListWebApi.Repository
     public class ShoppingListRepository : IShoppingListRepository
     {
         private SplitListContext context;
+        private IItemRepository itemRepo;
 
         public ShoppingListRepository(SplitListContext Context)
         {
             context = Context;
+            itemRepo = new ItemRepository(context);
         }
 
         public void DeleteShoppingList(ShoppingListDTO shoppingList)
@@ -64,30 +66,16 @@ namespace SplitListWebApi.Repository
                     context.ShoppingListItems.Remove(slItem);
                 }
             }
+            context.SaveChanges();
         }
 
         private void AddItemsToShoppingList(ShoppingListDTO shoppingList)
         {
             foreach (ItemDTO item in shoppingList.Items)
             {
-                Item itemModel = context.Items.Find(item.ItemID);
-                if (itemModel != null)
-                {
-                    itemModel.Name = item.Name;
-                    itemModel.Type = item.Type;
-                    context.Items.Update(itemModel);
-                    context.SaveChanges();
-                }
-                else
-                {
-                    context.Items.Add(new Item()
-                    {
-                        ItemID = item.ItemID,
-                        Name = item.Name,
-                        Type = item.Type
-                    });
-                    context.SaveChanges();
-                }
+                Item itemModel = itemRepo.LoadToModel(item);
+                if (item.ItemID <= 0)
+                    item.ItemID = itemModel.ItemID;
 
                 ShoppingListItem shoppingListItemModel = context.ShoppingListItems.Find(shoppingList.shoppingListID, item.ItemID);
                 if (shoppingListItemModel != null)
@@ -113,13 +101,13 @@ namespace SplitListWebApi.Repository
         {
             ShoppingList list = LoadToModel(shoppingList);
 
-            if (shoppingList.shoppingListID <= 0)
-            {
-                shoppingList.shoppingListID = list.ShoppingListID;
-            }
-
             if (list != null)
             {
+                if (shoppingList.shoppingListID <= 0)
+                {
+                    shoppingList.shoppingListID = list.ShoppingListID;
+                }
+
                 list.Name = shoppingList.shoppingListName;
                 context.ShoppingLists.Update(list);
                 context.SaveChanges();
