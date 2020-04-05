@@ -25,7 +25,6 @@ namespace SplitList.Views
         private async void Button_OnClicked(object sender, EventArgs e)
         {
             var result = await SerializerShoppingList.PostShoppingList(ShoppingListMapper.ShoppingListToShoppingListDto(ShoppingListViewModel.ShoppingList));
-            var content = result.Content;
         }
     }
 }
