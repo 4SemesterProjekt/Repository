@@ -68,9 +68,9 @@ namespace ClientLibForAPI
             //};
 
             //var pantryMarkus1 = SerializerPantry.PostPantry(MarkusPantry).Result;
-            var pantryOfMarkus = SerializerPantry.GetPantryByGroupId(2).Result;
-            Console.WriteLine($"{pantryOfMarkus.ID}, {pantryOfMarkus.Name}, {pantryOfMarkus.GroupName}");
-            var d = SerializerPantry.DeletePantry(pantryOfMarkus);
+            //var pantryOfMarkus = SerializerPantry.GetPantryByGroupId(2).Result;
+            //Console.WriteLine($"{pantryOfMarkus.ID}, {pantryOfMarkus.Name}, {pantryOfMarkus.GroupName}");
+            //var d = SerializerPantry.DeletePantry(pantryOfMarkus);
             //var pantryOfNikolaj = SerializerPantry.GetPantryByGroupId(1).Result;
 
             //pantryOfNikolaj.Items.Add(new ItemDTO()
@@ -85,6 +85,27 @@ namespace ClientLibForAPI
             //var pantryOfNikolaj1 = SerializerPantry.PostPantry(pantryOfNikolaj).Result;
             //Console.WriteLine($"{pantryOfNikolaj1.ID}, {pantryOfNikolaj1.Name}, {pantryOfNikolaj1.GroupName}");
 
+
+
+
+            /* ____________________________________TEST af funktionalitet for Groups__________________________*/
+
+            var NikoGroup = SerializerGroups.GetGroupByGroupId(1).Result;
+            Console.WriteLine($"{NikoGroup.GroupID}, {NikoGroup.OwnerID}, {NikoGroup.ShoppingLists[0].shoppingListName}");
+
+            var niko = SerializerGroups.GetGroupOwnerByGroupId(1).Result;
+            Console.WriteLine($"{niko.Name}");
+
+            GroupDTO Studiegruppe = new GroupDTO
+            {
+                Name = "StudieGruppe",
+                OwnerID = niko.Id
+
+            };
+            var StudieGruppe1 = SerializerGroups.GetGroupByGroupId(3).Result;
+            Console.WriteLine($"{StudieGruppe1.GroupID}, {StudieGruppe1.OwnerID}");
+
+            var d = SerializerGroups.DeleteGroup(StudieGruppe1).Result;
         }
 
     }
