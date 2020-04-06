@@ -12,6 +12,8 @@
 
   <ItemGroup>
     <None Remove="EmbeddedResources\checklist.png" />
+    <None Remove="EmbeddedResources\delete.svg" />
+    <None Remove="EmbeddedResources\deleteWhite.png" />
     <None Remove="EmbeddedResources\fridge.png" />
     <None Remove="EmbeddedResources\minus.png" />
     <None Remove="EmbeddedResources\plus.png" />
@@ -20,6 +22,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="EmbeddedResources\checklist.png" />
+    <EmbeddedResource Include="EmbeddedResources\deleteWhite.png" />
     <EmbeddedResource Include="EmbeddedResources\fridge.png" />
     <EmbeddedResource Include="EmbeddedResources\minus.png" />
     <EmbeddedResource Include="EmbeddedResources\plus.png" />

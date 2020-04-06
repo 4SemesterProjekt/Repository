@@ -35,38 +35,44 @@
                 <ListView.ItemTemplate>
                     <DataTemplate x:Name="ItemTemplate">
                         <ViewCell>
-                            <Grid >
+                            <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="10*"/>
                                     <ColumnDefinition Width="70*"/>
                                     <ColumnDefinition Width="20*"/>
                                 </Grid.ColumnDefinitions>
                                 <Editor Text="{Binding Path=Name}" 
-                                   Grid.Column="1"
-                                   VerticalOptions="Center"
-                                   HorizontalOptions="Start"
-                                   FontSize="16"
-                                   Placeholder="Item"
-                                   AutoSize="TextChanges"
-                                   IsTextPredictionEnabled="False"/>
+                                        Grid.Column="1"
+                                        VerticalOptions="Center"
+                                        HorizontalOptions="Start"
+                                        FontSize="16"
+                                        Placeholder="Item"
+                                        AutoSize="TextChanges"
+                                        IsTextPredictionEnabled="False"/>
                                 <StackLayout Orientation="Horizontal" Grid.Column="2">
                                 <ImageButton Source="{utility:ImageResource SplitList.EmbeddedResources.plus.png}"
-                                       WidthRequest="10"
-                                       VerticalOptions="Center"
-                                       BindingContext="{x:Reference ShoppingListViewModel}"
-                                       Command="{Binding IncItemAmountCommand}"/>
+                                             WidthRequest="10"
+                                             VerticalOptions="Center"
+                                             BindingContext="{x:Reference ShoppingListViewModel}"
+                                             Command="{Binding IncItemAmountCommand}"/>
                                 <Label Text="{Binding Path=Amount}"
                                        VerticalOptions="Center"
                                        HorizontalOptions="Start"
                                        FontSize="16"/>
                                 <ImageButton Source="{utility:ImageResource SplitList.EmbeddedResources.minus.png}"
-                                       WidthRequest="10"
-                                       VerticalOptions="Center"
-                                       BindingContext="{x:Reference ShoppingListViewModel}"
-                                       Command="{Binding DecItemAmountCommand}"/>
+                                             WidthRequest="10"
+                                             VerticalOptions="Center"
+                                             BindingContext="{x:Reference ShoppingListViewModel}"
+                                             Command="{Binding DecItemAmountCommand}"/>
                                 </StackLayout>
 
                             </Grid>
+                            <ViewCell.ContextActions>
+                                <MenuItem Text="Delete"
+                                          BindingContext="{x:Reference ShoppingListViewModel}"
+                                          Command="{Binding DeleteItemCommand}"
+                                          IconImageSource="{utility:ImageResource SplitList.EmbeddedResources.deleteWhite.png}"/>
+                            </ViewCell.ContextActions>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
@@ -90,10 +96,6 @@
                     </Grid>
                 </ListView.Footer>
             </ListView>
-
-            
-                
-
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

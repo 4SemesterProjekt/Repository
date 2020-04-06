@@ -90,14 +90,28 @@ namespace SplitList.ViewModels
         {
             get
             {
-                return _addItemToListCommand ?? (_addItemToListCommand = new DelegateCommand(AddItemToListCommandExecute));
+                return _addItemToListCommand ?? (_addItemToListCommand = new DelegateCommand<object>(AddItemToListCommandExecute));
             }
         }
 
-        public void AddItemToListCommandExecute()
+        public void AddItemToListCommandExecute(object obj)
         {
-            ShoppingList.Items.Add(new Item("",1));
+           ShoppingList.Items.Add(new Item("",1,obj as CheckBox));
+
         }
+
+        private ICommand _deleteItemCommand;
+
+        public ICommand DeleteItemCommand
+        {
+            get { return _deleteItemCommand ?? (_deleteItemCommand = new DelegateCommand(DeleteItemExecute)); }
+        }
+
+        public void DeleteItemExecute()
+        {
+            ShoppingList.Items.Remove(CurrentItem);
+        }
+
         #endregion
     }
 }
