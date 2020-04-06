@@ -15,7 +15,7 @@ namespace SplitList.ViewModels
 {
     class LoginViewModel
     {
-        private Uri AuthenticationUri = new Uri("https://localhost:44393/weatherforecast"); //URL på vores webapi, som appen skal requeste et link til en loginside fra.
+        private Uri AuthenticationUri = new Uri("https://splitlistwebapi.azurewebsites.net/api/account/googleresponse"); //URL på vores webapi, som appen skal requeste et link til en loginside fra.
         private Uri CallBackUri = new Uri("SplitList://"); //URL til vores app, som loginsiden bruger til at åbne for appen, når login er gennemført.
 
         private ICommand _LoginCommand;
