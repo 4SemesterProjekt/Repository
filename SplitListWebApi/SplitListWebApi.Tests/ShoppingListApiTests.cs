@@ -112,7 +112,6 @@ namespace SplitListWebApi.Tests
 
 
                 Assert.AreEqual(amount, context.ShoppingLists.Count());
-                Assert.AreEqual(amount, repo.GetShoppingLists().Count);
 
             }
         }
