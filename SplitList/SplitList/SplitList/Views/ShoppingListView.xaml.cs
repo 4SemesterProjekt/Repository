@@ -27,5 +27,12 @@ namespace SplitList.Views
             ShoppingListDTO tobj = ShoppingListMapper.ShoppingListToShoppingListDto(ShoppingListViewModel.ShoppingList);
             var result = await SerializerShoppingList.PostShoppingList(tobj);
         }
+
+        protected override async void OnDisappearing()
+        {
+            base.OnDisappearing();
+            ShoppingListDTO tobj = ShoppingListMapper.ShoppingListToShoppingListDto(ShoppingListViewModel.ShoppingList);
+            var result = await SerializerShoppingList.PostShoppingList(tobj);
+        }
     }
 }
