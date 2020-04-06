@@ -5,33 +5,35 @@ using ApiFormat;
 using Microsoft.EntityFrameworkCore;
 using SplitListWebApi.Areas.Identity.Data;
 using SplitListWebApi.Areas.Identity.Data.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace SplitListWebApi.Repository
 {
     public interface IUserRepository
     {
-        List<GroupDTO> GetUsersGroups(UserDTO user);
-        void AddUser(UserDTO user);
+        List<GroupDTO> GetUsersGroups(string userID);
         void DeleteUser(UserDTO user);
-        void UpdateUser(UserDTO user);
+        UserDTO UpdateUser(UserDTO user);
     }
 
     public class UserRepository : IUserRepository
     {
-        public SplitListContext context { get; set; }
-        public UserRepository(SplitListContext context_)
+        private UserManager<User> _userManager;
+        private SplitListContext _context;
+        public UserRepository(UserManager<User> userManager, SplitListContext context)
         {
-            context = context_;
+            _context = context;
+            _userManager = userManager;
         }
 
-        public List<GroupDTO> GetUsersGroups(UserDTO user)
+        public List<GroupDTO> GetUsersGroups(string userID)
         {
-            User dbuser = LoadToModel(user);
+            User dbuser = _userManager.FindByIdAsync(userID).Result;
             if (dbuser != null)
             {
                 //May be flawed and only return 1 single group
-                List<Group> userGroups = context.UserGroups
-                    .Where(ug => ug.Id == user.Id)
+                List<Group> userGroups = _context.UserGroups
+                    .Where(ug => ug.Id == userID)
                     .Include(g => g.Group)
                     .Select(ug => ug.Group)
                     .ToList();
@@ -54,35 +56,46 @@ namespace SplitListWebApi.Repository
 
         private User LoadToModel(UserDTO user)
         {
-            User dbUser = context.Users.Find(user.Id);
-
+            User dbUser =_userManager.FindByIdAsync(user.Id).Result;
             if (dbUser != null)
                 return dbUser;
-            else
-            {
-                User newUser = new User()
-                {
-                    Name = user.Name
-                };
-                context.Users.Add(newUser);
-                context.SaveChanges();
-                return newUser;
-            }
-        }
-
-        public void AddUser(UserDTO newuser)
-        {
-            LoadToModel(newuser);
+            else return null;
         }
 
         public void DeleteUser(UserDTO user)
         {
-            throw new System.NotImplementedException();
+            User dbUser = LoadToModel(user);
+            if (dbUser != null)
+            {
+                _userManager.DeleteAsync(dbUser);
+
+                foreach (GroupDTO group in GetUsersGroups(user.Id))
+                {
+                    UserGroup toDelete = _context.UserGroups.Find(user.Id, group.GroupID);
+                    if (toDelete != null)
+                        _context.UserGroups.Remove(toDelete);
+                }
+                _context.SaveChanges();
+            }
+                
+
         }
 
-        public void UpdateUser(UserDTO user)
+        public UserDTO UpdateUser(UserDTO user)
         {
-            throw new System.NotImplementedException();
+            User dbUser = LoadToModel(user);
+            if (dbUser != null)
+            {
+                var result = _userManager.UpdateAsync(dbUser).Result;
+                return new UserDTO()
+                {
+                    Groups = user.Groups,
+                    Id = dbUser.Id,
+                    Name = dbUser.Name
+                };
+            }
+            else return null;
+            
         }
     }
 }
