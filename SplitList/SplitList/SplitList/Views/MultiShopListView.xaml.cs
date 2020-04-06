@@ -15,7 +15,7 @@ namespace SplitList.Views
         public MultiShopListView()
         {
             InitializeComponent();
-            BindingContext = new MultiShopListViewModel(Navigation,this);
+            BindingContext = new MultiShopListViewModel(Navigation,this,1);
         }
     }
 }

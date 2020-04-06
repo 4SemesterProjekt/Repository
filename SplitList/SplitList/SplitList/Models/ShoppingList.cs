@@ -21,12 +21,12 @@ namespace SplitList.Models
             ShoppingListId = 0;
             GroupId = 1;
         }
-        public ShoppingList(string name)
+        public ShoppingList(string name, int groupId)
         {
             Items = new ObservableCollection<Item>();
             Name = name;
             ShoppingListId = 0;
-            GroupId = 1;
+            GroupId = groupId;
         }
 
         public int ShoppingListId { get; set; }

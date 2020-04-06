@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Internal;
 using SplitListWebApi.Models;
 using SplitListWebApi.Repository;
 using ApiFormat;
+using SplitListWebApi.Areas.Identity.Data;
 
 namespace SplitListWebApi.Controllers
 {
@@ -39,9 +40,9 @@ namespace SplitListWebApi.Controllers
         // POST: api/ShoppingLists
         // Updates/Creates shoppinglist from parameter.
         [HttpPost]
-        public void PostShoppingList(ShoppingListDTO shoppingList)
+        public ShoppingListDTO PostShoppingList(ShoppingListDTO shoppingList)
         {
-            repo.UpdateShoppingList(shoppingList);
+            return repo.UpdateShoppingList(shoppingList);
         }
 
         // DELETE: api/ShoppingLists
