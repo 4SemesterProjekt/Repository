@@ -10,11 +10,7 @@ using Newtonsoft.Json;
 
 namespace ClientLibAPI
 {
-    public static class GoodController 
-    {
-        private static readonly HttpClient client = new HttpClient();
-        public static HttpClient Client { get => client;}
-    }
+    
     public static class SerializerShoppingList
     {
         
@@ -23,7 +19,7 @@ namespace ClientLibAPI
         //Return list of shoppinglistDTO based on GroupId
         public static async Task<List<ShoppingListDTO>> GetShoppingListByGroupId(int GroupId)
         {
-            var ShoppinglistsByIDString = GoodController.Client.GetStringAsync($"{URL}group/{GroupId}").GetAwaiter().GetResult();
+            var ShoppinglistsByIDString = MSerializer.Client.GetStringAsync($"{URL}group/{GroupId}").GetAwaiter().GetResult();
             var ShoppinglistsByGroupID = JsonConvert.DeserializeObject<List<ShoppingListDTO>>(ShoppinglistsByIDString);
             return ShoppinglistsByGroupID;
 
@@ -32,7 +28,7 @@ namespace ClientLibAPI
         //Return a shoppinglistDTO based on ShoppinglistId
         public static async Task<ShoppingListDTO> GetShoppingListByShoppinglistId(int ShoppinglistId)
         {
-            var ShoppinglistsByIdString = client.GetStringAsync($"{URL}{ ShoppinglistId}").GetAwaiter().GetResult();
+            var ShoppinglistsByIdString = MSerializer.Client.GetStringAsync($"{URL}{ ShoppinglistId}").GetAwaiter().GetResult();
             var ShoppinglistsByID = JsonConvert.DeserializeObject<ShoppingListDTO>(ShoppinglistsByIdString);
             return ShoppinglistsByID;
             
@@ -51,7 +47,7 @@ namespace ClientLibAPI
                 var httpContext = new StringContent(ShoppinglistContext, Encoding.UTF8, "application/json");
                 request.Content = httpContext;
 
-                var response =  await client.SendAsync(request);
+                var response = await MSerializer.Client.SendAsync(request);
                 var createdShoppinglist = JsonConvert.DeserializeObject<ShoppingListDTO>(response.Content.ReadAsStringAsync().Result);
                 return createdShoppinglist;
             }
@@ -68,7 +64,7 @@ namespace ClientLibAPI
                 var httpContext = new StringContent(ShoppinglistContext, Encoding.UTF8, "application/json");
                 request.Content = httpContext;
 
-                return await client.SendAsync(request);
+                return await MSerializer.Client.SendAsync(request);
 
 
             }

@@ -6,9 +6,9 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
 
-namespace ClientLibForAPI
+namespace ClientLibAPI
 {
-    public class SerializerPantry
+    public static class SerializerPantry
     {
         const string URL = "https://splitlistwebapi.azurewebsites.net/api/Pantries/";
 
@@ -20,7 +20,7 @@ namespace ClientLibForAPI
             return PantriesByGroupID;
 
         }
-        
+
 
         // POST: api/Pantries
         // Updates/Creates Pantry from parameter.
