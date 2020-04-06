@@ -53,11 +53,6 @@ namespace SplitListWebApi.Repository
             context.SaveChanges();
         }
 
-        public void FunctionalDeleteSL(ShoppingListDTO shoppingList)
-        {
-
-        }
-
         private void RemoveItemsFromShoppingList(ShoppingListDTO shoppingList)
         {
             List<ShoppingListItem> dbItemsInSL = context.ShoppingListItems
@@ -132,45 +127,25 @@ namespace SplitListWebApi.Repository
             return shoppingList;
         }
 
-        public List<ShoppingListDTO> GetShoppingLists()
-        {
-            List<ShoppingListDTO> repoList = new List<ShoppingListDTO>();
-            var contextLists =  context.ShoppingLists
-                .Include(a => a.Group)
-                .ToList();
-
-            foreach (ShoppingList list in contextLists)
-            {
-                repoList.Add( new ShoppingListDTO()
-                {
-                    shoppingListID = list.ShoppingListID,
-                    shoppingListGroupID = list.GroupID,
-                    shoppingListGroupName = list.Group.Name,
-                    shoppingListName = list.Name
-                });
-            }
-            return repoList;
-        }
-
         public List<ShoppingListDTO> GetShoppingListsByGroupID(int GroupID)
         {
-            List<ShoppingListDTO> repoList = new List<ShoppingListDTO>();
+            List<ShoppingListDTO> lists = new List<ShoppingListDTO>();
+
             var contextLists = context.ShoppingLists
                 .Include(g => g.Group)
                 .Where(a => a.GroupID == GroupID)
                 .ToList();
 
-            foreach (ShoppingList list in contextLists)
+            if (contextLists != null)
             {
-                repoList.Add(new ShoppingListDTO()
+                foreach (ShoppingList list in contextLists)
                 {
-                    shoppingListID = list.ShoppingListID,
-                    shoppingListGroupID = list.GroupID,
-                    shoppingListGroupName = list.Group.Name,
-                    shoppingListName = list.Name
-                });
+                    lists.Add(GenerateDTOFromModel(list));
+                }
+
+                return lists;
             }
-            return repoList;
+            return null;
         }
 
         public ShoppingListDTO GetShoppingListByID(int ID)
@@ -178,74 +153,85 @@ namespace SplitListWebApi.Repository
             ShoppingList dbList = context.ShoppingLists.Find(ID);
             if (dbList != null)
             {
-                ShoppingListDTO list = new ShoppingListDTO()
-                {
-                    shoppingListID = dbList.ShoppingListID,
-                    shoppingListGroupID = dbList.GroupID,
-                    shoppingListName = dbList.Name,
-                    Items = new List<ItemDTO>()
-                };
-                
-                List<ShoppingListItem> shoppingListItems = context.ShoppingLists
-                    .Where(sl => sl.ShoppingListID == ID)
-                    .Include(sli => sli.ShoppingListItems)
-                    .ThenInclude(it => it.Item)
-                    .SelectMany(sl => sl.ShoppingListItems)
-                    .ToList();
-                if (shoppingListItems != null)
-                {
-                    foreach (var item in shoppingListItems)
-                    {
-                        list.Items.Add(new ItemDTO()
-                        {
-                            Amount = item.Amount,
-                            ItemID = item.ItemID,
-                            Name = item.Item.Name,
-                            Type = item.Item.Type
-                        });
-                    }
-                }
-
-                list.shoppingListGroupName = context.Groups.Find(list.shoppingListGroupID).Name;
+                ShoppingListDTO list = GenerateDTOFromModel(dbList);
+                list = AddItemsToDTO(list);
                 return list;
             }
             else return null;
+        }
+
+        private ShoppingListDTO AddItemsToDTO(ShoppingListDTO list)
+        {
+            List<ShoppingListItem> shoppingListItems = context.ShoppingLists
+                   .Where(sl => sl.ShoppingListID == list.shoppingListID)
+                   .Include(sli => sli.ShoppingListItems)
+                   .ThenInclude(it => it.Item)
+                   .SelectMany(sl => sl.ShoppingListItems)
+                   .ToList();
+
+            if (shoppingListItems != null)
+            {
+                foreach (ShoppingListItem item in shoppingListItems)
+                {
+                    list.Items.Add(new ItemDTO()
+                    {
+                        Amount = item.Amount,
+                        ItemID = item.ItemID,
+                        Name = item.Item.Name,
+                        Type = item.Item.Type
+                    });
+                }
+            }
+            return list;
+        }
+
+        private ShoppingListDTO GenerateDTOFromModel(ShoppingList dbList)
+        {
+            return new ShoppingListDTO()
+            {
+                shoppingListID = dbList.ShoppingListID,
+                shoppingListGroupID = dbList.GroupID,
+                shoppingListName = dbList.Name,
+                Items = new List<ItemDTO>(),
+                shoppingListGroupName = context.Groups.Find(dbList.GroupID).Name
+            };
         }
 
         public ShoppingList LoadToModel(ShoppingListDTO shoppingList)
         {
             if (GroupExists(shoppingList.shoppingListGroupID))
             {
-                ShoppingList list = context.ShoppingLists.Find(shoppingList.shoppingListID);
+                ShoppingList slInDb = GetSLFromDb(shoppingList);
 
-                if (list != null)
-                    return list;
-                else
-                {
-                    ShoppingList newList = new ShoppingList()
-                    {
-                        Name = shoppingList.shoppingListName,
-                        GroupID = shoppingList.shoppingListGroupID,
-                    };
-                    context.ShoppingLists.Add(newList);
-                    context.SaveChanges();
-                    return newList;
-                }
+                if (slInDb != null)
+                    return slInDb;
+
+                else 
+                    return GenerateSLInDb(shoppingList);
             }
+
             return null;
         }
 
-        public ShoppingListDTO GenerateSLInDb(ShoppingListDTO shoppingList)
+        private ShoppingList GenerateSLInDb(ShoppingListDTO shoppingList)
         {
-            return null;
+            ShoppingList newList = new ShoppingList()
+            {
+                Name = shoppingList.shoppingListName,
+                GroupID = shoppingList.shoppingListGroupID,
+            };
+            context.ShoppingLists.Add(newList);
+            context.SaveChanges();
+            return newList;
         }
 
-        public ShoppingListDTO GetSLFromDb(ShoppingListDTO shoppingList)
+        private ShoppingList GetSLFromDb(ShoppingListDTO shoppingList)
         {
-            return null;
+            ShoppingList list = context.ShoppingLists.Find(shoppingList.shoppingListID);
+            return list;
         }
 
-        public bool GroupExists(int id)
+        private bool GroupExists(int id)
         {
             var result = context.Groups.Find(id);
             if (result == null)
