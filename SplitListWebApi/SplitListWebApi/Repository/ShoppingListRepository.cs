@@ -5,13 +5,15 @@ using ApiFormat;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http.Features;
+using SplitListWebApi.Areas.Identity.Data;
+using SplitListWebApi.Areas.Identity.Data.Models;
 
 namespace SplitListWebApi.Repository
 {
     public interface IShoppingListRepository
     {
         void DeleteShoppingList(ShoppingListDTO shoppingList);
-        void UpdateShoppingList(ShoppingListDTO shoppingList);
+        ShoppingListDTO UpdateShoppingList(ShoppingListDTO shoppingList);
         List<ShoppingListDTO> GetShoppingListsByGroupID(int GroupID);
         ShoppingListDTO GetShoppingListByID(int ID);
     }
@@ -19,10 +21,12 @@ namespace SplitListWebApi.Repository
     public class ShoppingListRepository : IShoppingListRepository
     {
         private SplitListContext context;
+        private IItemRepository itemRepo;
 
         public ShoppingListRepository(SplitListContext Context)
         {
             context = Context;
+            itemRepo = new ItemRepository(context);
         }
 
         public void DeleteShoppingList(ShoppingListDTO shoppingList)
@@ -49,17 +53,66 @@ namespace SplitListWebApi.Repository
             context.SaveChanges();
         }
 
-        public void UpdateShoppingList(ShoppingListDTO shoppingList)
+        private void RemoveItemsFromShoppingList(ShoppingListDTO shoppingList)
         {
-            ShoppingList list = LoadToModel(shoppingList);
-            if ( list != null)
+            List<ShoppingListItem> dbItemsInSL = context.ShoppingListItems
+                .Where(sli => sli.ShoppingListID == shoppingList.shoppingListID)
+                .Include(it => it.Item)
+                .ToList();
+
+            foreach (ShoppingListItem slItem in dbItemsInSL)
             {
-                if (shoppingList.shoppingListName != list.Name)
+                ItemDTO itemToRemove = shoppingList.Items.Find(it => it.ItemID == slItem.ItemID);
+                if (itemToRemove == null)
                 {
-                    list.Name = shoppingList.shoppingListName;
-                    context.ShoppingLists.Update(list);
+                    context.ShoppingListItems.Remove(slItem);
+                }
+            }
+            context.SaveChanges();
+        }
+
+        private void AddItemsToShoppingList(ShoppingListDTO shoppingList)
+        {
+            foreach (ItemDTO item in shoppingList.Items)
+            {
+                Item itemModel = itemRepo.LoadToModel(item);
+                if (item.ItemID <= 0)
+                    item.ItemID = itemModel.ItemID;
+
+                ShoppingListItem shoppingListItemModel = context.ShoppingListItems.Find(shoppingList.shoppingListID, item.ItemID);
+                if (shoppingListItemModel != null)
+                {
+                    shoppingListItemModel.Amount = item.Amount;
+                    context.Update(shoppingListItemModel);
                     context.SaveChanges();
                 }
+                else
+                {
+                    context.ShoppingListItems.Add(new ShoppingListItem()
+                    {
+                        ItemID = item.ItemID,
+                        Amount = item.Amount,
+                        ShoppingListID = shoppingList.shoppingListID
+                    });
+                    context.SaveChanges();
+                }
+            }
+        }
+
+        public ShoppingListDTO UpdateShoppingList(ShoppingListDTO shoppingList)
+        {
+            ShoppingList list = LoadToModel(shoppingList);
+
+            if (list != null)
+            {
+                if (shoppingList.shoppingListID <= 0)
+                {
+                    shoppingList.shoppingListID = list.ShoppingListID;
+                }
+
+                list.Name = shoppingList.shoppingListName;
+                context.ShoppingLists.Update(list);
+                context.SaveChanges();
 
                 if (shoppingList.Items == null)
                 {
@@ -67,48 +120,11 @@ namespace SplitListWebApi.Repository
                 }
                 else
                 {
-                    foreach (ItemDTO item in shoppingList.Items)
-                    {
-                        Item itemInDb = context.Items.Find(item.ItemID);
-                        if (itemInDb != null)
-                        {
-                            itemInDb.Name = item.Name;
-                            itemInDb.Type = item.Type;
-                            context.Items.Update(itemInDb);
-                            context.SaveChanges();
-                        }
-                        else
-                        {
-                            context.Items.Add(new Item
-                            {
-                                ItemID = item.ItemID,
-                                Name = item.Name,
-                                Type = item.Type
-                            });
-                            context.SaveChanges();
-                        }
-
-                        ShoppingListItem slItemInDb = context.ShoppingListItems.Find(shoppingList.shoppingListID, item.ItemID);
-                        if (slItemInDb != null)
-                        {
-                            slItemInDb.Amount = item.Amount;
-                            context.ShoppingListItems.Update(slItemInDb);
-                            context.SaveChanges();
-                        }
-                        else
-                        {
-                            context.ShoppingListItems.Add(new ShoppingListItem
-                            {
-                                ShoppingListID = shoppingList.shoppingListID,
-                                ItemID = item.ItemID,
-                                Amount = item.Amount
-                            });
-                            context.SaveChanges();
-                        }
-                    }
+                    RemoveItemsFromShoppingList(shoppingList);
+                    AddItemsToShoppingList(shoppingList);
                 }
             }
-            
+            return shoppingList;
         }
 
         public List<ShoppingListDTO> GetShoppingLists()
