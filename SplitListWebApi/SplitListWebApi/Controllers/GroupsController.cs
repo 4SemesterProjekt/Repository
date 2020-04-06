@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -30,7 +29,6 @@ namespace SplitListWebApi.Controllers
 
         // GET: api/Groups/5
         [HttpGet("{id}")]
-        [Authorize]
         public async Task<ActionResult<Group>> GetGroup(int id)
         {
             var @group = await _context.Groups.FindAsync(id);
