@@ -53,6 +53,11 @@ namespace SplitListWebApi.Repository
             context.SaveChanges();
         }
 
+        public void FunctionalDeleteSL(ShoppingListDTO shoppingList)
+        {
+
+        }
+
         private void RemoveItemsFromShoppingList(ShoppingListDTO shoppingList)
         {
             List<ShoppingListItem> dbItemsInSL = context.ShoppingListItems
@@ -209,7 +214,7 @@ namespace SplitListWebApi.Repository
 
         public ShoppingList LoadToModel(ShoppingListDTO shoppingList)
         {
-            if (context.Groups.Find(shoppingList.shoppingListGroupID) != null)
+            if (GroupExists(shoppingList.shoppingListGroupID))
             {
                 ShoppingList list = context.ShoppingLists.Find(shoppingList.shoppingListID);
 
@@ -229,5 +234,24 @@ namespace SplitListWebApi.Repository
             }
             return null;
         }
+
+        public ShoppingListDTO GenerateSLInDb(ShoppingListDTO shoppingList)
+        {
+            return null;
+        }
+
+        public ShoppingListDTO GetSLFromDb(ShoppingListDTO shoppingList)
+        {
+            return null;
+        }
+
+        public bool GroupExists(int id)
+        {
+            var result = context.Groups.Find(id);
+            if (result == null)
+                return false;
+            else return true;
+        }
+
     }
 }

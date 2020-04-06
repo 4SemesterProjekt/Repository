@@ -10,7 +10,7 @@ namespace SplitListWebApi.Repository
 {
     public interface IGroupRepository
     {
-        List<UserDTO> GetUsersInGroup(GroupDTO group);
+        //List<UserDTO> GetUsersInGroup(GroupDTO group);
         UserDTO GetOwnerOfGroup(GroupDTO group);
         GroupDTO UpdateGroup(GroupDTO group);
         void DeleteGroup(GroupDTO group);
@@ -114,6 +114,7 @@ namespace SplitListWebApi.Repository
             }
             return group;
         }
+
         public List<UserDTO> GetUsersInGroup(GroupDTO group)
         {
             List<UserDTO> users = new List<UserDTO>();

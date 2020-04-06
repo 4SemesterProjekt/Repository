@@ -134,13 +134,13 @@ namespace SplitListWebApi.Tests
                 context.UserGroups.Add(userGroup2);
                 context.SaveChanges();
 
-                List<UserDTO> usersDTO = groupRepo.GetUsersInGroup(group);
+                GroupDTO GroupFromDb = groupRepo.GetGroupByGroupID(group.GroupID);
                 Assert.AreEqual(2, users.Count);
 
                 for (int i = 0; i < 2; i++)
                 {
-                    Assert.AreEqual(users[i].Name, usersDTO[i].Name);
-                    Assert.AreEqual(users[i].Id, usersDTO[i].Id);
+                    Assert.AreEqual(users[i].Name, GroupFromDb.Users[i].Name);
+                    Assert.AreEqual(users[i].Id, GroupFromDb.Users[i].Id);
                 }
             }
         }

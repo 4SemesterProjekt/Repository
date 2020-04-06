@@ -24,7 +24,12 @@ namespace SplitListWebApi.Repository
             Item dbItem = context.Items.Find(item.ItemID);
 
             if (dbItem != null)
+            {
+                dbItem.Name = item.Name;
+                dbItem.Type = item.Type;
                 return dbItem;
+            }
+                
             else
             {
                 Item newItem = new Item()

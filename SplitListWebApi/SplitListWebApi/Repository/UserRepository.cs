@@ -77,8 +77,6 @@ namespace SplitListWebApi.Repository
                 }
                 _context.SaveChanges();
             }
-                
-
         }
 
         public UserDTO UpdateUser(UserDTO user)
