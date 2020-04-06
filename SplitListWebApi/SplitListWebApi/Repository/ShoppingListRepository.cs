@@ -5,8 +5,6 @@ using ApiFormat;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http.Features;
-using SplitListWebApi.Areas.Identity.Data;
-using SplitListWebApi.Areas.Identity.Data.Models;
 
 namespace SplitListWebApi.Repository
 {
