@@ -29,5 +29,23 @@ namespace SplitList.Droid
 
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+
+        //Bruges til at registrere callbackURL
+        [Activity(NoHistory = true, LaunchMode = LaunchMode.SingleTop)]
+        [IntentFilter(new[] { "android.intent.action.VIEW" },
+            Categories = new[] { "android.intent.category.DEFAULT", "android.intent.category.BROWSABLE" },
+            DataScheme = "SplitList")]
+        public class WebAuth : Xamarin.Essentials.WebAuthenticatorCallbackActivity
+        {
+
+        }
+
+        //Override nødvendig for callback urls
+        protected override void OnResume()
+        {
+            base.OnResume();
+
+            Xamarin.Essentials.Platform.OnResume();
+        }
     }
 }

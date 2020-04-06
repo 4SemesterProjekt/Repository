@@ -10,19 +10,25 @@ using Newtonsoft.Json;
 
 namespace ClientLibAPI
 {
-    public static class SerializerShoppingList
+    public static class GoodController 
     {
         private static readonly HttpClient client = new HttpClient();
+        public static HttpClient Client { get => client;}
+    }
+    public static class SerializerShoppingList
+    {
+        
         const string URL = "https://splitlistwebapi.azurewebsites.net/api/ShoppingLists/";
 
         //Return list of shoppinglistDTO based on GroupId
         public static async Task<List<ShoppingListDTO>> GetShoppingListByGroupId(int GroupId)
         {
-            var ShoppinglistsByIDString = client.GetStringAsync($"{URL}group/{GroupId}").GetAwaiter().GetResult();
+            var ShoppinglistsByIDString = GoodController.Client.GetStringAsync($"{URL}group/{GroupId}").GetAwaiter().GetResult();
             var ShoppinglistsByGroupID = JsonConvert.DeserializeObject<List<ShoppingListDTO>>(ShoppinglistsByIDString);
             return ShoppinglistsByGroupID;
 
         }
+
         //Return a shoppinglistDTO based on ShoppinglistId
         public static async Task<ShoppingListDTO> GetShoppingListByShoppinglistId(int ShoppinglistId)
         {

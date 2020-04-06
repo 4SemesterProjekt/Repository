@@ -13,7 +13,7 @@ namespace ClientLibForAPI
         private static void Main()
         {
 
-            /* TEST af funktionalitet for shoppinglist*/
+            /* ____________________________________TEST af funktionalitet for shoppinglist__________________________*/
 
             Console.WriteLine("Hello world");
             var Shoppinglistforid1 = SerializerShoppingList.GetShoppingListByGroupId(1).Result;
@@ -39,7 +39,7 @@ namespace ClientLibForAPI
             var d = SerializerShoppingList.PostShoppingList(shoppinglistByID).Result;
 
 
-            var testerforItem = SerializerShoppingList.GetShoppingListByShoppinglistId(3).Result;
+            var testerforItem = SerializerShoppingList.GetShoppingListByShoppinglistId(1).Result;
             testerforItem.Items.Add(new ItemDTO()
             {
                 ItemID = 0,
@@ -53,11 +53,12 @@ namespace ClientLibForAPI
             
            
             Console.WriteLine($"{NewShoppinglist.shoppingListID}, {NewShoppinglist.shoppingListGroupName}, {NewShoppinglist.shoppingListName}");
-            
-
 
 
             //Console.WriteLine($"{Shoppinglistforid9.shoppingListID}, {Shoppinglistforid9.shoppingListGroupName}, {Shoppinglistforid9.shoppingListName}");
+
+
+            /* ____________________________________TEST af funktionalitet for Pantry__________________________*/
         }
 
     }
