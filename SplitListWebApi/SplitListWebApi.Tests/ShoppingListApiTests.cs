@@ -51,10 +51,7 @@ namespace SplitListWebApi.Tests
                 {
                     GroupID = 1,
                     Name = "JordkimsGruppe",
-                    OwnerID = "1",
-                    Pantries = null,
-                    ShoppingLists = null,
-                    UserGroups = null
+                    OwnerID = "1"
                 };
                 context.Groups.Add(jørgensGruppe);
 
@@ -94,7 +91,6 @@ namespace SplitListWebApi.Tests
                     GroupID = 1,
                     Name = "Group1",
                     OwnerID = "1",
-                    Pantries = null,
                     ShoppingLists = null,
                     UserGroups = null
                 });
@@ -139,7 +135,6 @@ namespace SplitListWebApi.Tests
                     GroupID = 1,
                     Name = "JordkimsGruppe",
                     OwnerID = "1",
-                    Pantries = null,
                     ShoppingLists = null,
                     UserGroups = null
                 };
@@ -181,10 +176,7 @@ namespace SplitListWebApi.Tests
                 {
                     GroupID = 1,
                     Name = "JordkimsGruppe",
-                    OwnerID = "1",
-                    Pantries = null,
-                    ShoppingLists = null,
-                    UserGroups = null
+                    OwnerID = "1"
                 };
                 context.Groups.Add(jørgensGruppe);
 
@@ -239,10 +231,7 @@ namespace SplitListWebApi.Tests
                 {
                     GroupID = 1,
                     Name = "JordkimsGruppe",
-                    OwnerID = "1",
-                    Pantries = null,
-                    ShoppingLists = null,
-                    UserGroups = null
+                    OwnerID = "1"
                 };
             
                 context.Groups.Add(jørgensGruppe);

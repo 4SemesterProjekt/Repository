@@ -19,6 +19,14 @@
     <Compile Remove="Migrations\20200310130947_InitialMigration.Designer.cs" />
     <Compile Remove="Migrations\20200310133744_InitialMigration.cs" />
     <Compile Remove="Migrations\20200310133744_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200310134416_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200310134416_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200316095000_Added_ShoppingListItems_DbSet.cs" />
+    <Compile Remove="Migrations\20200316095000_Added_ShoppingListItems_DbSet.Designer.cs" />
+    <Compile Remove="Migrations\20200330085334_AddedDbSetForPantryItems.cs" />
+    <Compile Remove="Migrations\20200330085334_AddedDbSetForPantryItems.Designer.cs" />
+    <Compile Remove="Migrations\20200330094826_AddedDbSetForUserGroups.cs" />
+    <Compile Remove="Migrations\20200330094826_AddedDbSetForUserGroups.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
