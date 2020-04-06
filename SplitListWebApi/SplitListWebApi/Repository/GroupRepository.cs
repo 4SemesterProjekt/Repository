@@ -3,6 +3,8 @@ using SplitListWebApi.Models;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using SplitListWebApi.Areas.Identity.Data;
+using SplitListWebApi.Areas.Identity.Data.Models;
 
 namespace SplitListWebApi.Repository
 {
@@ -27,13 +29,13 @@ namespace SplitListWebApi.Repository
         public UserDTO GetOwnerOfGroup(GroupDTO group)
         {
             Group dbGroup = LoadToModel(group);
-            User owner = context.Users.Where(u => u.UserID == group.OwnerID).FirstOrDefault();
+            User owner = context.Users.Where(u => u.Id == group.OwnerID).FirstOrDefault();
             if (owner != null)
             {
                 return new UserDTO()
                 {
                     Name = owner.Name,
-                    UserID = owner.UserID
+                    Id = owner.Id
                 };
             }
             else return null;
@@ -48,7 +50,7 @@ namespace SplitListWebApi.Repository
 
             foreach (UserGroup userGroup in dbUsersInGroup)
             {
-                UserDTO userToRemove = group.Users.Find(u => u.UserID == userGroup.UserID);
+                UserDTO userToRemove = group.Users.Find(u => u.Id == userGroup.Id);
                 if (userToRemove == null)
                 {
                     context.UserGroups.Remove(userGroup);
@@ -60,7 +62,7 @@ namespace SplitListWebApi.Repository
         {
             foreach (UserDTO user in group.Users)
             {
-                User userModel = context.Users.Find(user.UserID);
+                User userModel = context.Users.Find(user.Id);
                 if (userModel != null)
                 {
                     userModel.Name = user.Name;
@@ -72,18 +74,18 @@ namespace SplitListWebApi.Repository
                     // Modify to complete microsoft identity ( use user repo )
                     context.Users.Add(new User()
                     {
-                        UserID = user.UserID,
+                        Id = user.Id,
                         Name = user.Name
                     });
                     context.SaveChanges();
                 }
 
-                UserGroup userGroupModel = context.UserGroups.Find(user.UserID, group.GroupID);
+                UserGroup userGroupModel = context.UserGroups.Find(user.Id, group.GroupID);
                 if (userGroupModel == null)
                 {
                     context.UserGroups.Add(new UserGroup()
                     {
-                        UserID = user.UserID,
+                        Id = user.Id,
                         GroupID = group.GroupID
                     });
                     context.SaveChanges();
@@ -128,7 +130,7 @@ namespace SplitListWebApi.Repository
                     users.Add(new UserDTO()
                     {
                         Name = usergroup.User.Name,
-                        UserID = usergroup.User.UserID
+                        Id = usergroup.User.Id
                     });
                 }
             }
