@@ -48,7 +48,10 @@ namespace SplitList.ViewModels
                 return _addItemToListCommand ?? (_addItemToListCommand = new DelegateCommand<object>(AddItemToListCommandExecute));
             }
         }
-
+        /// <summary>
+        /// Ads an item to the shown shopping list defaults empty name and amount of 1, for the user to edit afterwards
+        /// </summary>
+        /// <param name="obj">Is the checkbox used for checks</param>
         public void AddItemToListCommandExecute(object obj)
         {
            ShoppingList.Items.Add(new Item("",1,obj as CheckBox));
@@ -62,9 +65,14 @@ namespace SplitList.ViewModels
             get { return _deleteItemCommand ?? (_deleteItemCommand = new DelegateCommand(DeleteItemExecute)); }
         }
 
+        /// <summary>
+        /// On first press shows a checkbox next to each item
+        /// On second press, if any checkbox is checked prompts the user to confirm deletions, if chosen any selected Items will be deleted
+        /// </summary>
         public async void DeleteItemExecute()
         {
-            if (!deleteState)
+            //On first press
+            if (!deleteState) 
             {
                 foreach (var shoppingListItem in ShoppingList.Items)
                 {
@@ -72,9 +80,12 @@ namespace SplitList.ViewModels
                 }
 
                 deleteState = true;
-            }else if(deleteState)
+            }
+            //On second press
+            else if (deleteState) 
             {
                 bool isAnyChecked = false;
+                //Runs the list through to see if an item is checked, avoids prompting the user when no deletion is intented
                 foreach (var shoppingListItem in ShoppingList.Items)
                 {
                     if (shoppingListItem.IsChecked)
@@ -83,19 +94,21 @@ namespace SplitList.ViewModels
                         break;
                     }
                 }
-
+                //If an item is checked prompts the user to confirm their deletions
                 if (isAnyChecked)
                 {
-                    var result = await Page.DisplayAlert("Advarsel", "Er du sikker på slette disse items?", "Ja", "Nej");
+                    var result = await Page.DisplayAlert("Warning", "Are you sure that you want to delete the selected items?", "Yes", "No");
                     if (result)
                     {
                         for (int i = ShoppingList.Items.Count - 1; i >= 0; i--)
                         {
+                            //Does not update itself on the database, it is done when the page is closed
                             if (ShoppingList.Items[i].IsChecked)
                                 ShoppingList.Items.Remove(ShoppingList.Items[i]);
                         }
                     }
                 }
+                //Hides all the checkboxes again
                 foreach (var shoppingListItem in ShoppingList.Items)
                 {
                     shoppingListItem.IsChecked = false;

@@ -97,7 +97,9 @@ namespace SplitList.Models
 
             }
         }
-
+        /// <summary>
+        /// Decreases the amount of items in the GUI
+        /// </summary>
         public void DecItemAmountCommandExecute()
         {
             if (Amount > 1)

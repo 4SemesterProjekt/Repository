@@ -8,6 +8,11 @@ namespace SplitList.Mapping
 {
     public class ItemMapper
     {
+        /// <summary>
+        /// Maps a GUI item to an item transferobject
+        /// </summary>
+        /// <param name="item"> Type item</param>
+        /// <returns>ItemDTO</returns>
         public static ItemDTO ItemToItemDto(Item item)
         {
             ItemDTO newItemDto = new ItemDTO
@@ -19,7 +24,11 @@ namespace SplitList.Mapping
             };
             return newItemDto;
         }
-
+        /// <summary>
+        /// Maps a transfer item object to a GUI item
+        /// </summary>
+        /// <param name="itemDto">Type ItemDTO</param>
+        /// <returns>Item</returns>
         public static Item ItemDtoToItem(ItemDTO itemDto)
         {
             Item newItem = new Item
