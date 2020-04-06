@@ -20,6 +20,8 @@ namespace SplitList.Models
             Name = "";
             ShoppingListId = 0;
             GroupId = 1;
+            IsVisible = false;
+            IsChecked = false;
         }
         public ShoppingList(string name, int groupId)
         {
@@ -27,6 +29,8 @@ namespace SplitList.Models
             Name = name;
             ShoppingListId = 0;
             GroupId = groupId;
+            IsVisible = false;
+            IsChecked = false;
         }
 
         public int ShoppingListId { get; set; }
@@ -37,6 +41,22 @@ namespace SplitList.Models
             get => _name;
             set => SetProperty(ref _name, value);
 
+        }
+
+        private bool _isVisible;
+        private bool _isChecked;
+
+        public bool IsVisible
+        {
+            get => _isVisible;
+            set => SetProperty(ref _isVisible, value);
+
+        }
+
+        public bool IsChecked
+        {
+            get => _isChecked;
+            set => SetProperty(ref _isChecked, value);
         }
 
         private ObservableCollection<Item> _items;

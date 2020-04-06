@@ -19,19 +19,8 @@ namespace SplitList.Views
         public ShoppingListView(ShoppingList shoppingList)
         {
             InitializeComponent();
+            ShoppingListViewModel.Page = this;
             ShoppingListViewModel.ShoppingList = ShoppingListMapper.ShoppingListDtoToShoppingList(SerializerShoppingList.GetShoppingListByShoppinglistId(shoppingList.ShoppingListId).Result);
-        }
-
-        private async void Button_OnClicked(object sender, EventArgs e)
-        {
-            ShoppingListDTO tobj = ShoppingListMapper.ShoppingListToShoppingListDto(ShoppingListViewModel.ShoppingList);
-            var result = await SerializerShoppingList.PostShoppingList(tobj);
-
-        }
-
-        protected override async void OnDisappearing()
-        {
-            
         }
 
         protected override async void OnDisappearing()
@@ -40,5 +29,6 @@ namespace SplitList.Views
             ShoppingListDTO tobj = ShoppingListMapper.ShoppingListToShoppingListDto(ShoppingListViewModel.ShoppingList);
             var result = await SerializerShoppingList.PostShoppingList(tobj);
         }
+
     }
 }

@@ -10,6 +10,7 @@ using Prism.Commands;
 using Prism.Mvvm;
 using SplitList.Mapping;
 using SplitList.Models;
+using SplitList.Views;
 using Xamarin.Forms;
 
 namespace SplitList.ViewModels
@@ -24,6 +25,9 @@ namespace SplitList.ViewModels
         
         #region Properties
 
+        public Page Page { get; set; }
+        private bool deleteState = false;
+
         private ShoppingList _shoppingList;
 
         public ShoppingList ShoppingList
@@ -31,59 +35,10 @@ namespace SplitList.ViewModels
             get => _shoppingList;
             set => SetProperty(ref _shoppingList, value);
         }
-
-        private Item _currentItem;
-
-        public Item CurrentItem
-        {
-            get => _currentItem;
-            set => SetProperty(ref _currentItem, value);
-        }
-
+        
         #endregion
 
         #region Commands
-
-        private ICommand _incItemAmountCommand;
-
-        public ICommand IncItemAmountCommand
-        {
-            get
-            {
-                return _incItemAmountCommand ?? (_incItemAmountCommand = new DelegateCommand(IncItemAmountCommandExecute));
-
-            }
-        }
-
-        public void IncItemAmountCommandExecute()
-        {
-            if (CurrentItem != null)
-            {
-                if (CurrentItem.Amount < 99)
-                    CurrentItem.Amount++;
-            }
-        }
-
-        private ICommand _decItemAmountCommand;
-
-        public ICommand DecItemAmountCommand
-        {
-            get
-            {
-                return _decItemAmountCommand ?? (_decItemAmountCommand = new DelegateCommand(DecItemAmountCommandExecute));
-
-            }
-        }
-
-        public void DecItemAmountCommandExecute()
-        {
-            if (CurrentItem != null)
-            {
-                if (CurrentItem.Amount > 1)
-                    CurrentItem.Amount--;
-            }
-        }
-
 
         private ICommand _addItemToListCommand;
         public ICommand AddItemToListCommand
@@ -107,11 +62,51 @@ namespace SplitList.ViewModels
             get { return _deleteItemCommand ?? (_deleteItemCommand = new DelegateCommand(DeleteItemExecute)); }
         }
 
-        public void DeleteItemExecute()
+        public async void DeleteItemExecute()
         {
-            ShoppingList.Items.Remove(CurrentItem);
+            if (!deleteState)
+            {
+                foreach (var shoppingListItem in ShoppingList.Items)
+                {
+                    shoppingListItem.IsVisible = true;
+                }
+
+                deleteState = true;
+            }else if(deleteState)
+            {
+                bool isAnyChecked = false;
+                foreach (var shoppingListItem in ShoppingList.Items)
+                {
+                    if (shoppingListItem.IsChecked)
+                    {
+                        isAnyChecked = true;
+                        break;
+                    }
+                }
+
+                if (isAnyChecked)
+                {
+                    var result = await Page.DisplayAlert("Advarsel", "Er du sikker på slette disse items?", "Ja", "Nej");
+                    if (result)
+                    {
+                        for (int i = ShoppingList.Items.Count - 1; i >= 0; i--)
+                        {
+                            if (ShoppingList.Items[i].IsChecked)
+                                ShoppingList.Items.Remove(ShoppingList.Items[i]);
+                        }
+                    }
+                }
+                foreach (var shoppingListItem in ShoppingList.Items)
+                {
+                    shoppingListItem.IsChecked = false;
+                    shoppingListItem.IsVisible = false;
+                }
+                deleteState = false;
+            }
+            
         }
 
+        
         #endregion
     }
 }
