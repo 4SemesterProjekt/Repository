@@ -6,6 +6,8 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
+using SplitListWebApi.Areas.Identity.Data;
+using SplitListWebApi.Areas.Identity.Data.Models;
 using SplitListWebApi.Models;
 using SplitListWebApi.Repository;
 
@@ -49,10 +51,7 @@ namespace SplitListWebApi.Tests
                 {
                     GroupID = 1,
                     Name = "JordkimsGruppe",
-                    OwnerID = 1,
-                    Pantries = null,
-                    ShoppingLists = null,
-                    UserGroups = null
+                    OwnerID = "1"
                 };
                 context.Groups.Add(jørgensGruppe);
 
@@ -91,8 +90,7 @@ namespace SplitListWebApi.Tests
                 {
                     GroupID = 1,
                     Name = "Group1",
-                    OwnerID = 1,
-                    Pantries = null,
+                    OwnerID = "1",
                     ShoppingLists = null,
                     UserGroups = null
                 });
@@ -136,8 +134,7 @@ namespace SplitListWebApi.Tests
                 {
                     GroupID = 1,
                     Name = "JordkimsGruppe",
-                    OwnerID = 1,
-                    Pantries = null,
+                    OwnerID = "1",
                     ShoppingLists = null,
                     UserGroups = null
                 };
@@ -179,10 +176,7 @@ namespace SplitListWebApi.Tests
                 {
                     GroupID = 1,
                     Name = "JordkimsGruppe",
-                    OwnerID = 1,
-                    Pantries = null,
-                    ShoppingLists = null,
-                    UserGroups = null
+                    OwnerID = "1"
                 };
                 context.Groups.Add(jørgensGruppe);
 
@@ -237,10 +231,7 @@ namespace SplitListWebApi.Tests
                 {
                     GroupID = 1,
                     Name = "JordkimsGruppe",
-                    OwnerID = 1,
-                    Pantries = null,
-                    ShoppingLists = null,
-                    UserGroups = null
+                    OwnerID = "1"
                 };
             
                 context.Groups.Add(jørgensGruppe);
@@ -275,7 +266,7 @@ namespace SplitListWebApi.Tests
                 {
                     GroupID = 1,
                     Name = "JordkimsGruppe",
-                    OwnerID = 1,
+                    OwnerID = "1",
                 };
 
                 context.Groups.Add(jørgensGruppe);
@@ -311,10 +302,7 @@ namespace SplitListWebApi.Tests
                 context.Groups.Add(new Group()
                 {
                     Name = "Group1",
-                    OwnerID = 1,
-                    Pantries = null,
-                    ShoppingLists = null,
-                    UserGroups = null
+                    OwnerID = "1"
                 });
                 context.SaveChanges();
             }
@@ -324,13 +312,13 @@ namespace SplitListWebApi.Tests
                 ShoppingListRepository repo = new ShoppingListRepository(context);
                 for (var i = 0; i < amount; ++i)
                 {
-                    repo.UpdateShoppingList(new ShoppingListDTO()
+                    ShoppingListDTO dto = repo.UpdateShoppingList(new ShoppingListDTO()
                     {
-                        shoppingListID = i + 1,
                         shoppingListName = $"ShoppingList{i + 1}",
                         shoppingListGroupID = 1,
                         shoppingListGroupName = "Group1"
                     });
+                    Assert.AreEqual(dto.shoppingListID, i+1);
                 }
                 Assert.AreEqual(amount, context.ShoppingLists.Count());
             }
@@ -349,10 +337,7 @@ namespace SplitListWebApi.Tests
                 context.Groups.Add(new Group()
                 {
                     Name = "Group1",
-                    OwnerID = 1,
-                    Pantries = null,
-                    ShoppingLists = null,
-                    UserGroups = null
+                    OwnerID = "1"
                 });
                 context.SaveChanges();
             }
@@ -361,8 +346,7 @@ namespace SplitListWebApi.Tests
             {
                 shoppingListName = "ShoppingList1",
                 shoppingListGroupID = 1,
-                shoppingListGroupName = "Group1",
-                shoppingListID = 1
+                shoppingListGroupName = "Group1"
             };
 
             using (var context = new SplitListContext(options))
@@ -386,7 +370,7 @@ namespace SplitListWebApi.Tests
         }
 
         [Test]
-        public void UpdateShoppinglistItemsWhenFound()
+        public void UpdateShoppingListAddsItems()
         {
             using (var context = new SplitListContext(options))
             {
@@ -398,10 +382,7 @@ namespace SplitListWebApi.Tests
                 context.Groups.Add(new Group()
                 {
                     Name = "Group1",
-                    OwnerID = 1,
-                    Pantries = null,
-                    ShoppingLists = null,
-                    UserGroups = null
+                    OwnerID = "1"
                 });
                 context.SaveChanges();
             }
@@ -411,20 +392,19 @@ namespace SplitListWebApi.Tests
                 shoppingListName = "ShoppingList1",
                 shoppingListGroupID = 1,
                 shoppingListGroupName = "Group1",
-                shoppingListID = 1,
                 Items = new List<ItemDTO>()
                 {
                     new ItemDTO()
                     {
                         Amount = 1,
-                        ItemID = 1,
+                        ItemID = 0,
                         Type = "Fruit",
                         Name = "Banana"
                     },
                     new ItemDTO()
                     {
                         Amount = 1,
-                        ItemID = 2,
+                        ItemID = 0,
                         Type = "Fruit",
                         Name = "Apple"
                     }
@@ -437,6 +417,7 @@ namespace SplitListWebApi.Tests
                 repo.UpdateShoppingList(list);
                 Assert.AreEqual("ShoppingList1", context.ShoppingLists.FirstOrDefault().Name);
                 Assert.AreEqual(1, context.ShoppingLists.Count());
+                Assert.AreEqual(2, context.ShoppingListItems.Count());
 
                 ShoppingListDTO modifiedList = new ShoppingListDTO()
                 {
@@ -449,14 +430,12 @@ namespace SplitListWebApi.Tests
                         new ItemDTO()
                         {
                             Amount = 3,
-                            ItemID = 1,
                             Type = "Fruit",
                             Name = "Banana"
                         },
                         new ItemDTO()
                         {
                             Amount = 5,
-                            ItemID = 2,
                             Type = "Fruit",
                             Name = "Apple"
                         }
@@ -477,6 +456,62 @@ namespace SplitListWebApi.Tests
                         }
                     }
                 }
+            }
+        }
+
+        [Test]
+        public void UpdateShoppingListDeletesItems()
+        {
+            using (var context = new SplitListContext(options))
+            {
+                context.Database.EnsureCreated();
+            }
+
+            using (var context = new SplitListContext(options))
+            {
+                context.Groups.Add(new Group()
+                {
+                    Name = "Group1",
+                    OwnerID = "1"
+                });
+                context.SaveChanges();
+            }
+
+            ShoppingListDTO list = new ShoppingListDTO()
+            {
+                shoppingListName = "ShoppingList1",
+                shoppingListGroupID = 1,
+                shoppingListGroupName = "Group1",
+                shoppingListID = 1,
+                Items = new List<ItemDTO>()
+                {
+                    new ItemDTO()
+                    {
+                        Amount = 1,
+                        Type = "Fruit",
+                        Name = "Banana"
+                    },
+                    new ItemDTO()
+                    {
+                        Amount = 1,
+                        Type = "Fruit",
+                        Name = "Apple"
+                    }
+                }
+            };
+
+            using (var context = new SplitListContext(options))
+            {
+                ShoppingListRepository repo = new ShoppingListRepository(context);
+                repo.UpdateShoppingList(list);
+                Assert.AreEqual("ShoppingList1", context.ShoppingLists.FirstOrDefault().Name);
+                Assert.AreEqual(1, context.ShoppingLists.Count());
+
+                list.Items.RemoveAt(1);
+
+                repo.UpdateShoppingList(list);
+
+                Assert.AreEqual(1, context.ShoppingListItems.Count());
             }
         }
     }

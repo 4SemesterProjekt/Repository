@@ -19,9 +19,21 @@
     <Compile Remove="Migrations\20200310130947_InitialMigration.Designer.cs" />
     <Compile Remove="Migrations\20200310133744_InitialMigration.cs" />
     <Compile Remove="Migrations\20200310133744_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200310134416_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200310134416_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200316095000_Added_ShoppingListItems_DbSet.cs" />
+    <Compile Remove="Migrations\20200316095000_Added_ShoppingListItems_DbSet.Designer.cs" />
+    <Compile Remove="Migrations\20200330085334_AddedDbSetForPantryItems.cs" />
+    <Compile Remove="Migrations\20200330085334_AddedDbSetForPantryItems.Designer.cs" />
+    <Compile Remove="Migrations\20200330094826_AddedDbSetForUserGroups.cs" />
+    <Compile Remove="Migrations\20200330094826_AddedDbSetForUserGroups.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="3.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.0-preview1.19508.20" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.2" />
@@ -29,6 +41,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.0-preview1.19506.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
   </ItemGroup>
 

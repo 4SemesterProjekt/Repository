@@ -8,6 +8,7 @@
              xmlns:system="clr-namespace:System;assembly=netstandard"
              xmlns:models="clr-namespace:SplitList.Models;assembly=SplitList"
              xmlns:view="clr-namespace:SplitList.Views;assembly=SplitList"
+             xmlns:b="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
              mc:Ignorable="d"
              Title="MenuPage"
              x:Class="SplitList.Views.MenuView">
