@@ -19,21 +19,18 @@ namespace SplitList.Views
         public ShoppingListView(ShoppingList shoppingList)
         {
             InitializeComponent();
+            ShoppingListViewModel.Page = this;
             ShoppingListViewModel.ShoppingList = ShoppingListMapper.ShoppingListDtoToShoppingList(SerializerShoppingList.GetShoppingListByShoppinglistId(shoppingList.ShoppingListId).Result);
         }
-
-        private async void Button_OnClicked(object sender, EventArgs e)
-        {
-            ShoppingListDTO tobj = ShoppingListMapper.ShoppingListToShoppingListDto(ShoppingListViewModel.ShoppingList);
-            var result = await SerializerShoppingList.PostShoppingList(tobj);
-
-        }
-
+        /// <summary>
+        /// Overrides the disappearing function to sync changes made in a specific shoppinglist with the database
+        /// </summary>
         protected override async void OnDisappearing()
         {
             base.OnDisappearing();
             ShoppingListDTO tobj = ShoppingListMapper.ShoppingListToShoppingListDto(ShoppingListViewModel.ShoppingList);
             var result = await SerializerShoppingList.PostShoppingList(tobj);
         }
+
     }
 }

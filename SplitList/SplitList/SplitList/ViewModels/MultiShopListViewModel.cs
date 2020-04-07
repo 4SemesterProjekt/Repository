@@ -30,6 +30,7 @@ namespace SplitList.ViewModels
 
         private Page _page;
 
+        private bool deleteState;
         private INavigation Navigation { get; set; }
 
         private int _groupId;
@@ -85,15 +86,76 @@ namespace SplitList.ViewModels
         //Does nothing if cancel is pressed
         async void AddShoppingListExecute()
         {
-            string result = await _page.DisplayPromptAsync("New shoppingList","Enter a name for your shoppinglist");
-            if(!string.IsNullOrEmpty(result))
+            string result = await _page.DisplayPromptAsync("New shoppingList", "Enter a name for your shoppinglist");
+            if (!string.IsNullOrEmpty(result))
             {
-                var newList = new ShoppingList(result,GroupId);
+                var newList = new ShoppingList(result, GroupId);
                 var listDTO = ShoppingListMapper.ShoppingListToShoppingListDto(newList);
                 var listReturned = await SerializerShoppingList.PostShoppingList(listDTO);
                 Lists.Add(ShoppingListMapper.ShoppingListDtoToShoppingList(listReturned));
             }
         }
+
+        private ICommand _deleteShoppingListCommand;
+
+        public ICommand DeleteShoppingListCommand
+        {
+            get { return _deleteShoppingListCommand ?? (_deleteShoppingListCommand = new DelegateCommand(DeleteShoppingListExecute)); }
+        }
+
+        /// <summary>
+        /// On first press shows a checkbox next to each shoppinglist
+        /// On second press, if any checkbox is checked prompts the user to confirm deletions, if chosen any selected shoppinglist will be deleted
+        /// </summary>
+        public async void DeleteShoppingListExecute()
+        {
+            if (!deleteState) //Deletestate is used to check if the checkboxes should be shown
+            {
+                foreach (var shoppingList in Lists)
+                {
+                    shoppingList.IsVisible = true;
+                }
+
+                deleteState = true;
+            }
+            else if (deleteState)
+            {
+                bool IsAnyChecked = false; //Does a check through the lists to see if any box is checked, makes sure that there is no promt when no deletion is attemted
+                foreach (var shoppingList in Lists)
+                {
+                    if (shoppingList.IsChecked)
+                    {
+                        IsAnyChecked = true;
+                        break;
+                    }
+                }
+
+                if (IsAnyChecked)
+                {//Prompts the user to confirm the deletion on the selected shoppinglists
+                    var result = await _page.DisplayAlert("Warning", "Are you sure that you want to delete the selected shoppinglists", "Yes", "No");
+                    if (result)
+                    {
+                        for (int i = Lists.Count-1; i >= 0; i--)
+                        {
+                            if (Lists[i].IsChecked)
+                            {//Serializer function deletes the selected shoppinglists on the database
+                                await SerializerShoppingList.DeleteShoppingList(ShoppingListMapper.ShoppingListToShoppingListDto(Lists[i]));
+                                Lists.Remove(Lists[i]);
+                                
+                            }
+                        }
+                    }
+                }
+                //Hides the checkboxes after use
+                foreach (var shoppingList in Lists)
+                {
+                    shoppingList.IsChecked = false;
+                    shoppingList.IsVisible = false;
+                }
+                deleteState = false;
+            }
+        }
+
 
         #endregion
     }

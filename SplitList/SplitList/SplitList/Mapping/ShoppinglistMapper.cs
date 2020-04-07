@@ -8,6 +8,9 @@ namespace SplitList.Mapping
 {
     class ShoppingListMapper
     {
+        //Takes a shoppinglist transfer object in and maps it to the shoppinglists used by the program
+        //Parameter ShoppinglistDTO object
+        //Returns a shoppinglist object
         public static ShoppingList ShoppingListDtoToShoppingList(ShoppingListDTO dto)
         {
             ShoppingList newList = new ShoppingList();
@@ -24,6 +27,9 @@ namespace SplitList.Mapping
             return newList;
         }
 
+        //Takes a shoppinglist object and maps it to a transfer object for publishing to the database
+        //Parameter ShoppingList
+        //Returns ShoppinglistDTO
         public static ShoppingListDTO ShoppingListToShoppingListDto(ShoppingList list)
         {
             ShoppingListDTO newDtoList = new ShoppingListDTO();
