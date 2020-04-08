@@ -12,7 +12,7 @@
         <viewModels:ShoppingListViewModel x:Name="ShoppingListViewModel"/>
     </ContentPage.BindingContext>
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Delete"
+        <ToolbarItem
                   BindingContext="{x:Reference ShoppingListViewModel}"
                   Command="{Binding DeleteItemCommand}"
                   IconImageSource="{utility:ImageResource SplitList.EmbeddedResources.deleteWhite.png}"/>
