@@ -31,6 +31,8 @@
     <Compile Remove="Migrations\20200406074734_InitialMigrationAfterRebase.Designer.cs" />
     <Compile Remove="Migrations\20200409205406_InitialMigration.cs" />
     <Compile Remove="Migrations\20200409205406_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200409205447_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200409205447_InitialMigration.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
