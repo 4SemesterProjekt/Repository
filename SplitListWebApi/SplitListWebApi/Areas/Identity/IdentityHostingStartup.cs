@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using ApiFormat.User;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SplitListWebApi.Areas.Identity;
 using SplitListWebApi.Areas.Identity.Data;
-using SplitListWebApi.Models;
 
 [assembly: HostingStartup(typeof(IdentityHostingStartup))]
 namespace SplitListWebApi.Areas.Identity
@@ -17,10 +17,11 @@ namespace SplitListWebApi.Areas.Identity
             builder.ConfigureServices((context, services) => {
                 services.AddDbContext<SplitListContext>(options =>
                     options.UseSqlServer(
-                        context.Configuration.GetConnectionString("SplitListWebApiContextConnection")));
+                        context.Configuration.GetConnectionString("SplitListMarkusSQLServer")));
 
-                services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
-                    .AddEntityFrameworkStores<SplitListContext>();
+                services.AddIdentity<UserModel, ApplicationRole>()
+                    .AddEntityFrameworkStores<SplitListContext>()
+                    .AddDefaultTokenProviders();
             });
         }
     }

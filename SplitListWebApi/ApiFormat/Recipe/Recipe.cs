@@ -4,11 +4,8 @@ using ApiFormat.ShadowTables;
 
 namespace ApiFormat.Recipe
 {
-    public class Recipe : IRecipeModel, IRecipeDTO
+    public class Recipe : RecipeModel, IRecipeDTO
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public ICollection<RecipeItem> ItemRecipes { get; set; }
-        public ICollection<IItemDTO> Items { get; set; }
+        public List<IItemDTO> Items { get; set; }
     }
 }

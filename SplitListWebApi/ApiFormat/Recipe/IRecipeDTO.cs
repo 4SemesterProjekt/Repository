@@ -5,6 +5,6 @@ namespace ApiFormat.Recipe
 {
     public interface IRecipeDTO : IDTO
     {
-        public ICollection<IItemDTO> Items { get; set; }
+        List<IItemDTO> Items { get; set; }
     }
 }

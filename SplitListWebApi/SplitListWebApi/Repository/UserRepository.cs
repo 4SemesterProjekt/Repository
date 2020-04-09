@@ -1,99 +1,99 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using SplitListWebApi.Models;
-using ApiFormat;
-using Microsoft.EntityFrameworkCore;
-using SplitListWebApi.Areas.Identity.Data;
-using SplitListWebApi.Areas.Identity.Data.Models;
-using Microsoft.AspNetCore.Identity;
+﻿//using System.Collections.Generic;
+//using System.Linq;
+//using ApiFormat;
+//using ApiFormat.ShadowTables;
+//using ApiFormat.User;
+//using Microsoft.EntityFrameworkCore;
+//using SplitListWebApi.Areas.Identity.Data;
+//using Microsoft.AspNetCore.Identity;
 
-namespace SplitListWebApi.Repository
-{
-    public interface IUserRepository
-    {
-        List<IGroupDTO> GetUsersGroups(string userID);
-        void DeleteUser(UserDTO user);
-        UserDTO UpdateUser(UserDTO user);
-    }
+//namespace SplitListWebApi.Repository
+//{
+//    public interface IUserRepository
+//    {
+//        List<IGroupDTO> GetUsersGroups(string userID);
+//        void DeleteUser(IUserDTO user);
+//        IUserDTO UpdateUser(IUserDTO user);
+//    }
 
-    public class UserRepository : IUserRepository
-    {
-        private UserManager<User> _userManager;
-        private SplitListContext _context;
-        public UserRepository(UserManager<User> userManager, SplitListContext context)
-        {
-            _context = context;
-            _userManager = userManager;
-        }
+//    public class UserRepository : IUserRepository
+//    {
+//        private UserManager<User> _userManager;
+//        private SplitListContext _context;
+//        public UserRepository(UserManager<User> userManager, SplitListContext context)
+//        {
+//            _context = context;
+//            _userManager = userManager;
+//        }
 
-        public List<IGroupDTO> GetUsersGroups(string userID)
-        {
-            User dbuser = _userManager.FindByIdAsync(userID).Result;
-            if (dbuser != null)
-            {
-                //May be flawed and only return 1 single group
-                List<Group> userGroups = _context.UserGroups
-                    .Where(ug => ug.Id == userID)
-                    .Include(g => g.Group)
-                    .Select(ug => ug.Group)
-                    .ToList();
+//        public List<IGroupDTO> GetUsersGroups(int userID)
+//        {
+//            User dbuser = _userManager.FindByIdAsync(userID.ToString()).Result;
+//            if (dbuser != null)
+//            {
+//                //May be flawed and only return 1 single group
+//                List<IGroupModel> userGroups = _context.UserGroups
+//                    .Where(ug => ug.UserID == userID)
+//                    .Include(g => g.Group)
+//                    .Select(ug => ug.Group)
+//                    .ToList();
 
-                List<IGroupDTO> userGroupDTO = new List<IGroupDTO>();
+//                List<IGroupDTO> userGroupDTO = new List<IGroupDTO>();
 
-                foreach (Group group in userGroups)
-                {
-                    userGroupDTO.Add(new IGroupDTO()
-                    {
-                        GroupID = group.GroupID,
-                        OwnerID = group.OwnerID,
-                        Name = group.Name
-                    });
-                }
-                return userGroupDTO;
-            }
-            else return null;
-        }
+//                foreach (Group group in userGroups)
+//                {
+//                    userGroupDTO.Add(new Group()
+//                    {
+//                        Id = group.Id,
+//                        OwnerID = group.OwnerID,
+//                        Name = group.Name
+//                    });
+//                }
+//                return userGroupDTO;
+//            }
+//            else return null;
+//        }
 
-        private User LoadToModel(UserDTO user)
-        {
-            User dbUser =_userManager.FindByIdAsync(user.Id).Result;
-            if (dbUser != null)
-                return dbUser;
-            else return null;
-        }
+//        private User LoadToModel(IUserDTO user)
+//        {
+//            User dbUser =_userManager.FindByIdAsync(user.Id.ToString()).Result;
+//            if (dbUser != null)
+//                return dbUser;
+//            else return null;
+//        }
 
-        public void DeleteUser(UserDTO user)
-        {
-            User dbUser = LoadToModel(user);
-            if (dbUser != null)
-            {
-                _userManager.DeleteAsync(dbUser);
+//        public void DeleteUser(IUserDTO user)
+//        {
+//            User dbUser = LoadToModel(user);
+//            if (dbUser != null)
+//            {
+//                _userManager.DeleteAsync(dbUser);
 
-                foreach (IGroupDTO group in GetUsersGroups(user.Id))
-                {
-                    UserGroup toDelete = _context.UserGroups.Find(user.Id, group.GroupID);
-                    if (toDelete != null)
-                        _context.UserGroups.Remove(toDelete);
-                }
-                _context.SaveChanges();
-            }
-        }
+//                foreach (IGroupDTO group in GetUsersGroups(user.Id))
+//                {
+//                    UserGroup toDelete = _context.UserGroups.Find(user.Id, group.Id);
+//                    if (toDelete != null)
+//                        _context.UserGroups.Remove(toDelete);
+//                }
+//                _context.SaveChanges();
+//            }
+//        }
 
-        public UserDTO UpdateUser(UserDTO user)
-        {
-            User dbUser = LoadToModel(user);
-            if (dbUser != null)
-            {
-                var result = _userManager.UpdateAsync(dbUser).Result;
-                return new UserDTO()
-                {
-                    Groups = user.Groups,
-                    Id = dbUser.Id,
-                    Name = dbUser.Name
-                };
-            }
-            else return null;
+//        public IUserDTO UpdateUser(IUserDTO user)
+//        {
+//            User dbUser = LoadToModel(user);
+//            if (dbUser != null)
+//            {
+//                var result = _userManager.UpdateAsync(dbUser).Result;
+//                return new User()
+//                {
+//                    Groups = user.Groups,
+//                    Id = dbUser.Id,
+//                    Name = dbUser.Name
+//                };
+//            }
+//            else return null;
             
-        }
-    }
-}
+//        }
+//    }
+//}

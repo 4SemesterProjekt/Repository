@@ -27,6 +27,10 @@
     <Compile Remove="Migrations\20200330085334_AddedDbSetForPantryItems.Designer.cs" />
     <Compile Remove="Migrations\20200330094826_AddedDbSetForUserGroups.cs" />
     <Compile Remove="Migrations\20200330094826_AddedDbSetForUserGroups.Designer.cs" />
+    <Compile Remove="Migrations\20200406074734_InitialMigrationAfterRebase.cs" />
+    <Compile Remove="Migrations\20200406074734_InitialMigrationAfterRebase.Designer.cs" />
+    <Compile Remove="Migrations\20200409205406_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200409205406_InitialMigration.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

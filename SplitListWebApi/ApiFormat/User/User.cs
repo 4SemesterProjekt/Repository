@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using ApiFormat.ShadowTables;
 using Microsoft.AspNetCore.Identity;
 
 namespace ApiFormat.User
 {
-    public class User : IdentityUser<int>, IUserModel, IUserDTO
+    public class User : UserModel, IUserDTO
     {
-        public ICollection<UserGroup> UserGroups { get; set; }
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public ICollection<IGroupDTO> Groups { get; set; }
+        public List<IGroupDTO> Groups { get; set; }
     }
 }

@@ -1,63 +1,62 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ApiFormat;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SplitListWebApi.Areas.Identity.Data;
-using SplitListWebApi.Areas.Identity.Data.Models;
-using SplitListWebApi.Models;
-using SplitListWebApi.Repository;
+﻿//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Threading.Tasks;
+//using ApiFormat;
+//using ApiFormat.User;
+//using Microsoft.AspNetCore.Authorization;
+//using Microsoft.AspNetCore.Http;
+//using Microsoft.AspNetCore.Mvc;
+//using Microsoft.EntityFrameworkCore;
+//using SplitListWebApi.Areas.Identity.Data;
+//using SplitListWebApi.Repository;
 
-namespace SplitListWebApi.Controllers
-{
-    [Route("api/[controller]")]
-    [ApiController]
-    public class GroupsController : ControllerBase
-    {
-        private SplitListContext _context;
-        private IGroupRepository repo;
+//namespace SplitListWebApi.Controllers
+//{
+//    [Route("api/[controller]")]
+//    [ApiController]
+//    public class GroupsController : ControllerBase
+//    {
+//        private SplitListContext _context;
+//        private IGroupRepository repo;
 
-        public GroupsController(SplitListContext context)
-        {
-            _context = context;
-            repo = new GroupRepository(_context);
-        }
+//        public GroupsController(SplitListContext context)
+//        {
+//            _context = context;
+//            repo = new GroupRepository(_context);
+//        }
 
-        //Get: api/groups/5
-        //Returns GroupDTO from specific ID.
-        [HttpGet("{id}")]
-        public IGroupDTO GetGroupByID(int id)
-        {
-            return repo.GetGroupByGroupID(id);
-        }
+//        //Get: api/groups/5
+//        //Returns GroupDTO from specific ID.
+//        [HttpGet("{id}")]
+//        public IGroupDTO GetGroupByID(int id)
+//        {
+//            return repo.GetGroupByGroupID(id);
+//        }
 
-        //Get: api/groups/5/owner
-        //Returns the UserDTO of the owner of the group specified by an ID.
-        [HttpGet("{id}/owner")]
-        public UserDTO GetOwnerOfGroup(int id)
-        {
-            IGroupDTO group = repo.GetGroupByGroupID(id);
-            return repo.GetOwnerOfGroup(group);
-        }
+//        //Get: api/groups/5/owner
+//        //Returns the IUserDTO of the owner of the group specified by an ID.
+//        [HttpGet("{id}/owner")]
+//        public IUserDTO GetOwnerOfGroup(int id)
+//        {
+//            IGroupDTO group = repo.GetGroupByGroupID(id);
+//            return repo.GetOwnerOfGroup(group);
+//        }
 
-        //Post: api/groups
-        //Updates/Creates a group and its members.
-        [HttpPost]
-        public IGroupDTO UpdateGroup(IGroupDTO group)
-        {
-            return repo.UpdateGroup(group);
-        }
+//        //Post: api/groups
+//        //Updates/Creates a group and its members.
+//        [HttpPost]
+//        public IGroupDTO UpdateGroup(IGroupDTO group)
+//        {
+//            return repo.UpdateGroup(group);
+//        }
 
-        //Delete: api/groups
-        //Deletes group from db.
-        [HttpDelete]
-        public void DeleteGroup(IGroupDTO group)
-        {
-            repo.DeleteGroup(group);
-        }
-    }
-}
+//        //Delete: api/groups
+//        //Deletes group from db.
+//        [HttpDelete]
+//        public void DeleteGroup(IGroupDTO group)
+//        {
+//            repo.DeleteGroup(group);
+//        }
+//    }
+//}

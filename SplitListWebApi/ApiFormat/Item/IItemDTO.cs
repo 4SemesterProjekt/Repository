@@ -2,7 +2,7 @@
 {
     public interface IItemDTO : IDTO
     {
-        public string Type { get; set; }
-        public int Amount { get; set; }
+        string Type { get; set; }
+        int Amount { get; set; }
     }
 }

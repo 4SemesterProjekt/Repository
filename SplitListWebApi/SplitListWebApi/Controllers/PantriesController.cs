@@ -1,47 +1,47 @@
-﻿using System.Collections.Generic;
-using ApiFormat;
-using Microsoft.AspNetCore.Mvc;
-using SplitListWebApi.Areas.Identity.Data;
-using SplitListWebApi.Models;
-using SplitListWebApi.Repository;
+﻿//using System.Collections.Generic;
+//using ApiFormat;
+//using ApiFormat.Pantry;
+//using Microsoft.AspNetCore.Mvc;
+//using SplitListWebApi.Areas.Identity.Data;
+//using SplitListWebApi.Repository;
 
-namespace SplitListWebApi.Controllers
-{
-    [Route("api/[controller]")]
-    [ApiController]
-    public class PantriesController : ControllerBase
-    {
-        private readonly SplitListContext _context;
-        private IPantryRepository repo;
+//namespace SplitListWebApi.Controllers
+//{
+//    [Route("api/[controller]")]
+//    [ApiController]
+//    public class PantriesController : ControllerBase
+//    {
+//        private readonly SplitListContext _context;
+//        private IPantryRepository repo;
 
-        public PantriesController(SplitListContext context)
-        {
-            _context = context;
-            repo = new PantryRepository(context);
-        }
+//        public PantriesController(SplitListContext context)
+//        {
+//            _context = context;
+//            repo = new PantryRepository(context);
+//        }
 
-        // GET: api/Pantries/group/5
-        // Returns pantry for a specific group
-        [HttpGet("group/{id}")]
-        public PantryDTO GetPantryByGroupID(int id)
-        {
-            return repo.GetPantryFromGroupID(id);
-        }
+//        // GET: api/Pantries/group/5
+//        // Returns pantry for a specific group
+//        [HttpGet("group/{id}")]
+//        public IPantryDTO GetPantryByGroupID(int id)
+//        {
+//            return repo.GetPantryFromGroupID(id);
+//        }
 
-        // POST: api/Pantries
-        // Updates/Creates pantry from parameter
-        [HttpPost]
-        public PantryDTO PostPantry(PantryDTO pantryDto)
-        {
-            return repo.UpdatePantry(pantryDto);
-        }
+//        // POST: api/Pantries
+//        // Updates/Creates pantry from parameter
+//        [HttpPost]
+//        public IPantryDTO PostPantry(IPantryDTO pantryDto)
+//        {
+//            return repo.UpdatePantry(pantryDto);
+//        }
 
-        // DELETE: api/Pantries
-        // Deletes pantry from parameter
-        [HttpDelete]
-        public void DeletePantry(PantryDTO pantryDto)
-        {
-            repo.DeletePantry(pantryDto);
-        }
-    }
-}
+//        // DELETE: api/Pantries
+//        // Deletes pantry from parameter
+//        [HttpDelete]
+//        public void DeletePantry(IPantryDTO pantryDto)
+//        {
+//            repo.DeletePantry(pantryDto);
+//        }
+//    }
+//}

@@ -4,6 +4,6 @@ namespace ApiFormat.User
 {
     public interface IUserDTO : IDTO
     {
-        public ICollection<IGroupDTO> Groups { get; set; }
+        List<IGroupDTO> Groups { get; set; }
     }
 }

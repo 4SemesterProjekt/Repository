@@ -6,9 +6,9 @@ namespace ApiFormat.ShadowTables
     public class PantryItem
     {
         public int PantryID { get; set; }
-        public IPantryModel Pantry { get; set; }
+        public PantryModel Pantry { get; set; }
         public int ItemID { get; set; }
-        public IItemModel Item { get; set; }
+        public ItemModel Item { get; set; }
         public int Amount { get; set; }
     }
 }

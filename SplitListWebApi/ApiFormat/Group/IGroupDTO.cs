@@ -9,9 +9,9 @@ namespace ApiFormat
 {
     public interface IGroupDTO : IDTO
     {
-        public string OwnerID { get; set; }
-        public ICollection<IShoppingListDTO> ShoppingLists { get; set; }
-        public IPantryDTO Pantry { get; set; }
-        public ICollection<IUserDTO> Users { get; set; }
+        int OwnerId { get; set; }
+        List<IShoppingListDTO> ShoppingLists { get; set; }
+        IPantryDTO Pantry { get; set; }
+        List<IUserDTO> Users { get; set; }
     }
 }
