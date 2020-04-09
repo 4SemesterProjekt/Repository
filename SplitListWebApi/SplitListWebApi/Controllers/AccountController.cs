@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using ApiFormat;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -49,12 +50,18 @@ namespace SplitListWebApi.Controllers
                 EmailConfirmed = true
             };
 
+            var userDto = new UserDTO()
+            {
+                Id = user.Id,
+                Name = user.Name
+            };
+
             var loginInfo = new UserLoginInfo(info.LoginProvider, info.ProviderKey, info.Principal.FindFirst(ClaimTypes.Name).Value);
 
             var result = await _signInManager.ExternalLoginSignInAsync(loginInfo.LoginProvider, loginInfo.ProviderKey, false);
 
             if (result.Succeeded)
-                return Ok(user);
+                return Redirect("splitlist://#access_token=" + user.Id);
             else
             {
                 var identityResult = await _userManager.CreateAsync(user);
@@ -65,7 +72,7 @@ namespace SplitListWebApi.Controllers
                 if (!identityResult.Succeeded) return Forbid();
                 await _signInManager.SignInAsync(user, false);
 
-                return Ok(user);
+                return Ok(userDto);
             }
         }
     }

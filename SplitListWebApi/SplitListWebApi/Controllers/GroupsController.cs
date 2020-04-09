@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ApiFormat;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using SplitListWebApi.Areas.Identity.Data;
 using SplitListWebApi.Areas.Identity.Data.Models;
 using SplitListWebApi.Models;
+using SplitListWebApi.Repository;
 
 namespace SplitListWebApi.Controllers
 {
@@ -16,98 +18,46 @@ namespace SplitListWebApi.Controllers
     [ApiController]
     public class GroupsController : ControllerBase
     {
-        private readonly SplitListContext _context;
+        private SplitListContext _context;
+        private IGroupRepository repo;
 
         public GroupsController(SplitListContext context)
         {
             _context = context;
+            repo = new GroupRepository(_context);
         }
 
-        // GET: api/Groups
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Group>>> GetGroups()
-        {
-            return await _context.Groups.ToListAsync();
-        }
-
-        // GET: api/Groups/5
+        //Get: api/groups/5
+        //Returns GroupDTO from specific ID.
         [HttpGet("{id}")]
-        [Authorize]
-        public async Task<ActionResult<Group>> GetGroup(int id)
+        public GroupDTO GetGroupByID(int id)
         {
-            var @group = await _context.Groups.FindAsync(id);
-
-            if (@group == null)
-            {
-                return NotFound();
-            }
-
-            return @group;
+            return repo.GetGroupByGroupID(id);
         }
 
-        // PUT: api/Groups/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutGroup(int id, Group @group)
+        //Get: api/groups/5/owner
+        //Returns the UserDTO of the owner of the group specified by an ID.
+        [HttpGet("{id}/owner")]
+        public UserDTO GetOwnerOfGroup(int id)
         {
-            if (id != @group.GroupID)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(@group).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!GroupExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            GroupDTO group = repo.GetGroupByGroupID(id);
+            return repo.GetOwnerOfGroup(group);
         }
 
-        // POST: api/Groups
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+        //Post: api/groups
+        //Updates/Creates a group and its members.
         [HttpPost]
-        public async Task<ActionResult<Group>> PostGroup(Group @group)
+        public GroupDTO UpdateGroup(GroupDTO group)
         {
-            _context.Groups.Add(@group);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetGroup", new { id = @group.GroupID }, @group);
+            return repo.UpdateGroup(group);
         }
 
-        // DELETE: api/Groups/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Group>> DeleteGroup(int id)
+        //Delete: api/groups
+        //Deletes group from db.
+        [HttpDelete]
+        public void DeleteGroup(GroupDTO group)
         {
-            var @group = await _context.Groups.FindAsync(id);
-            if (@group == null)
-            {
-                return NotFound();
-            }
-
-            _context.Groups.Remove(@group);
-            await _context.SaveChangesAsync();
-
-            return @group;
-        }
-
-        private bool GroupExists(int id)
-        {
-            return _context.Groups.Any(e => e.GroupID == id);
+            repo.DeleteGroup(group);
         }
     }
 }

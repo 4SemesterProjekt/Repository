@@ -10,10 +10,9 @@ namespace SplitListWebApi.Repository
 {
     public interface IGroupRepository
     {
-        List<UserDTO> GetUsersInGroup(GroupDTO group);
+        //List<UserDTO> GetUsersInGroup(GroupDTO group);
         UserDTO GetOwnerOfGroup(GroupDTO group);
-        void AddGroup(GroupDTO group);
-        void UpdateGroup(GroupDTO group);
+        GroupDTO UpdateGroup(GroupDTO group);
         void DeleteGroup(GroupDTO group);
         GroupDTO GetGroupByGroupID(int ID);
     }
@@ -93,9 +92,14 @@ namespace SplitListWebApi.Repository
             }
         }
 
-        public void UpdateGroup(GroupDTO group)
+        public GroupDTO UpdateGroup(GroupDTO group)
         {
             Group dbGroup = LoadToModel(group);
+            if (group.GroupID <= 0)
+            {
+                group.GroupID = dbGroup.GroupID;
+            }
+
             dbGroup.Name = group.Name;
             dbGroup.OwnerID = group.OwnerID;
 
@@ -108,11 +112,9 @@ namespace SplitListWebApi.Repository
                 RemoveUsersFromGroup(group);
                 AddUsersToGroup(group);
             }
+            return group;
         }
-        public void AddGroup(GroupDTO group)
-        {
-            LoadToModel(group);
-        }
+
         public List<UserDTO> GetUsersInGroup(GroupDTO group)
         {
             List<UserDTO> users = new List<UserDTO>();

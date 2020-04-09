@@ -25,14 +25,14 @@ namespace SplitListWebApi.Controllers
 
         // Returns all shopping lists for a specific group
         [HttpGet("group/{id}")]
-        public List<ShoppingListDTO> GetShoppingList(int id)
+        public List<ShoppingListDTO> GetShoppingListsByGroupID(int id)
         {
             return repo.GetShoppingListsByGroupID(id);
         }
 
         // Returns ShoppingListDTO object for a specific shoppinglist ID
         [HttpGet("{id}")]
-        public ShoppingListDTO GetShoppingLists(int id)
+        public ShoppingListDTO GetShoppingListByID(int id)
         {
             return repo.GetShoppingListByID(id);
         }

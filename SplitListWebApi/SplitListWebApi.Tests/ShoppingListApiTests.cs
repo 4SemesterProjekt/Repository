@@ -112,7 +112,6 @@ namespace SplitListWebApi.Tests
 
 
                 Assert.AreEqual(amount, context.ShoppingLists.Count());
-                Assert.AreEqual(amount, repo.GetShoppingLists().Count);
 
             }
         }
@@ -458,6 +457,61 @@ namespace SplitListWebApi.Tests
                 }
             }
         }
+
+        [Test]
+        public void UpdateShoppingListUpdatesNameOfItems()
+        {
+            using (var context = new SplitListContext(options))
+            {
+                context.Database.EnsureCreated();
+            }
+
+            using (var context = new SplitListContext(options))
+            {
+                context.Groups.Add(new Group()
+                {
+                    Name = "Group1",
+                    OwnerID = "1"
+                });
+                context.SaveChanges();
+
+
+                ShoppingListDTO list = new ShoppingListDTO()
+                {
+                    shoppingListName = "ShoppingList1",
+                    shoppingListGroupID = 1,
+                    shoppingListGroupName = "Group1",
+                    Items = new List<ItemDTO>()
+                    {
+                        new ItemDTO()
+                        {
+                            Amount = 1,
+                            Type = "Fruit",
+                            Name = "Banana"
+                        },
+                        new ItemDTO()
+                        {
+                            Amount = 4,
+                            Type = "Fruit",
+                            Name = "Apple"
+                        }
+                    }
+                };
+
+                ShoppingListRepository repo = new ShoppingListRepository(context);
+                repo.UpdateShoppingList(list);
+
+                list.Items[1].Name = "Gifler";
+                repo.UpdateShoppingList(list);
+
+                ShoppingListDTO dblistDTO = repo.GetShoppingListByID(1);
+                Assert.AreEqual("Gifler", dblistDTO.Items[1].Name);
+
+
+
+            }
+        }
+
 
         [Test]
         public void UpdateShoppingListDeletesItems()
