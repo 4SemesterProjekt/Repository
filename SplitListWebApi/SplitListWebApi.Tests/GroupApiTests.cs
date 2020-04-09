@@ -44,7 +44,7 @@ namespace SplitListWebApi.Tests
 
                 context.Database.EnsureCreated();
 
-                GroupDTO group = new GroupDTO()
+                IGroupDTO group = new IGroupDTO()
                 {
                     Name = "Group1",
                     OwnerID = "1"
@@ -67,7 +67,7 @@ namespace SplitListWebApi.Tests
 
                 context.Database.EnsureCreated();
 
-                GroupDTO group = new GroupDTO()
+                IGroupDTO group = new IGroupDTO()
                 {
                     Name = "Group1",
                     OwnerID = "1"
@@ -88,7 +88,7 @@ namespace SplitListWebApi.Tests
 
                 context.Database.EnsureCreated();
 
-                GroupDTO group = new GroupDTO()
+                IGroupDTO group = new IGroupDTO()
                 {
                     Name = "Group1",
                     OwnerID = "1"
@@ -134,7 +134,7 @@ namespace SplitListWebApi.Tests
                 context.UserGroups.Add(userGroup2);
                 context.SaveChanges();
 
-                GroupDTO GroupFromDb = groupRepo.GetGroupByGroupID(group.GroupID);
+                IGroupDTO GroupFromDb = groupRepo.GetGroupByGroupID(group.GroupID);
                 Assert.AreEqual(2, users.Count);
 
                 for (int i = 0; i < 2; i++)
@@ -154,7 +154,7 @@ namespace SplitListWebApi.Tests
 
                 context.Database.EnsureCreated();
 
-                GroupDTO group = new GroupDTO()
+                IGroupDTO group = new IGroupDTO()
                 {
                     Name = "Group1",
                     OwnerID = "1"
@@ -179,7 +179,7 @@ namespace SplitListWebApi.Tests
 
                 context.Database.EnsureCreated();
 
-                GroupDTO group = new GroupDTO()
+                IGroupDTO group = new IGroupDTO()
                 {
                     Name = "Group1",
                     OwnerID = "1"
@@ -221,7 +221,7 @@ namespace SplitListWebApi.Tests
 
                 context.Database.EnsureCreated();
 
-                GroupDTO group = new GroupDTO()
+                IGroupDTO group = new IGroupDTO()
                 {
                     Name = "Group1",
                     OwnerID = "1"
@@ -255,7 +255,7 @@ namespace SplitListWebApi.Tests
 
                 context.Database.EnsureCreated();
 
-                GroupDTO group = new GroupDTO()
+                IGroupDTO group = new IGroupDTO()
                 {
                     Name = "Group1",
                     OwnerID = "1"
@@ -286,7 +286,7 @@ namespace SplitListWebApi.Tests
 
                 context.Database.EnsureCreated();
 
-                GroupDTO group = new GroupDTO()
+                IGroupDTO group = new IGroupDTO()
                 {
                     Name = "Group1",
                     OwnerID = "1"
@@ -301,7 +301,7 @@ namespace SplitListWebApi.Tests
 
                 groupRepo.UpdateGroup(group);
 
-                GroupDTO correctGroup = groupRepo.GetGroupByGroupID(1);
+                IGroupDTO correctGroup = groupRepo.GetGroupByGroupID(1);
 
                 Assert.AreEqual("Group1", correctGroup.Name);
                 Assert.AreEqual(1, correctGroup.GroupID);

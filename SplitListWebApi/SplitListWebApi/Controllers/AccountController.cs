@@ -72,7 +72,7 @@ namespace SplitListWebApi.Controllers
                 if (!identityResult.Succeeded) return Forbid();
                 await _signInManager.SignInAsync(user, false);
 
-                return Ok(userDto);
+                return Redirect("splitlist://#access_token=" + user.Id);
             }
         }
     }

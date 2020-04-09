@@ -11,7 +11,7 @@ namespace SplitListWebApi.Repository
 {
     public interface IUserRepository
     {
-        List<GroupDTO> GetUsersGroups(string userID);
+        List<IGroupDTO> GetUsersGroups(string userID);
         void DeleteUser(UserDTO user);
         UserDTO UpdateUser(UserDTO user);
     }
@@ -26,7 +26,7 @@ namespace SplitListWebApi.Repository
             _userManager = userManager;
         }
 
-        public List<GroupDTO> GetUsersGroups(string userID)
+        public List<IGroupDTO> GetUsersGroups(string userID)
         {
             User dbuser = _userManager.FindByIdAsync(userID).Result;
             if (dbuser != null)
@@ -38,11 +38,11 @@ namespace SplitListWebApi.Repository
                     .Select(ug => ug.Group)
                     .ToList();
 
-                List<GroupDTO> userGroupDTO = new List<GroupDTO>();
+                List<IGroupDTO> userGroupDTO = new List<IGroupDTO>();
 
                 foreach (Group group in userGroups)
                 {
-                    userGroupDTO.Add(new GroupDTO()
+                    userGroupDTO.Add(new IGroupDTO()
                     {
                         GroupID = group.GroupID,
                         OwnerID = group.OwnerID,
@@ -69,7 +69,7 @@ namespace SplitListWebApi.Repository
             {
                 _userManager.DeleteAsync(dbUser);
 
-                foreach (GroupDTO group in GetUsersGroups(user.Id))
+                foreach (IGroupDTO group in GetUsersGroups(user.Id))
                 {
                     UserGroup toDelete = _context.UserGroups.Find(user.Id, group.GroupID);
                     if (toDelete != null)

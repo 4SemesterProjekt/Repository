@@ -26,7 +26,7 @@ namespace SplitListWebApi.Controllers
 
         //GET: User's Groups
         [HttpGet("/{id}/groups")]
-        public List<GroupDTO> GetGroupsFromUser(string id)
+        public List<IGroupDTO> GetGroupsFromUser(string id)
         {
             return repo.GetUsersGroups(id);
         }

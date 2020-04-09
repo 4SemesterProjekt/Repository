@@ -30,7 +30,7 @@ namespace SplitListWebApi.Controllers
         //Get: api/groups/5
         //Returns GroupDTO from specific ID.
         [HttpGet("{id}")]
-        public GroupDTO GetGroupByID(int id)
+        public IGroupDTO GetGroupByID(int id)
         {
             return repo.GetGroupByGroupID(id);
         }
@@ -40,14 +40,14 @@ namespace SplitListWebApi.Controllers
         [HttpGet("{id}/owner")]
         public UserDTO GetOwnerOfGroup(int id)
         {
-            GroupDTO group = repo.GetGroupByGroupID(id);
+            IGroupDTO group = repo.GetGroupByGroupID(id);
             return repo.GetOwnerOfGroup(group);
         }
 
         //Post: api/groups
         //Updates/Creates a group and its members.
         [HttpPost]
-        public GroupDTO UpdateGroup(GroupDTO group)
+        public IGroupDTO UpdateGroup(IGroupDTO group)
         {
             return repo.UpdateGroup(group);
         }
@@ -55,7 +55,7 @@ namespace SplitListWebApi.Controllers
         //Delete: api/groups
         //Deletes group from db.
         [HttpDelete]
-        public void DeleteGroup(GroupDTO group)
+        public void DeleteGroup(IGroupDTO group)
         {
             repo.DeleteGroup(group);
         }

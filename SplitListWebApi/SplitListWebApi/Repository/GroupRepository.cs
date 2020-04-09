@@ -11,10 +11,10 @@ namespace SplitListWebApi.Repository
     public interface IGroupRepository
     {
         //List<UserDTO> GetUsersInGroup(GroupDTO group);
-        UserDTO GetOwnerOfGroup(GroupDTO group);
-        GroupDTO UpdateGroup(GroupDTO group);
-        void DeleteGroup(GroupDTO group);
-        GroupDTO GetGroupByGroupID(int ID);
+        UserDTO GetOwnerOfGroup(IGroupDTO group);
+        IGroupDTO UpdateGroup(IGroupDTO group);
+        void DeleteGroup(IGroupDTO group);
+        IGroupDTO GetGroupByGroupID(int ID);
     }
 
     public class GroupRepository : IGroupRepository
@@ -25,7 +25,7 @@ namespace SplitListWebApi.Repository
             context = Context;
         }
 
-        public UserDTO GetOwnerOfGroup(GroupDTO group)
+        public UserDTO GetOwnerOfGroup(IGroupDTO group)
         {
             Group dbGroup = LoadToModel(group);
             User owner = context.Users.Where(u => u.Id == group.OwnerID).FirstOrDefault();
@@ -40,7 +40,7 @@ namespace SplitListWebApi.Repository
             else return null;
         }
 
-        private void RemoveUsersFromGroup(GroupDTO group)
+        private void RemoveUsersFromGroup(IGroupDTO group)
         {
             List<UserGroup> dbUsersInGroup = context.UserGroups
                 .Where(ug => ug.GroupID == group.GroupID)
@@ -57,7 +57,7 @@ namespace SplitListWebApi.Repository
             }
         }
 
-        private void AddUsersToGroup(GroupDTO group)
+        private void AddUsersToGroup(IGroupDTO group)
         {
             foreach (UserDTO user in group.Users)
             {
@@ -92,7 +92,7 @@ namespace SplitListWebApi.Repository
             }
         }
 
-        public GroupDTO UpdateGroup(GroupDTO group)
+        public IGroupDTO UpdateGroup(IGroupDTO group)
         {
             Group dbGroup = LoadToModel(group);
             if (group.GroupID <= 0)
@@ -115,7 +115,7 @@ namespace SplitListWebApi.Repository
             return group;
         }
 
-        public List<UserDTO> GetUsersInGroup(GroupDTO group)
+        public List<UserDTO> GetUsersInGroup(IGroupDTO group)
         {
             List<UserDTO> users = new List<UserDTO>();
 
@@ -139,7 +139,7 @@ namespace SplitListWebApi.Repository
             return users;
         }
 
-        private Group LoadToModel(GroupDTO group) 
+        private Group LoadToModel(IGroupDTO group) 
         {
             Group dbGroup = context.Groups.Find(group.GroupID);
 
@@ -158,7 +158,7 @@ namespace SplitListWebApi.Repository
             }
         }
 
-        public void DeleteGroup(GroupDTO group)
+        public void DeleteGroup(IGroupDTO group)
         {
             Group dbGroup = context.Groups.Find(group.GroupID);
 
@@ -175,12 +175,12 @@ namespace SplitListWebApi.Repository
             }
         }
 
-        public GroupDTO GetGroupByGroupID(int ID)
+        public IGroupDTO GetGroupByGroupID(int ID)
         {
             Group dbGroup = context.Groups.Find(ID);
             if (dbGroup != null)
             {
-                GroupDTO group = new GroupDTO()
+                IGroupDTO group = new IGroupDTO()
                 {
                     Name = dbGroup.Name,
                     OwnerID = dbGroup.OwnerID,
