@@ -1,16 +1,18 @@
-﻿using ApiFormat;
+﻿using System;
+using ApiFormat;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SplitListWebApi.Repositories.Interfaces;
 
 namespace SplitListWebApi.Controllers.Utilities
 {
     public static class DTOUtilities
     {
-        public static IDTO Save(this IDTO source, IRepository repo) => repo.Update(source) != null ? source : repo.Add(source);
+        public static T Save<T>(this T source, IGenericRepository<T> repo) where T : class => repo.Update(source).Entity == null ? repo.Create(source) : source;
 
-        public static IDTO Add(this IDTO source, IRepository repo) => repo.Add(source);
+        public static T Add<T>(this T source, IGenericRepository<T> repo) where T : class => repo.Create(source);
 
-        public static void Delete(this IDTO source, IRepository repo) => repo.Delete(source);
+        public static void Delete<T>(this T source, IGenericRepository<T> repo, double id) where T : class => repo.Delete(id);
 
-        public static IDTO Get(this IDTO source, IRepository repo) => repo.Find(source.Id);
+        public static T Get<T>(this T source, IGenericRepository<T> repo, double id) where T : class => repo.GetById(id);
     }
 }

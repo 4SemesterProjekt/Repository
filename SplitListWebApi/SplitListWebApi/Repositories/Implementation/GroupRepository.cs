@@ -1,4 +1,57 @@
-﻿//using ApiFormat;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using ApiFormat;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using SplitListWebApi.Areas.Identity.Data;
+using SplitListWebApi.Controllers.Utilities;
+using SplitListWebApi.Repositories.Interfaces;
+
+namespace SplitListWebApi.Repositories.Implementation
+{
+    public class GroupRepository<TEntity> : IGenericRepository<TEntity>
+        where TEntity : class
+    {
+        private readonly SplitListContext _dbContext;
+        public GroupRepository(SplitListContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
+        public IQueryable<TEntity> GetAll()
+        {
+            return _dbContext.Set<TEntity>().AsNoTracking();
+        }
+
+        public TEntity GetById(double id)
+        {
+            var entity = _dbContext.Find<TEntity>(id);
+            _dbContext.Entry(entity).State = EntityState.Detached;
+            return entity;
+        }
+
+        public TEntity Create(TEntity entity)
+        {
+            entity.BeginTransaction(_dbContext.Add<TEntity>, _dbContext);
+            return entity;
+        }
+
+        public EntityEntry<TEntity> Update(TEntity entity)
+        {
+            entity.BeginTransaction(_dbContext.Update<TEntity>, _dbContext);
+            return _dbContext.Entry(entity); //To check whether any entries has been updated. Look in DTOUtilities.Update.
+        }
+
+        public void Delete(double id)
+        {
+            var entity = GetById(id);
+            entity.BeginTransaction(_dbContext.Remove<TEntity>, _dbContext);
+        }
+    }
+}
+
+//using ApiFormat;
 //using System.Collections.Generic;
 //using Microsoft.EntityFrameworkCore;
 //using System.Linq;

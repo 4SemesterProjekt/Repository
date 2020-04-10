@@ -1,4 +1,29 @@
-﻿//using System;
+﻿using System;
+using ApiFormat;
+using Microsoft.AspNetCore.Mvc;
+using SplitListWebApi.Areas.Identity.Data;
+using SplitListWebApi.Controllers.Utilities;
+using SplitListWebApi.Repositories.Implementation;
+
+namespace SplitListWebApi.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class GroupsController : ControllerBase
+    {
+        [HttpGet("{id}")]
+        public IGroupDTO Get(IGroupDTO dto)
+        {
+
+            /*
+             * Ideal Scenario: dto.LoadToModel().Get(dto.Id)
+             * TODO: Convert DTOUtilities to ModelUtilities instead. Change "where T : class" to "where T : IGroupDTO
+             */
+        }
+    }
+}
+
+//using System;
 //using System.Collections.Generic;
 //using System.Linq;
 //using System.Threading.Tasks;
