@@ -31,7 +31,7 @@ namespace SplitListWebApi.Controllers
         // POST: api/Pantries
         // Updates/Creates pantry from parameter
         [HttpPost]
-        public PantryDTO PostShoppingList(PantryDTO pantryDto)
+        public PantryDTO PostPantry(PantryDTO pantryDto)
         {
             return repo.UpdatePantry(pantryDto);
         }
@@ -39,7 +39,7 @@ namespace SplitListWebApi.Controllers
         // DELETE: api/Pantries
         // Deletes pantry from parameter
         [HttpDelete]
-        public void DeleteShoppingList(PantryDTO pantryDto)
+        public void DeletePantry(PantryDTO pantryDto)
         {
             repo.DeletePantry(pantryDto);
         }

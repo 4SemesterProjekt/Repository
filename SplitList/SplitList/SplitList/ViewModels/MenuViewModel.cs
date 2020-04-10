@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Input;
 using Prism.Commands;
 using Prism.Mvvm;
+using SplitList.Models;
 using SplitList.Utility;
 using SplitList.Views;
 using Xamarin.Forms;

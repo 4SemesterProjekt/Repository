@@ -6,7 +6,7 @@ using Xamarin.Forms;
 
 namespace SplitList.Models
 {
-    class MenuViewItem
+    public class MenuViewItem
     {
         public string Title { get; set; }
 

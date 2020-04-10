@@ -16,7 +16,7 @@ namespace SplitListWebApi.Areas.Identity
         {
             builder.ConfigureServices((context, services) => {
                 services.AddDbContext<SplitListContext>(options =>
-                    options.UseInMemoryDatabase(
+                    options.UseSqlServer(
                         context.Configuration.GetConnectionString("SplitListWebApiContextConnection")));
 
                 services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)

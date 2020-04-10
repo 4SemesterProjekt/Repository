@@ -14,11 +14,17 @@ namespace SplitList.Views
     {
         public MDP()
         {
+            
             InitializeComponent();
+            Master = new MenuView();
             Detail = new NavigationPage(new MultiShopListView());
             MenuView.NavListView.ItemSelected += OnItemSelected;
         }
-
+        /// <summary>
+        /// Navigates the page to the selected page from the menu
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             var item = e.SelectedItem as MenuViewItem;
