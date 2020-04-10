@@ -42,6 +42,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="ApiFormat">
+      <HintPath>..\..\..\DLLs\ApiFormat\ApiFormat.dll</HintPath>
+    </Reference>
     <ProjectReference Include="..\..\ClientLibAPI\ClientLibAPI.csproj" />
   </ItemGroup>
 
