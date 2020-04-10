@@ -40,7 +40,7 @@
             <ListView x:Name="ShoppingList" ItemsSource="{Binding ShoppingList.Items}" SelectionMode="None">
                 <ListView.ItemTemplate>
                     <DataTemplate x:Name="ItemTemplate">
-                        <ViewCell StyleId="">
+                        <ViewCell>
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="10*"/>

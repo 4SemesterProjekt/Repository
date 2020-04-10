@@ -18,6 +18,8 @@
     <None Remove="EmbeddedResources\minus.png" />
     <None Remove="EmbeddedResources\plus.png" />
     <None Remove="EmbeddedResources\recipe.png" />
+    <None Remove="EmbeddedResources\user.png" />
+    <None Remove="EmbeddedResources\user.svg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -61,6 +63,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="EmbeddedResources\user.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Views\GroupSelectView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Views\LoginView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -80,6 +89,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\ShoppingListView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\UserView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>

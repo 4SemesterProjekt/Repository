@@ -46,5 +46,27 @@
                 </ViewCell>
             </DataTemplate>
         </ListView.ItemTemplate>
+        <ListView.Footer>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="60"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+                <Image Source="{utility:ImageResource SplitList.EmbeddedResources.user.png}"
+                   WidthRequest="40"
+                   Margin="10"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Center"
+                   Grid.Column="0"/>
+            <Label Text="User"
+                   FontSize="20"
+                   TextColor="Gray"
+                   Grid.Column="1"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Center"/>
+            </Grid>
+        </ListView.Footer>
     </ListView>
 </ContentPage>
+    

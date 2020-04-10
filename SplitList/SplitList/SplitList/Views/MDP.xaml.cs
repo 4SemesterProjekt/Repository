@@ -12,12 +12,11 @@ namespace SplitList.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MDP : MasterDetailPage
     {
-        public MDP()
+        public MDP(int groupId)
         {
-            
             InitializeComponent();
             Master = new MenuView();
-            Detail = new NavigationPage(new MultiShopListView());
+            Detail = new NavigationPage(new MultiShopListView(groupId));
             MenuView.NavListView.ItemSelected += OnItemSelected;
         }
         /// <summary>
