@@ -21,10 +21,8 @@ namespace SplitListWebApi.Migrations
 
             modelBuilder.Entity("ApiFormat.GroupModel", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<double>("Id")
+                        .HasColumnType("float");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -39,10 +37,8 @@ namespace SplitListWebApi.Migrations
 
             modelBuilder.Entity("ApiFormat.Item.ItemModel", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<double>("Id")
+                        .HasColumnType("float");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -57,20 +53,18 @@ namespace SplitListWebApi.Migrations
 
             modelBuilder.Entity("ApiFormat.Pantry.PantryModel", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<double>("Id")
+                        .HasColumnType("float");
 
-                    b.Property<int>("GroupID")
-                        .HasColumnType("int");
+                    b.Property<double>("GroupModelID")
+                        .HasColumnType("float");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GroupID")
+                    b.HasIndex("GroupModelID")
                         .IsUnique();
 
                     b.ToTable("Pantries");
@@ -78,10 +72,8 @@ namespace SplitListWebApi.Migrations
 
             modelBuilder.Entity("ApiFormat.Recipe.RecipeModel", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<double>("Id")
+                        .HasColumnType("float");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -93,11 +85,11 @@ namespace SplitListWebApi.Migrations
 
             modelBuilder.Entity("ApiFormat.ShadowTables.PantryItem", b =>
                 {
-                    b.Property<int>("PantryID")
-                        .HasColumnType("int");
+                    b.Property<double>("PantryID")
+                        .HasColumnType("float");
 
-                    b.Property<int>("ItemID")
-                        .HasColumnType("int");
+                    b.Property<double>("ItemID")
+                        .HasColumnType("float");
 
                     b.Property<int>("Amount")
                         .HasColumnType("int");
@@ -111,11 +103,11 @@ namespace SplitListWebApi.Migrations
 
             modelBuilder.Entity("ApiFormat.ShadowTables.RecipeItem", b =>
                 {
-                    b.Property<int>("ItemID")
-                        .HasColumnType("int");
+                    b.Property<double>("ItemID")
+                        .HasColumnType("float");
 
-                    b.Property<int>("RecipeID")
-                        .HasColumnType("int");
+                    b.Property<double>("RecipeID")
+                        .HasColumnType("float");
 
                     b.HasKey("ItemID", "RecipeID");
 
@@ -126,11 +118,11 @@ namespace SplitListWebApi.Migrations
 
             modelBuilder.Entity("ApiFormat.ShadowTables.ShoppingListItem", b =>
                 {
-                    b.Property<int>("ShoppingListID")
-                        .HasColumnType("int");
+                    b.Property<double>("ShoppingListID")
+                        .HasColumnType("float");
 
-                    b.Property<int>("ItemID")
-                        .HasColumnType("int");
+                    b.Property<double>("ItemID")
+                        .HasColumnType("float");
 
                     b.Property<int>("Amount")
                         .HasColumnType("int");
@@ -144,11 +136,11 @@ namespace SplitListWebApi.Migrations
 
             modelBuilder.Entity("ApiFormat.ShadowTables.UserGroup", b =>
                 {
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
+                    b.Property<double>("UserID")
+                        .HasColumnType("float");
 
-                    b.Property<int>("GroupID")
-                        .HasColumnType("int");
+                    b.Property<double>("GroupID")
+                        .HasColumnType("float");
 
                     b.HasKey("UserID", "GroupID");
 
@@ -159,30 +151,29 @@ namespace SplitListWebApi.Migrations
 
             modelBuilder.Entity("ApiFormat.ShoppingList.ShoppingListModel", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<double>("Id")
+                        .HasColumnType("float");
 
                     b.Property<int>("GroupID")
                         .HasColumnType("int");
+
+                    b.Property<double?>("GroupModelId")
+                        .HasColumnType("float");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GroupID");
+                    b.HasIndex("GroupModelId");
 
                     b.ToTable("ShoppingLists");
                 });
 
             modelBuilder.Entity("ApiFormat.User.ApplicationRole", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<double>("Id")
+                        .HasColumnType("float");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -208,8 +199,8 @@ namespace SplitListWebApi.Migrations
 
             modelBuilder.Entity("ApiFormat.User.UserModel", b =>
                 {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    b.Property<double>("Id")
+                        .HasColumnType("float");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -274,7 +265,7 @@ namespace SplitListWebApi.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<double>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -287,8 +278,8 @@ namespace SplitListWebApi.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
+                    b.Property<double>("RoleId")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -297,7 +288,7 @@ namespace SplitListWebApi.Migrations
                     b.ToTable("AspNetRoleClaims");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<double>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -310,8 +301,8 @@ namespace SplitListWebApi.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<double>("UserId")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -320,7 +311,7 @@ namespace SplitListWebApi.Migrations
                     b.ToTable("AspNetUserClaims");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<double>", b =>
                 {
                     b.Property<string>("LoginProvider")
                         .HasColumnType("nvarchar(450)");
@@ -331,8 +322,8 @@ namespace SplitListWebApi.Migrations
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<double>("UserId")
+                        .HasColumnType("float");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -341,13 +332,13 @@ namespace SplitListWebApi.Migrations
                     b.ToTable("AspNetUserLogins");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<double>", b =>
                 {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<double>("UserId")
+                        .HasColumnType("float");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
+                    b.Property<double>("RoleId")
+                        .HasColumnType("float");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -356,10 +347,10 @@ namespace SplitListWebApi.Migrations
                     b.ToTable("AspNetUserRoles");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<double>", b =>
                 {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<double>("UserId")
+                        .HasColumnType("float");
 
                     b.Property<string>("LoginProvider")
                         .HasColumnType("nvarchar(450)");
@@ -377,9 +368,9 @@ namespace SplitListWebApi.Migrations
 
             modelBuilder.Entity("ApiFormat.Pantry.PantryModel", b =>
                 {
-                    b.HasOne("ApiFormat.GroupModel", "Group")
-                        .WithOne("Pantry")
-                        .HasForeignKey("ApiFormat.Pantry.PantryModel", "GroupID")
+                    b.HasOne("ApiFormat.GroupModel", "GroupModel")
+                        .WithOne("PantryModel")
+                        .HasForeignKey("ApiFormat.Pantry.PantryModel", "GroupModelID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -446,14 +437,12 @@ namespace SplitListWebApi.Migrations
 
             modelBuilder.Entity("ApiFormat.ShoppingList.ShoppingListModel", b =>
                 {
-                    b.HasOne("ApiFormat.GroupModel", "Group")
+                    b.HasOne("ApiFormat.GroupModel", "GroupModel")
                         .WithMany("ShoppingLists")
-                        .HasForeignKey("GroupID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("GroupModelId");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<double>", b =>
                 {
                     b.HasOne("ApiFormat.User.ApplicationRole", null)
                         .WithMany()
@@ -462,7 +451,7 @@ namespace SplitListWebApi.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<double>", b =>
                 {
                     b.HasOne("ApiFormat.User.UserModel", null)
                         .WithMany()
@@ -471,7 +460,7 @@ namespace SplitListWebApi.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<double>", b =>
                 {
                     b.HasOne("ApiFormat.User.UserModel", null)
                         .WithMany()
@@ -480,7 +469,7 @@ namespace SplitListWebApi.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<double>", b =>
                 {
                     b.HasOne("ApiFormat.User.ApplicationRole", null)
                         .WithMany()
@@ -495,7 +484,7 @@ namespace SplitListWebApi.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<double>", b =>
                 {
                     b.HasOne("ApiFormat.User.UserModel", null)
                         .WithMany()

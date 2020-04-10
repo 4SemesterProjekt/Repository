@@ -8,10 +8,10 @@ namespace ApiFormat
     public class GroupModel : IModel
     {
         public int OwnerId { get; set; }
-        public PantryModel Pantry { get; set; }
+        public PantryModel PantryModel { get; set; }
         public List<ShoppingListModel> ShoppingLists { get; set; }
         public List<UserGroup> UserGroups { get; set; }
-        public int Id { get; set; }
+        public double Id { get; set; }
         public string Name { get; set; }
     }
 }

@@ -5,7 +5,7 @@ namespace ApiFormat.Pantry
 {
     public interface IPantryDTO : IDTO
     {
-        int GroupID { get; set; }
+        double GroupModelID { get; set; }
         string GroupName { get; set; }
         List<IItemDTO> Items { get; set; }
     }

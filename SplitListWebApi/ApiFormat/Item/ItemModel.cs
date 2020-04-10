@@ -9,7 +9,7 @@ namespace ApiFormat.Item
         public List<RecipeItem> RecipeItems { get; set; }
         public List<ShoppingListItem> ShoppingListItems { get; set; }
         public List<PantryItem> PantryItems { get; set; }
-        public int Id { get; set; }
+        public double Id { get; set; }
         public string Name { get; set; }
     }
 }

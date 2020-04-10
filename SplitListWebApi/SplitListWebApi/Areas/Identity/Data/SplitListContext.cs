@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SplitListWebApi.Areas.Identity.Data
 {
-   public partial class SplitListContext : IdentityDbContext<UserModel, ApplicationRole, int>
+   public partial class SplitListContext : IdentityDbContext<UserModel, ApplicationRole, double>
     {
         public DbSet<GroupModel> Groups { get; set; }
         public DbSet<PantryModel> Pantries { get; set; }

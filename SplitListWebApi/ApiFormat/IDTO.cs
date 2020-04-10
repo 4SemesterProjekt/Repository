@@ -2,7 +2,7 @@
 {
     public interface IDTO
     {
-        int Id { get; set; }
+        double Id { get; set; }
         string Name { get; set; }
     }
 }
