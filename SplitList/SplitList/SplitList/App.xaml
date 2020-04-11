@@ -17,7 +17,7 @@
             </Style>
 
             <!-- DataTemplates -->
- 
+            <utility:ItemTappedEventArgsConverter x:Key="EventArgConverter"/>
         </ResourceDictionary>
     </Application.Resources>
     

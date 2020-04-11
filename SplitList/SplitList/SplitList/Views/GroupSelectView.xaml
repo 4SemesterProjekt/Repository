@@ -12,9 +12,6 @@
         <viewModels:GroupSelectViewModel x:Name="GroupSelectViewModel"/>
     </ContentPage.BindingContext>
     <ContentPage.Resources>
-        <ResourceDictionary>
-            <utility:ItemTappedEventArgsConverter x:Key="EventArgConverter"/>
-        </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
         <ListView x:Name="GroupList" ItemsSource="{Binding Groups}" SelectionMode="None">

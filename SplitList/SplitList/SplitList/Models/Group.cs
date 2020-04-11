@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Input;
 using Prism.Mvvm;
 
 namespace SplitList.Models
 {
-    class Group : BindableBase
+    public class Group : BindableBase
     {
         private string _name;
         private int _groupId;
