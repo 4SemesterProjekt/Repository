@@ -1,15 +1,14 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using ApiFormat.Group;
-using ApiFormat.ShadowTables;
+using ApiFormat.Item;
 
 namespace ApiFormat.Pantry
 {
-    public class PantryModel : IModel
+    public class PantryDTO : IDTO
     {
         public double GroupModelID { get; set; }
-        public GroupModel GroupModel { get; set; }
-        public List<PantryItem> PantryItems { get; set; }
+        public string GroupName { get; set; }
+        public List<ItemDTO> Items { get; set; }
         public double Id { get; set; }
         public string Name { get; set; }
     }

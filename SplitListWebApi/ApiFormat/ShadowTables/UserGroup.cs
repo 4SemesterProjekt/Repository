@@ -1,4 +1,5 @@
-﻿using ApiFormat.User;
+﻿using ApiFormat.Group;
+using ApiFormat.User;
 
 namespace ApiFormat.ShadowTables
 {

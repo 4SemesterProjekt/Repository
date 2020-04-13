@@ -10,7 +10,7 @@ using SplitListWebApi.Repositories.Interfaces;
 
 namespace SplitListWebApi.Repositories.Implementation
 {
-    public class GroupRepository<TEntity> : IGenericRepository<TEntity>
+    public class GroupRepository<TEntity> : IRepository<TEntity>
         where TEntity : class
     {
         private readonly SplitListContext _dbContext;

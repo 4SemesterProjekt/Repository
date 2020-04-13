@@ -1,5 +1,6 @@
 ﻿using System;
 using ApiFormat;
+using ApiFormat.Group;
 using Microsoft.AspNetCore.Mvc;
 using SplitListWebApi.Areas.Identity.Data;
 using SplitListWebApi.Controllers.Utilities;
@@ -12,12 +13,11 @@ namespace SplitListWebApi.Controllers
     public class GroupsController : ControllerBase
     {
         [HttpGet("{id}")]
-        public IGroupDTO Get(IGroupDTO dto)
+        public GroupDTO Get(GroupDTO dto)
         {
 
             /*
              * Ideal Scenario: dto.LoadToModel().Get(dto.Id)
-             * TODO: Convert DTOUtilities to ModelUtilities instead. Change "where T : class" to "where T : IGroupDTO
              */
         }
     }

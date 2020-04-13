@@ -9,6 +9,7 @@ namespace SplitListWebApi.Controllers.Utilities
 {
     public static class GeneralUtilities
     {
+        //Encapsulate Db-funcitions into transactions.
         public static void BeginTransaction<T>(this T source, Func<T, EntityEntry<T>> dbFunc, SplitListContext db) where T : class
         {
             using (var transaction = db.Database.BeginTransaction())
@@ -21,7 +22,6 @@ namespace SplitListWebApi.Controllers.Utilities
                 catch (Exception)
                 {
                     transaction.Rollback();
-                    throw;
                 }
             }
         }

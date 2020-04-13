@@ -11,5 +11,6 @@ namespace ApiFormat.Item
         public List<PantryItem> PantryItems { get; set; }
         public double Id { get; set; }
         public string Name { get; set; }
+        public int Amount { get; set; }
     }
 }

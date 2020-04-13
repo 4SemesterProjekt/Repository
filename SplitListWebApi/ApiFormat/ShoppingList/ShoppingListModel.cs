@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ApiFormat.Group;
 using ApiFormat.ShadowTables;
 
 namespace ApiFormat.ShoppingList
