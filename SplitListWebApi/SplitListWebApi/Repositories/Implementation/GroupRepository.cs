@@ -97,7 +97,7 @@ namespace SplitListWebApi.Repositories.Implementation
 //        private void RemoveUsersFromGroup(IGroupDTO group)
 //        {
 //            List<UserGroup> dbUsersInGroup = context.UserGroups
-//                .Where(ug => ug.GroupID == group.Id)
+//                .Where(ug => ug.GroupModelId == group.Id)
 //                .Include(ug => ug.User)
 //                .ToList();
 
@@ -139,7 +139,7 @@ namespace SplitListWebApi.Repositories.Implementation
 //                    context.UserGroups.Add(new UserGroup()
 //                    {
 //                        UserID = user.Id,
-//                        GroupID = group.Id
+//                        GroupModelId = group.Id
 //                    });
 //                    context.SaveChanges();
 //                }
@@ -239,7 +239,7 @@ namespace SplitListWebApi.Repositories.Implementation
 //                    Name = dbGroup.Name,
 //                    OwnerID = dbGroup.OwnerID,
 //                    Id = dbGroup.Id,
-//                    IGroupDTO.ShoppingLists = new List<IShoppingListDTO>()
+//                    IGroupDTO.ShoppingLists = new List<ShoppingListDTO>()
 //                };
 
 //                group.Users = GetUsersInGroup(group);

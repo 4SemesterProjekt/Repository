@@ -13,10 +13,10 @@
 //{
 //    public interface IShoppingListRepository
 //    {
-//        void DeleteShoppingList(IShoppingListDTO shoppingList);
-//        IShoppingListDTO UpdateShoppingList(IShoppingListDTO shoppingList);
-//        List<IShoppingListDTO> GetShoppingListsByGroupID(int GroupID);
-//        IShoppingListDTO GetShoppingListByID(int ID);
+//        void DeleteShoppingList(ShoppingListDTO shoppingList);
+//        ShoppingListDTO UpdateShoppingList(ShoppingListDTO shoppingList);
+//        List<ShoppingListDTO> GetShoppingListsByGroupID(int GroupModelId);
+//        ShoppingListDTO GetShoppingListByID(int ID);
 //    }
 
 //    public class ShoppingListRepository : IShoppingListRepository
@@ -30,7 +30,7 @@
 //            itemRepo = new ItemRepository(context);
 //        }
 
-//        public void DeleteShoppingList(IShoppingListDTO shoppingList)
+//        public void DeleteShoppingList(ShoppingListDTO shoppingList)
 //        {
 //            // Missing validation for OwnerID. Only owner should be able to delete shoppinglist.
 //            ShoppingList list = LoadToModel(shoppingList);
@@ -54,7 +54,7 @@
 //            context.SaveChanges();
 //        }
 
-//        private void RemoveItemsFromShoppingList(IShoppingListDTO shoppingList)
+//        private void RemoveItemsFromShoppingList(ShoppingListDTO shoppingList)
 //        {
 //            List<ShoppingListItem> dbItemsInSL = context.ShoppingListItems
 //                .Where(sli => sli.ShoppingListID == shoppingList.shoppingListID)
@@ -72,7 +72,7 @@
 //            context.SaveChanges();
 //        }
 
-//        private void AddItemsToShoppingList(IShoppingListDTO shoppingList)
+//        private void AddItemsToShoppingList(ShoppingListDTO shoppingList)
 //        {
 //            foreach (IItemDTO item in shoppingList.Items)
 //            {
@@ -100,7 +100,7 @@
 //            }
 //        }
 
-//        public IShoppingListDTO UpdateShoppingList(IShoppingListDTO shoppingList)
+//        public ShoppingListDTO UpdateShoppingList(ShoppingListDTO shoppingList)
 //        {
 //            ShoppingList list = LoadToModel(shoppingList);
 
@@ -128,13 +128,13 @@
 //            return shoppingList;
 //        }
 
-//        public List<IShoppingListDTO> GetShoppingListsByGroupID(int GroupID)
+//        public List<ShoppingListDTO> GetShoppingListsByGroupID(int GroupModelId)
 //        {
-//            List<IShoppingListDTO> lists = new List<IShoppingListDTO>();
+//            List<ShoppingListDTO> lists = new List<ShoppingListDTO>();
 
 //            var contextLists = context.ShoppingLists
 //                .Include(g => g.Group)
-//                .Where(a => a.GroupID == GroupID)
+//                .Where(a => a.GroupModelId == GroupModelId)
 //                .ToList();
 
 //            if (contextLists != null)
@@ -149,19 +149,19 @@
 //            return null;
 //        }
 
-//        public IShoppingListDTO GetShoppingListByID(int ID)
+//        public ShoppingListDTO GetShoppingListByID(int ID)
 //        {
 //            ShoppingList dbList = context.ShoppingLists.Find(ID);
 //            if (dbList != null)
 //            {
-//                IShoppingListDTO list = GenerateDTOFromModel(dbList);
+//                ShoppingListDTO list = GenerateDTOFromModel(dbList);
 //                list = AddItemsToDTO(list);
 //                return list;
 //            }
 //            else return null;
 //        }
 
-//        private IShoppingListDTO AddItemsToDTO(IShoppingListDTO list)
+//        private ShoppingListDTO AddItemsToDTO(ShoppingListDTO list)
 //        {
 //            List<ShoppingListItem> shoppingListItems = context.ShoppingLists
 //                   .Where(sl => sl.ShoppingListID == list.shoppingListID)
@@ -186,9 +186,9 @@
 //            return list;
 //        }
 
-//        private IShoppingListDTO GenerateDTOFromModel(ShoppingList dbList)
+//        private ShoppingListDTO GenerateDTOFromModel(ShoppingList dbList)
 //        {
-//            return new IShoppingListDTO()
+//            return new ShoppingListDTO()
 //            {
 //                shoppingListID = dbList.ShoppingListID,
 //                shoppingListGroupID = dbList.Id,
@@ -198,7 +198,7 @@
 //            };
 //        }
 
-//        public ShoppingList LoadToModel(IShoppingListDTO shoppingList)
+//        public ShoppingList LoadToModel(ShoppingListDTO shoppingList)
 //        {
 //            if (GroupExists(shoppingList.shoppingListGroupID))
 //            {
@@ -214,19 +214,19 @@
 //            return null;
 //        }
 
-//        private ShoppingList GenerateSLInDb(IShoppingListDTO shoppingList)
+//        private ShoppingList GenerateSLInDb(ShoppingListDTO shoppingList)
 //        {
 //            ShoppingList newList = new ShoppingList()
 //            {
 //                Name = shoppingList.shoppingListName,
-//                GroupID = shoppingList.shoppingListGroupID,
+//                GroupModelId = shoppingList.shoppingListGroupID,
 //            };
 //            context.ShoppingLists.Add(newList);
 //            context.SaveChanges();
 //            return newList;
 //        }
 
-//        private ShoppingList GetSLFromDb(IShoppingListDTO shoppingList)
+//        private ShoppingList GetSLFromDb(ShoppingListDTO shoppingList)
 //        {
 //            ShoppingList list = context.ShoppingLists.Find(shoppingList.shoppingListID);
 //            return list;

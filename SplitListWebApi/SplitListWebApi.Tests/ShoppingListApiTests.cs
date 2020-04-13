@@ -47,7 +47,7 @@
 
 //                Group jørgensGruppe = new Group()
 //                {
-//                    GroupID = 1,
+//                    GroupModelId = 1,
 //                    Name = "JordkimsGruppe",
 //                    OwnerID = "1"
 //                };
@@ -55,7 +55,7 @@
 
 //                ShoppingListDTO list = new ShoppingListDTO()
 //                {
-//                    shoppingListGroupID = jørgensGruppe.GroupID,
+//                    shoppingListGroupID = jørgensGruppe.GroupModelId,
 //                    shoppingListGroupName = "JordkimsGruppe",
 //                    shoppingListName = "JørgensListe",
 //                    shoppingListID = 1
@@ -86,7 +86,7 @@
 
 //                context.Groups.Add(new Group()
 //                {
-//                    GroupID = 1,
+//                    GroupModelId = 1,
 //                    Name = "Group1",
 //                    OwnerID = "1",
 //                    ShoppingLists = null,
@@ -129,7 +129,7 @@
                 
 //                Group jørgensGruppe = new Group()
 //                {
-//                    GroupID = 1,
+//                    GroupModelId = 1,
 //                    Name = "JordkimsGruppe",
 //                    OwnerID = "1",
 //                    ShoppingLists = null,
@@ -143,7 +143,7 @@
 //                {
 //                    ShoppingListDTO list = new ShoppingListDTO()
 //                    {
-//                        shoppingListGroupID = jørgensGruppe.GroupID,
+//                        shoppingListGroupID = jørgensGruppe.GroupModelId,
 //                        shoppingListGroupName = "JordkimsGruppe",
 //                        shoppingListName = $"JørgensListe{i + 1}",
 //                        shoppingListID = i + 1
@@ -151,7 +151,7 @@
 //                    repo.UpdateShoppingList(list);
 //                }
 
-//                List<ShoppingListDTO> shoppingLists = repo.GetShoppingListsByGroupID(jørgensGruppe.GroupID);
+//                List<ShoppingListDTO> shoppingLists = repo.GetShoppingListsByGroupID(jørgensGruppe.GroupModelId);
 //                Assert.AreEqual(amount, shoppingLists.Count);
 
 //                context.SaveChanges();
@@ -171,7 +171,7 @@
 
 //                Group jørgensGruppe = new Group()
 //                {
-//                    GroupID = 1,
+//                    GroupModelId = 1,
 //                    Name = "JordkimsGruppe",
 //                    OwnerID = "1"
 //                };
@@ -179,7 +179,7 @@
 
 //                ShoppingListDTO list = new ShoppingListDTO()
 //                {
-//                    shoppingListGroupID = jørgensGruppe.GroupID,
+//                    shoppingListGroupID = jørgensGruppe.GroupModelId,
 //                    shoppingListGroupName = "JordkimsGruppe",
 //                    shoppingListName = "JørgensListe",
 //                    shoppingListID = 1,
@@ -226,7 +226,7 @@
 
 //                Group jørgensGruppe = new Group()
 //                {
-//                    GroupID = 1,
+//                    GroupModelId = 1,
 //                    Name = "JordkimsGruppe",
 //                    OwnerID = "1"
 //                };
@@ -236,7 +236,7 @@
 
 //                ShoppingListDTO formatList = new ShoppingListDTO()
 //                {
-//                     shoppingListGroupID = jørgensGruppe.GroupID,
+//                     shoppingListGroupID = jørgensGruppe.GroupModelId,
 //                     shoppingListGroupName = "JordkimsGruppe",
 //                     shoppingListName = "JørgensListe"
 //                };
@@ -246,7 +246,7 @@
 //                ShoppingList modelList = repo.LoadToModel(formatList);
 //                ShoppingList actualList = context.ShoppingLists.FirstOrDefault();
 //                Assert.AreEqual(modelList.Name, actualList.Name);
-//                Assert.AreEqual(modelList.GroupID, actualList.GroupID);
+//                Assert.AreEqual(modelList.GroupModelId, actualList.GroupModelId);
 //                Assert.AreEqual(modelList.ShoppingListID, actualList.ShoppingListID);
 //            }
 //        }
@@ -261,7 +261,7 @@
 
 //                Group jørgensGruppe = new Group()
 //                {
-//                    GroupID = 1,
+//                    GroupModelId = 1,
 //                    Name = "JordkimsGruppe",
 //                    OwnerID = "1",
 //                };

@@ -3,7 +3,7 @@ using ApiFormat.Item;
 
 namespace ApiFormat.ShoppingList
 {
-    public class IShoppingListDTO : IDTO
+    public class ShoppingListDTO : IDTO
     {
         public int GroupID { get; set; }
         public string GroupName { get; set; }

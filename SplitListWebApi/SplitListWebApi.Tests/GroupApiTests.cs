@@ -53,7 +53,7 @@
 //                Assert.AreEqual(1, context.Groups.Count());
 //                Assert.AreEqual("Group1", context.Groups.FirstOrDefault().Name);
 //                Assert.AreEqual("1", context.Groups.FirstOrDefault().OwnerID);
-//                Assert.AreEqual(1, context.Groups.FirstOrDefault().GroupID);
+//                Assert.AreEqual(1, context.Groups.FirstOrDefault().GroupModelId);
 //            }
 //        }
 
@@ -114,13 +114,13 @@
 
 //                UserGroup userGroup1 = new UserGroup()
 //                {
-//                    GroupID = 1,
+//                    GroupModelId = 1,
 //                    Id = "1"
 //                };
 
 //                UserGroup userGroup2 = new UserGroup()
 //                {
-//                    GroupID = 1,
+//                    GroupModelId = 1,
 //                    Id = "2"
 //                };
 
@@ -133,7 +133,7 @@
 //                context.UserGroups.Add(userGroup2);
 //                context.SaveChanges();
 
-//                IGroupDTO GroupFromDb = groupRepo.GetGroupByGroupID(group.GroupID);
+//                IGroupDTO GroupFromDb = groupRepo.GetGroupByGroupID(group.GroupModelId);
 //                Assert.AreEqual(2, users.Count);
 
 //                for (int i = 0; i < 2; i++)
@@ -303,7 +303,7 @@
 //                IGroupDTO correctGroup = groupRepo.GetGroupByGroupID(1);
 
 //                Assert.AreEqual("Group1", correctGroup.Name);
-//                Assert.AreEqual(1, correctGroup.GroupID);
+//                Assert.AreEqual(1, correctGroup.GroupModelId);
 //                Assert.AreEqual("1", correctGroup.OwnerID);
 //                Assert.AreEqual(2, correctGroup.Users.Count);
 //            }

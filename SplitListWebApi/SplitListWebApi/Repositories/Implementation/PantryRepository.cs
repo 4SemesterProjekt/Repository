@@ -50,7 +50,7 @@
 
 //        public IPantryDTO GetPantryFromGroupID(int groupID)
 //        {
-//            Pantry dbPantry = context.Pantries.Where(p => p.GroupID == groupID).SingleOrDefault();
+//            Pantry dbPantry = context.Pantries.Where(p => p.GroupModelId == groupID).SingleOrDefault();
 //            if (dbPantry != null)
 //            {
 //                IPantryDTO newPantr = new IPantryDTO()
@@ -81,7 +81,7 @@
 //                        });
 //                    }
 //                }
-//                newPantr.GroupName = context.Groups.Find(newPantr.GroupID).Name;
+//                newPantr.GroupName = context.Groups.Find(newPantr.GroupModelId).Name;
 //                return newPantr;
 //            }
 //            else return null;
@@ -163,7 +163,7 @@
 
 //        private Pantry LoadToModel(IPantryDTO pantry)
 //        {
-//            if (context.Groups.Find(pantry.GroupID) != null)
+//            if (context.Groups.Find(pantry.GroupModelId) != null)
 //            {
 //                Pantry dbPantry = context.Pantries.Find(pantry.ID);
 
@@ -174,7 +174,7 @@
 //                    Pantry newPantry = new Pantry()
 //                    {
 //                        Name = pantry.Name,
-//                        GroupID = pantry.GroupID,
+//                        GroupModelId = pantry.GroupModelId,
 //                    };
 
 //                    context.Pantries.Add(newPantry);

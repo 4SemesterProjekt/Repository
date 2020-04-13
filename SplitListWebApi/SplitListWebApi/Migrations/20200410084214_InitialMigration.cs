@@ -396,7 +396,7 @@ namespace SplitListWebApi.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_UserGroups_GroupID",
                 table: "UserGroups",
-                column: "GroupID");
+                column: "GroupModelId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
