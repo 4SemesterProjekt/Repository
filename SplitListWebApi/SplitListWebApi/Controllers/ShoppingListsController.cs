@@ -25,14 +25,14 @@
 
 //        // Returns all shopping lists for a specific group
 //        [HttpGet("group/{id}")]
-//        public List<IShoppingListDTO> GetShoppingListsByGroupID(int id)
+//        public List<ShoppingListDTO> GetShoppingListsByGroupID(int id)
 //        {
 //            return repo.GetShoppingListsByGroupID(id);
 //        }
 
-//        // Returns IShoppingListDTO object for a specific shoppinglist ID
+//        // Returns ShoppingListDTO object for a specific shoppinglist ID
 //        [HttpGet("{id}")]
-//        public IShoppingListDTO GetShoppingListByID(int id)
+//        public ShoppingListDTO GetShoppingListByID(int id)
 //        {
 //            return repo.GetShoppingListByID(id);
 //        }
@@ -40,14 +40,14 @@
 //        // POST: api/ShoppingLists
 //        // Updates/Creates shoppinglist from parameter.
 //        [HttpPost]
-//        public IShoppingListDTO PostShoppingList(IShoppingListDTO shoppingList)
+//        public ShoppingListDTO PostShoppingList(ShoppingListDTO shoppingList)
 //        {
 //            return repo.UpdateShoppingList(shoppingList);
 //        }
 
 //        // DELETE: api/ShoppingLists
 //        [HttpDelete]
-//        public void DeleteShoppingList(IShoppingListDTO list)
+//        public void DeleteShoppingList(ShoppingListDTO list)
 //        {
 //            repo.DeleteShoppingList(list);
 //        }

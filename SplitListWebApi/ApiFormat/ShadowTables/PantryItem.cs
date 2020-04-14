@@ -5,10 +5,10 @@ namespace ApiFormat.ShadowTables
 {
     public class PantryItem
     {
-        public double PantryID { get; set; }
-        public PantryModel Pantry { get; set; }
-        public double ItemID { get; set; }
-        public ItemModel Item { get; set; }
+        public double PantryModelID { get; set; }
+        public PantryModel PantryModel { get; set; }
+        public double ItemModelID { get; set; }
+        public ItemModel ItemModel { get; set; }
         public int Amount { get; set; }
     }
 }

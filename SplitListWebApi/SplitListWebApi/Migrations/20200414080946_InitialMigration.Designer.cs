@@ -10,7 +10,7 @@ using SplitListWebApi.Areas.Identity.Data;
 namespace SplitListWebApi.Migrations
 {
     [DbContext(typeof(SplitListContext))]
-    [Migration("20200410084214_InitialMigration")]
+    [Migration("20200414080946_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,6 +41,9 @@ namespace SplitListWebApi.Migrations
                 {
                     b.Property<double>("Id")
                         .HasColumnType("float");
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -87,66 +90,66 @@ namespace SplitListWebApi.Migrations
 
             modelBuilder.Entity("ApiFormat.ShadowTables.PantryItem", b =>
                 {
-                    b.Property<double>("PantryID")
+                    b.Property<double>("PantryModelID")
                         .HasColumnType("float");
 
-                    b.Property<double>("ItemID")
+                    b.Property<double>("ItemModelID")
                         .HasColumnType("float");
 
                     b.Property<int>("Amount")
                         .HasColumnType("int");
 
-                    b.HasKey("PantryID", "ItemID");
+                    b.HasKey("PantryModelID", "ItemModelID");
 
-                    b.HasIndex("ItemID");
+                    b.HasIndex("ItemModelID");
 
                     b.ToTable("PantryItems");
                 });
 
             modelBuilder.Entity("ApiFormat.ShadowTables.RecipeItem", b =>
                 {
-                    b.Property<double>("ItemID")
+                    b.Property<double>("ItemModelID")
                         .HasColumnType("float");
 
-                    b.Property<double>("RecipeID")
+                    b.Property<double>("RecipeModelID")
                         .HasColumnType("float");
 
-                    b.HasKey("ItemID", "RecipeID");
+                    b.HasKey("ItemModelID", "RecipeModelID");
 
-                    b.HasIndex("RecipeID");
+                    b.HasIndex("RecipeModelID");
 
                     b.ToTable("RecipeItem");
                 });
 
             modelBuilder.Entity("ApiFormat.ShadowTables.ShoppingListItem", b =>
                 {
-                    b.Property<double>("ShoppingListID")
+                    b.Property<double>("ShoppingListModelID")
                         .HasColumnType("float");
 
-                    b.Property<double>("ItemID")
+                    b.Property<double>("ItemModelID")
                         .HasColumnType("float");
 
                     b.Property<int>("Amount")
                         .HasColumnType("int");
 
-                    b.HasKey("ShoppingListID", "ItemID");
+                    b.HasKey("ShoppingListModelID", "ItemModelID");
 
-                    b.HasIndex("ItemID");
+                    b.HasIndex("ItemModelID");
 
                     b.ToTable("ShoppingListItems");
                 });
 
             modelBuilder.Entity("ApiFormat.ShadowTables.UserGroup", b =>
                 {
-                    b.Property<double>("UserID")
+                    b.Property<double>("UserModelID")
                         .HasColumnType("float");
 
-                    b.Property<double>("GroupID")
+                    b.Property<double>("GroupModelID")
                         .HasColumnType("float");
 
-                    b.HasKey("UserID", "GroupID");
+                    b.HasKey("UserModelID", "GroupModelID");
 
-                    b.HasIndex("GroupID");
+                    b.HasIndex("GroupModelID");
 
                     b.ToTable("UserGroups");
                 });
@@ -156,10 +159,10 @@ namespace SplitListWebApi.Migrations
                     b.Property<double>("Id")
                         .HasColumnType("float");
 
-                    b.Property<int>("GroupID")
+                    b.Property<int>("GroupModelId")
                         .HasColumnType("int");
 
-                    b.Property<double?>("GroupModelId")
+                    b.Property<double?>("GroupModelId1")
                         .HasColumnType("float");
 
                     b.Property<string>("Name")
@@ -167,7 +170,7 @@ namespace SplitListWebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GroupModelId");
+                    b.HasIndex("GroupModelId1");
 
                     b.ToTable("ShoppingLists");
                 });
@@ -379,60 +382,60 @@ namespace SplitListWebApi.Migrations
 
             modelBuilder.Entity("ApiFormat.ShadowTables.PantryItem", b =>
                 {
-                    b.HasOne("ApiFormat.Item.ItemModel", "Item")
+                    b.HasOne("ApiFormat.Item.ItemModel", "ItemModel")
                         .WithMany("PantryItems")
-                        .HasForeignKey("ItemID")
+                        .HasForeignKey("ItemModelID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ApiFormat.Pantry.PantryModel", "Pantry")
+                    b.HasOne("ApiFormat.Pantry.PantryModel", "PantryModel")
                         .WithMany("PantryItems")
-                        .HasForeignKey("PantryID")
+                        .HasForeignKey("PantryModelID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("ApiFormat.ShadowTables.RecipeItem", b =>
                 {
-                    b.HasOne("ApiFormat.Item.ItemModel", "item")
+                    b.HasOne("ApiFormat.Item.ItemModel", "ItemModel")
                         .WithMany("RecipeItems")
-                        .HasForeignKey("ItemID")
+                        .HasForeignKey("ItemModelID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ApiFormat.Recipe.RecipeModel", "Recipe")
+                    b.HasOne("ApiFormat.Recipe.RecipeModel", "RecipeModel")
                         .WithMany("RecipeItems")
-                        .HasForeignKey("RecipeID")
+                        .HasForeignKey("RecipeModelID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("ApiFormat.ShadowTables.ShoppingListItem", b =>
                 {
-                    b.HasOne("ApiFormat.Item.ItemModel", "Item")
+                    b.HasOne("ApiFormat.Item.ItemModel", "ItemModel")
                         .WithMany("ShoppingListItems")
-                        .HasForeignKey("ItemID")
+                        .HasForeignKey("ItemModelID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ApiFormat.ShoppingList.ShoppingListModel", "ShoppingList")
+                    b.HasOne("ApiFormat.ShoppingList.ShoppingListModel", "ShoppingListModel")
                         .WithMany("ShoppingListItems")
-                        .HasForeignKey("ShoppingListID")
+                        .HasForeignKey("ShoppingListModelID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("ApiFormat.ShadowTables.UserGroup", b =>
                 {
-                    b.HasOne("ApiFormat.GroupModel", "Group")
+                    b.HasOne("ApiFormat.GroupModel", "GroupModel")
                         .WithMany("UserGroups")
-                        .HasForeignKey("GroupID")
+                        .HasForeignKey("GroupModelID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ApiFormat.User.UserModel", "User")
+                    b.HasOne("ApiFormat.User.UserModel", "UserModel")
                         .WithMany("UserGroups")
-                        .HasForeignKey("UserID")
+                        .HasForeignKey("UserModelID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -441,7 +444,7 @@ namespace SplitListWebApi.Migrations
                 {
                     b.HasOne("ApiFormat.GroupModel", "GroupModel")
                         .WithMany("ShoppingLists")
-                        .HasForeignKey("GroupModelId");
+                        .HasForeignKey("GroupModelId1");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<double>", b =>

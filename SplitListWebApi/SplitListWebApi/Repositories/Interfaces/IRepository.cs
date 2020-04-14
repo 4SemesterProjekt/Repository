@@ -5,16 +5,13 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace SplitListWebApi.Repositories.Interfaces
 {
-    public interface IGenericRepository<TEntity>
-        where TEntity : class
+    public interface IRepository<TSource>
+        where TSource : class
     {
-        IQueryable<TEntity> GetAll();
-
-        TEntity GetById(double id);
-        TEntity Create(TEntity entity);
-
-        EntityEntry<TEntity> Update(TEntity entity);
-
-        void Delete(double id);
+        IQueryable<TSource> GetAll();
+        TSource GetById(double id);
+        TSource Create(TSource entity);
+        EntityEntry<TSource> Update(TSource entity);
+        void Delete(TSource entity);
     }
 }

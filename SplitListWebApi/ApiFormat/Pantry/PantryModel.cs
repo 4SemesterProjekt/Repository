@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using ApiFormat.Group;
 using ApiFormat.ShadowTables;
 
 namespace ApiFormat.Pantry

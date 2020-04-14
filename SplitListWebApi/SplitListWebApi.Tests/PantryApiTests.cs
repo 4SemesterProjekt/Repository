@@ -42,7 +42,7 @@
 
 //                Group group = new Group()
 //                {
-//                    GroupID = 1,
+//                    GroupModelId = 1,
 //                    Name = "Group1",
 //                    OwnerID = "1",
 //                };
@@ -51,7 +51,7 @@
 
 //                repo.UpdatePantry(new PantryDTO()
 //                {
-//                    GroupID = 1,
+//                    GroupModelId = 1,
 //                    GroupName = "Group1",
 //                    Name = "Pantry1"
 //                });
@@ -72,7 +72,7 @@
 
 //                Group group = new Group()
 //                {
-//                    GroupID = 1,
+//                    GroupModelId = 1,
 //                    Name = "Group1",
 //                    OwnerID = "1",
 //                };
@@ -81,7 +81,7 @@
 
 //                PantryDTO pantry = new PantryDTO()
 //                {
-//                    GroupID = 1,
+//                    GroupModelId = 1,
 //                    GroupName = "Group1",
 //                    Name = "Pantry1",
 //                    Items = new List<ItemDTO>()
@@ -117,7 +117,7 @@
 
 //                Group group = new Group()
 //                {
-//                    GroupID = 1,
+//                    GroupModelId = 1,
 //                    Name = "Group1",
 //                    OwnerID = "1",
 //                };
@@ -126,7 +126,7 @@
 
 //                PantryDTO pantry = new PantryDTO()
 //                {
-//                    GroupID = 1,
+//                    GroupModelId = 1,
 //                    GroupName = "Group1",
 //                    Name = "Pantry1",
 //                    Items = new List<ItemDTO>()
@@ -169,7 +169,7 @@
 
 //                Group group = new Group()
 //                {
-//                    GroupID = 1,
+//                    GroupModelId = 1,
 //                    Name = "Group1",
 //                    OwnerID = "1",
 //                };
@@ -178,7 +178,7 @@
 
 //                PantryDTO pantry = new PantryDTO()
 //                {
-//                    GroupID = 1,
+//                    GroupModelId = 1,
 //                    GroupName = "Group1",
 //                    Name = "Pantry1"
 //                };
@@ -203,7 +203,7 @@
 
 //                Group group = new Group()
 //                {
-//                    GroupID = 1,
+//                    GroupModelId = 1,
 //                    Name = "Group1",
 //                    OwnerID = "1",
 //                };
@@ -212,7 +212,7 @@
 
 //                PantryDTO pantry = new PantryDTO()
 //                {
-//                    GroupID = 1,
+//                    GroupModelId = 1,
 //                    GroupName = "Group1",
 //                    Name = "Pantry1",
 //                    Items = new List<ItemDTO>()
@@ -247,7 +247,7 @@
 
 //                Group group = new Group()
 //                {
-//                    GroupID = 1,
+//                    GroupModelId = 1,
 //                    Name = "Group1",
 //                    OwnerID = "1",
 //                };
@@ -256,7 +256,7 @@
 
 //                PantryDTO pantry = new PantryDTO()
 //                {
-//                    GroupID = 1,
+//                    GroupModelId = 1,
 //                    GroupName = "Group1",
 //                    Name = "Pantry1",
 //                    Items = new List<ItemDTO>()
