@@ -10,7 +10,7 @@ using SplitListWebApi.Areas.Identity.Data;
 namespace SplitListWebApi.Migrations
 {
     [DbContext(typeof(SplitListContext))]
-    [Migration("20200414151414_InitialMigration")]
+    [Migration("20200414173729_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -156,10 +156,7 @@ namespace SplitListWebApi.Migrations
                     b.Property<double>("Id")
                         .HasColumnType("float");
 
-                    b.Property<int>("GroupModelId")
-                        .HasColumnType("int");
-
-                    b.Property<double?>("GroupModelId1")
+                    b.Property<double>("GroupModelId")
                         .HasColumnType("float");
 
                     b.Property<string>("Name")
@@ -167,7 +164,7 @@ namespace SplitListWebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GroupModelId1");
+                    b.HasIndex("GroupModelId");
 
                     b.ToTable("ShoppingLists");
                 });
@@ -444,7 +441,9 @@ namespace SplitListWebApi.Migrations
                 {
                     b.HasOne("ApiFormat.GroupModel", "GroupModel")
                         .WithMany("ShoppingLists")
-                        .HasForeignKey("GroupModelId1");
+                        .HasForeignKey("GroupModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<double>", b =>

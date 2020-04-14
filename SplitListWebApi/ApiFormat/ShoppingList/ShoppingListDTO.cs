@@ -6,7 +6,7 @@ namespace ApiFormat.ShoppingList
 {
     public class ShoppingListDTO : IDTO
     {
-        public int GroupID { get; set; }
+        public double GroupID { get; set; }
         public GroupDTO Group { get; set; }
         public List<ItemDTO> Items { get; set; }
         public double Id { get; set; }

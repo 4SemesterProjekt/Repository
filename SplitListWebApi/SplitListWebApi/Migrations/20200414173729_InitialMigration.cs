@@ -197,8 +197,8 @@ namespace SplitListWebApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<double>(nullable: false),
-                    GroupModelID = table.Column<double>(nullable: false),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: true),
+                    GroupModelID = table.Column<double>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -216,19 +216,18 @@ namespace SplitListWebApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<double>(nullable: false),
-                    GroupModelId = table.Column<int>(nullable: false),
-                    GroupModelId1 = table.Column<double>(nullable: true),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: true),
+                    GroupModelId = table.Column<double>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ShoppingLists", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ShoppingLists_Groups_GroupModelId1",
-                        column: x => x.GroupModelId1,
+                        name: "FK_ShoppingLists_Groups_GroupModelId",
+                        column: x => x.GroupModelId,
                         principalTable: "Groups",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -390,9 +389,9 @@ namespace SplitListWebApi.Migrations
                 column: "ItemModelID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ShoppingLists_GroupModelId1",
+                name: "IX_ShoppingLists_GroupModelId",
                 table: "ShoppingLists",
-                column: "GroupModelId1");
+                column: "GroupModelId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserGroups_GroupModelID",

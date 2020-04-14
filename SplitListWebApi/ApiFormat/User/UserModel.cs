@@ -8,8 +8,8 @@ namespace ApiFormat.User
 {
     public class UserModel : IdentityUser<double>, IModel
     {
-        public List<UserGroup> UserGroups { get; set; }
         public string Name { get; set; }
+        public List<UserGroup> UserGroups { get; set; }
     }
     public class ApplicationRole : IdentityRole<double>
     {
