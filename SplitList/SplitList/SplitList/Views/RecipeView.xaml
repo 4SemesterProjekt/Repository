@@ -6,14 +6,10 @@
              xmlns:viewModels="clr-namespace:SplitList.ViewModels;assembly=SplitList"
              mc:Ignorable="d"
              x:Class="SplitList.Views.RecipeView">
-    <ContentPage.BindingContext>
-        <viewModels:RecipeViewModel/>
-    </ContentPage.BindingContext>
-    <ContentPage.Content>
+	<ContentPage.Content>
         <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+
+			
+		</StackLayout>
     </ContentPage.Content>
 </ContentPage>
