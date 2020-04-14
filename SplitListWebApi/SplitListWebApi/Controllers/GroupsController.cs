@@ -24,14 +24,12 @@ namespace SplitListWebApi.Controllers
         }
 
         [HttpPost("Create")]
-        [Authorize]
         public GroupDTO Create([FromBody] GroupDTO dto)
         {
             return dto.Add(_repository);
         }
 
         [HttpGet("{id}")]
-        [Authorize]
         public GroupDTO GetById(double id)
         {
             GroupDTO dto = new GroupDTO();

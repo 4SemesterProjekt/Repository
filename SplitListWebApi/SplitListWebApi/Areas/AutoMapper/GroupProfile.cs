@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ApiFormat;
 using ApiFormat.Group;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace SplitListWebApi.Areas.AutoMapper
 {

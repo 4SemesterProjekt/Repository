@@ -34,11 +34,11 @@ namespace SplitListWebApi.Repositories.Implementation
             return _mapper.Map<TSource>(model);
         }
 
-        public EntityEntry<TSource> Update(TSource entity)
+        public TSource Update(TSource entity)
         {
             var model = _mapper.Map<TEntity>(entity);
             model.WriteToDatabase(_dbContext.Update, _dbContext);
-            return _mapper.Map<EntityEntry<TSource>>(_dbContext.Entry(model)); //To check whether any entries has been updated. Look in DTOUtilities.Update.
+            return _mapper.Map<TSource>(model); //To check whether any entries has been updated. Look in DTOUtilities.Update.
         }
 
         public void Delete(TSource entity)

@@ -23,6 +23,7 @@ namespace SplitListWebApi.Utilities
                 }
                 catch (Exception)
                 {
+                    source = null;
                     transaction.Rollback();
                 }
             }
