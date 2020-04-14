@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ApiFormat.User;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Builder;
@@ -42,12 +43,14 @@ namespace SplitListWebApi
                     options.ClientId = "19678358422-ciecen8r69ja6ji2d6o1ikrm5fdjrh1a.apps.googleusercontent.com";
                     options.ClientSecret = "0y3MWqxCffaoe2IiVXzQrd61";
                 });
-            services.Configure<User>(options =>
+            services.Configure<UserModel>(options =>
                 {
                     options.TwoFactorEnabled = false;
                     options.AccessFailedCount = 5;
                 }
             );
+
+            services.AddAutoMapper(typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

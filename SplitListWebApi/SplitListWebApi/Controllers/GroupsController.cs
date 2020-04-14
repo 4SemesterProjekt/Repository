@@ -1,10 +1,12 @@
 ﻿using System;
 using ApiFormat;
 using ApiFormat.Group;
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SplitListWebApi.Areas.Identity.Data;
-using SplitListWebApi.Controllers.Utilities;
 using SplitListWebApi.Repositories.Implementation;
+using SplitListWebApi.Utilities;
 
 namespace SplitListWebApi.Controllers
 {
@@ -12,13 +14,33 @@ namespace SplitListWebApi.Controllers
     [ApiController]
     public class GroupsController : ControllerBase
     {
-        [HttpGet("{id}")]
-        public GroupDTO Get(GroupDTO dto)
-        {
+        private SplitListContext _context;
+        private GenericRepository<GroupDTO, GroupModel> _repository;
 
-            /*
-             * Ideal Scenario: dto.LoadToModel().Get(dto.Id)
-             */
+        public GroupsController(SplitListContext context, IMapper mapper)
+        {
+            _context = context;
+            _repository = new GenericRepository<GroupDTO, GroupModel>(_context, mapper);
+        }
+
+        [HttpGet("Create/{name}/{OwnerID}")]
+        [Authorize]
+        public GroupDTO Add(string name, double ownerId)
+        {
+            var dto = new GroupDTO()
+            {
+                Name = name,
+                OwnerID = ownerId
+            };
+            return dto.Add(_repository);
+        }
+
+        [HttpGet("GetById/{id}")]
+        [Authorize]
+        public GroupDTO GetById(double id)
+        {
+            GroupDTO dto = new GroupDTO();
+            return dto.GetById(_repository, id);
         }
     }
 }
@@ -48,7 +70,7 @@ namespace SplitListWebApi.Controllers
 //        public GroupsController(SplitListContext context)
 //        {
 //            _context = context;
-//            repo = new GroupRepository(_context);
+//            repo = new GenericRepository(_context);
 //        }
 
 //        //Get: api/groups/5

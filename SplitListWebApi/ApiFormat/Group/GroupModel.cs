@@ -7,7 +7,7 @@ namespace ApiFormat
 {
     public class GroupModel : IModel
     {
-        public int OwnerId { get; set; }
+        public double OwnerId { get; set; }
         public PantryModel PantryModel { get; set; }
         public List<ShoppingListModel> ShoppingLists { get; set; }
         public List<UserGroup> UserGroups { get; set; }

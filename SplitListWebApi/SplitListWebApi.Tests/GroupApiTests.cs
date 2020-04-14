@@ -39,7 +39,7 @@
 //        {
 //            using (var context = new SplitListContext(options))
 //            {
-//                IGroupRepository groupRepo = new GroupRepository(context);
+//                IGroupRepository groupRepo = new GenericRepository(context);
 
 //                context.Database.EnsureCreated();
 
@@ -62,7 +62,7 @@
 //        {
 //            using (var context = new SplitListContext(options))
 //            {
-//                IGroupRepository groupRepo = new GroupRepository(context);
+//                IGroupRepository groupRepo = new GenericRepository(context);
 
 //                context.Database.EnsureCreated();
 
@@ -83,7 +83,7 @@
 //        {
 //            using (var context = new SplitListContext(options))
 //            {
-//                IGroupRepository groupRepo = new GroupRepository(context);
+//                IGroupRepository groupRepo = new GenericRepository(context);
 
 //                context.Database.EnsureCreated();
 
@@ -149,7 +149,7 @@
 //        {
 //            using (var context = new SplitListContext(options))
 //            {
-//                IGroupRepository groupRepo = new GroupRepository(context);
+//                IGroupRepository groupRepo = new GenericRepository(context);
 
 //                context.Database.EnsureCreated();
 
@@ -174,7 +174,7 @@
 //        {
 //            using (var context = new SplitListContext(options))
 //            {
-//                IGroupRepository groupRepo = new GroupRepository(context);
+//                IGroupRepository groupRepo = new GenericRepository(context);
 
 //                context.Database.EnsureCreated();
 
@@ -216,7 +216,7 @@
 //        {
 //            using (var context = new SplitListContext(options))
 //            {
-//                IGroupRepository groupRepo = new GroupRepository(context);
+//                IGroupRepository groupRepo = new GenericRepository(context);
 
 //                context.Database.EnsureCreated();
 
@@ -250,7 +250,7 @@
 //        {
 //            using (var context = new SplitListContext(options))
 //            {
-//                IGroupRepository groupRepo = new GroupRepository(context);
+//                IGroupRepository groupRepo = new GenericRepository(context);
 
 //                context.Database.EnsureCreated();
 
@@ -281,7 +281,7 @@
 //        {
 //            using (var context = new SplitListContext(options))
 //            {
-//                IGroupRepository groupRepo = new GroupRepository(context);
+//                IGroupRepository groupRepo = new GenericRepository(context);
 
 //                context.Database.EnsureCreated();
 

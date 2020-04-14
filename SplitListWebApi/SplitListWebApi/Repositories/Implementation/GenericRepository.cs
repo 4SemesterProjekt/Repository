@@ -2,51 +2,77 @@
 using System.Linq;
 using System.Threading.Tasks;
 using ApiFormat;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using SplitListWebApi.Areas.Identity.Data;
-using SplitListWebApi.Controllers.Utilities;
 using SplitListWebApi.Repositories.Interfaces;
+using SplitListWebApi.Utilities;
 
 namespace SplitListWebApi.Repositories.Implementation
 {
-    public class GroupRepository<TEntity> : IRepository<TEntity>
-        where TEntity : class
+    public class GenericRepository<TSource, TEntity> : IRepository<TSource>
+        where TSource : class, IDTO
+        where TEntity : class, IModel
     {
         private readonly SplitListContext _dbContext;
-        public GroupRepository(SplitListContext dbContext)
+        private IMapper _mapper;
+        public GenericRepository(SplitListContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
 
-        public IQueryable<TEntity> GetAll()
+        /*
+         * General for functions:
+         * Map to Model-Entity
+         * Run DB-function
+         * Model back to DTO
+         * return DTO.
+         */
+
+        public IQueryable<TSource> GetAll()
         {
-            return _dbContext.Set<TEntity>().AsNoTracking();
+            return _mapper.Map<IQueryable<TSource>>(_dbContext.Set<TEntity>().AsNoTracking());
         }
 
-        public TEntity GetById(double id)
+        public TSource GetById(double id)
         {
-            var entity = _dbContext.Find<TEntity>(id);
-            _dbContext.Entry(entity).State = EntityState.Detached;
-            return entity;
+            var entity = Query().SingleOrDefault(i => Math.Abs(i.Id - id) < (double)0.1);
+            _dbContext.Entry(entity).State = EntityState.Detached; //AsNoTracking().
+            var dto = _mapper.Map<TSource>(entity);
+            return dto;
         }
 
-        public TEntity Create(TEntity entity)
+        private IQueryable<TEntity> Query(bool eager = true)
         {
-            entity.BeginTransaction(_dbContext.Add<TEntity>, _dbContext);
-            return entity;
+            var query = _dbContext.Set<TEntity>().AsQueryable();
+            if (eager)
+            {
+                foreach (var property in _dbContext.Model.FindEntityType(typeof(TEntity)).GetNavigations())
+                    query = query.Include(property.Name);
+            }
+            return query;
         }
 
-        public EntityEntry<TEntity> Update(TEntity entity)
+        public TSource Create(TSource entity)
         {
-            entity.BeginTransaction(_dbContext.Update<TEntity>, _dbContext);
-            return _dbContext.Entry(entity); //To check whether any entries has been updated. Look in DTOUtilities.Update.
+            var model = _mapper.Map<TEntity>(entity);
+            model.BeginTransaction(_dbContext.Add, _dbContext);
+            return _mapper.Map<TSource>(model);
         }
 
-        public void Delete(double id)
+        public EntityEntry<TSource> Update(TSource entity)
         {
-            var entity = GetById(id);
-            entity.BeginTransaction(_dbContext.Remove<TEntity>, _dbContext);
+            var model = _mapper.Map<TEntity>(entity);
+            model.BeginTransaction(_dbContext.Update, _dbContext);
+            return _mapper.Map<EntityEntry<TSource>>(_dbContext.Entry(model)); //To check whether any entries has been updated. Look in DTOUtilities.Update.
+        }
+
+        public void Delete(TSource entity)
+        {
+            var model = _mapper.Map<TEntity>(entity);
+            model.BeginTransaction(_dbContext.Remove, _dbContext);
         }
     }
 }
