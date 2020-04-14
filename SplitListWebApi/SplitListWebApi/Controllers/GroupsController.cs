@@ -23,24 +23,31 @@ namespace SplitListWebApi.Controllers
             _repository = new GenericRepository<GroupDTO, GroupModel>(_context, mapper);
         }
 
-        [HttpGet("Create/{name}/{OwnerID}")]
+        [HttpPost("Create")]
         [Authorize]
-        public GroupDTO Add(string name, double ownerId)
+        public GroupDTO Create([FromBody] GroupDTO dto)
         {
-            var dto = new GroupDTO()
-            {
-                Name = name,
-                OwnerID = ownerId
-            };
             return dto.Add(_repository);
         }
 
-        [HttpGet("GetById/{id}")]
+        [HttpGet("{id}")]
         [Authorize]
         public GroupDTO GetById(double id)
         {
             GroupDTO dto = new GroupDTO();
             return dto.GetById(_repository, id);
+        }
+
+        [HttpDelete("Delete")]
+        public void Delete([FromBody] GroupDTO dto)
+        {
+            dto.Delete(_repository);
+        }
+
+        [HttpPost("Save")]
+        public GroupDTO Save(GroupDTO dto)
+        {
+            return dto.Save(_repository);
         }
     }
 }
