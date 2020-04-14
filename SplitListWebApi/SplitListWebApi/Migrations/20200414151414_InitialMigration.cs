@@ -14,7 +14,8 @@ namespace SplitListWebApi.Migrations
                     Id = table.Column<double>(nullable: false),
                     Name = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(maxLength: 256, nullable: true),
-                    ConcurrencyStamp = table.Column<string>(nullable: true)
+                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -52,7 +53,7 @@ namespace SplitListWebApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<double>(nullable: false),
-                    OwnerId = table.Column<int>(nullable: false),
+                    OwnerId = table.Column<double>(nullable: false),
                     Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -66,8 +67,7 @@ namespace SplitListWebApi.Migrations
                 {
                     Id = table.Column<double>(nullable: false),
                     Type = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true),
-                    Amount = table.Column<int>(nullable: false)
+                    Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

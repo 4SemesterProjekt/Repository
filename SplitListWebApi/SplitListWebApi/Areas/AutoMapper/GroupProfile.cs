@@ -33,7 +33,7 @@ namespace SplitListWebApi.Areas.AutoMapper
                 .ForMember( //Many-To-Many
                     gm => gm.ShoppingLists,
                     opt =>
-                        opt.MapFrom(st => st.ShoppingLists.Select(sl => sl.ShoppingListItems).ToList()));
+                        opt.MapFrom(gm => gm.ShoppingLists));
 
         }
     }

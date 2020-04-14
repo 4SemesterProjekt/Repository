@@ -10,7 +10,7 @@ using SplitListWebApi.Areas.Identity.Data;
 namespace SplitListWebApi.Migrations
 {
     [DbContext(typeof(SplitListContext))]
-    [Migration("20200414080946_InitialMigration")]
+    [Migration("20200414151414_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -29,8 +29,8 @@ namespace SplitListWebApi.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OwnerId")
-                        .HasColumnType("int");
+                    b.Property<double>("OwnerId")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -41,9 +41,6 @@ namespace SplitListWebApi.Migrations
                 {
                     b.Property<double>("Id")
                         .HasColumnType("float");
-
-                    b.Property<int>("Amount")
-                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -182,6 +179,9 @@ namespace SplitListWebApi.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
