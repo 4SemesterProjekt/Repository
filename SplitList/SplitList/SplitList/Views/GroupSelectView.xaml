@@ -8,11 +8,11 @@
              xmlns:utility="clr-namespace:SplitList.Utility;assembly=SplitList"
              mc:Ignorable="d"
              x:Class="SplitList.Views.GroupSelectView">
-    <ContentPage.BindingContext>
-        <viewModels:GroupSelectViewModel x:Name="GroupSelectViewModel"/>
-    </ContentPage.BindingContext>
-    <ContentPage.Resources>
-    </ContentPage.Resources>
+    <ContentPage.Behaviors>
+        <b:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding OnAppearing}"/>
+    </ContentPage.Behaviors>
     <ContentPage.Content>
         <ListView x:Name="GroupList" ItemsSource="{Binding Groups}" SelectionMode="None">
             <ListView.ItemTemplate>
@@ -20,7 +20,9 @@
                     <ViewCell>
                         <Label Text="{Binding Name}"
                                VerticalOptions="Center"
-                               FontSize="20"/>
+                               HorizontalOptions="Center"
+                               FontSize="20"
+                               Margin="10"/>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>

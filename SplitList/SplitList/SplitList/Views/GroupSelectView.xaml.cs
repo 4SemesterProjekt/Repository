@@ -15,6 +15,7 @@ namespace SplitList.Views
         public GroupSelectView()
         {
             InitializeComponent();
+            BindingContext = new GroupSelectViewModel();
         }
     }
 }

@@ -39,5 +39,21 @@ namespace SplitList.ViewModels
             var g = group as Group;
             Application.Current.MainPage = new MDP(g.GroupId);
         }
+
+        private ICommand _onAppearing;
+
+        public ICommand OnAppearing
+        {
+            get => _onAppearing ?? (_onAppearing = new DelegateCommand(OnAppearingExecute));
+        }
+
+        public async void OnAppearingExecute()
+        {
+            if (Groups.Count == 0)
+            {
+                var result = await Application.Current.MainPage.DisplayPromptAsync("No group found", "Please input a name for your group", "Create Group");
+                Groups.Add(new Group(){GroupId = 0, Name = result});
+            }
+        }
     }
 }
