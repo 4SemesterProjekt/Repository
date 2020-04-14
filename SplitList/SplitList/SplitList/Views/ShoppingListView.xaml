@@ -58,18 +58,18 @@
                                         AutoSize="TextChanges"
                                         IsTextPredictionEnabled="False"/>
                                 <StackLayout Orientation="Horizontal" Grid.Column="2">
-                                <ImageButton Source="{utility:ImageResource SplitList.EmbeddedResources.plus.png}"
-                                             WidthRequest="10"
-                                             VerticalOptions="Center"
-                                             Command="{Binding IncItemAmountCommand}"/>
-                                <Label Text="{Binding Path=Amount}"
-                                       VerticalOptions="Center"
-                                       HorizontalOptions="Start"
-                                       FontSize="16"/>
-                                <ImageButton Source="{utility:ImageResource SplitList.EmbeddedResources.minus.png}"
-                                             WidthRequest="10"
-                                             VerticalOptions="Center"
-                                             Command="{Binding DecItemAmountCommand}"/>
+                                    <ImageButton Source="{utility:ImageResource SplitList.EmbeddedResources.plus.png}"
+                                                 WidthRequest="10"
+                                                 VerticalOptions="Center"
+                                                 Command="{Binding IncItemAmountCommand}"/>
+                                    <Label Text="{Binding Path=Amount}"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="Start"
+                                           FontSize="16"/>
+                                    <ImageButton Source="{utility:ImageResource SplitList.EmbeddedResources.minus.png}"
+                                                 WidthRequest="10"
+                                                 VerticalOptions="Center"
+                                                 Command="{Binding DecItemAmountCommand}"/>
                                 </StackLayout>
 
                             </Grid>
