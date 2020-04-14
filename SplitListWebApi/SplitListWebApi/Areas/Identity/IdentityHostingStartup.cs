@@ -19,9 +19,8 @@ namespace SplitListWebApi.Areas.Identity
                     options.UseSqlServer(
                         context.Configuration.GetConnectionString("SplitListMarkusSQLServer")));
 
-                services.AddIdentity<UserModel, ApplicationRole>()
-                    .AddEntityFrameworkStores<SplitListContext>()
-                    .AddDefaultTokenProviders();
+                services.AddIdentity<UserModel, ApplicationRole>(options => { options.User.RequireUniqueEmail = true; })
+                    .AddEntityFrameworkStores<SplitListContext>();
             });
         }
     }

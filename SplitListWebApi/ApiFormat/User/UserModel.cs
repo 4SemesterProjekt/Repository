@@ -11,8 +11,8 @@ namespace ApiFormat.User
         public string Name { get; set; }
         public List<UserGroup> UserGroups { get; set; }
     }
+
     public class ApplicationRole : IdentityRole<double>
     {
-        public string Description { get; set; }
     }
 }

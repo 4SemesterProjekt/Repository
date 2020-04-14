@@ -25,14 +25,14 @@ namespace SplitListWebApi
         {
             services.AddControllers().AddNewtonsoftJson(
                 opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
-            services.AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = GoogleDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
-                })
+            services.AddAuthentication(
+                    options =>
+                    {
+                        options.DefaultAuthenticateScheme = GoogleDefaults.AuthenticationScheme;
+                        options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+                    })
                 .AddGoogle(options =>
                 {
-
                     options.ClientId = "19678358422-ciecen8r69ja6ji2d6o1ikrm5fdjrh1a.apps.googleusercontent.com";
                     options.ClientSecret = "0y3MWqxCffaoe2IiVXzQrd61";
                 });

@@ -28,7 +28,7 @@ namespace SplitListWebApi.Controllers
 
         [AllowAnonymous]
         [Route("[action]")]
-        public IActionResult GoogleLogin()
+        public IActionResult Login()
         {
             var redirectUrl = Url.Action(nameof(GoogleResponse), "Account");
             var properties = _signInManager.ConfigureExternalAuthenticationProperties("Google", redirectUrl);

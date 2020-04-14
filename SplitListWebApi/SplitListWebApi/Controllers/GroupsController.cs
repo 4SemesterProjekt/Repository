@@ -30,6 +30,7 @@ namespace SplitListWebApi.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public GroupDTO GetById(double id)
         {
             GroupDTO dto = new GroupDTO();
