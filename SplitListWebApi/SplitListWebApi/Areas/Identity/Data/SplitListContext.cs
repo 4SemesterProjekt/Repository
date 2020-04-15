@@ -8,6 +8,7 @@ using ApiFormat.ShoppingList;
 using ApiFormat.User;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace SplitListWebApi.Areas.Identity.Data
 {
@@ -38,7 +39,10 @@ namespace SplitListWebApi.Areas.Identity.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
+            modelBuilder.Entity<UserModel>()
+                .Property(um => um.ModelId)
+                .UseIdentityColumn()
+                .Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
 
             //Setup for User-Group Many-to-Many
             modelBuilder.Entity<UserGroup>().HasKey(ug => new {ug.GroupModelModelID, ug.UserModelId });

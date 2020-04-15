@@ -55,6 +55,8 @@
     <Compile Remove="Migrations\20200415131313_InitialMigration.Designer.cs" />
     <Compile Remove="Migrations\20200415132046_AutoIncrement.cs" />
     <Compile Remove="Migrations\20200415132046_AutoIncrement.Designer.cs" />
+    <Compile Remove="Migrations\20200415132151_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200415132151_InitialMigration.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
