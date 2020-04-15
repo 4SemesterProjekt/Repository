@@ -39,7 +39,11 @@ namespace SplitListWebApi.Utilities
             {
                 try
                 {
-                    query = db.Model.FindEntityType(typeof(TEntity)).GetNavigations().Aggregate(query, (current, property) => current.Include(property.Name));
+                    query = db.Model
+                        .FindEntityType(typeof(TEntity))
+                        .GetNavigations()
+                        .Aggregate(query, (current, property) => current.Include(property.Name));
+
                     transaction.Commit();
                 }
                 catch (Exception)

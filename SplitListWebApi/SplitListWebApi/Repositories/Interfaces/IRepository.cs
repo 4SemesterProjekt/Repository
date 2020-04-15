@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 namespace SplitListWebApi.Repositories.Interfaces
 {
     public interface IRepository<TSource>
-        where TSource : class
+        where TSource : class, IDTO
     {
         IQueryable<TSource> GetAll();
         TSource GetById(double id);
