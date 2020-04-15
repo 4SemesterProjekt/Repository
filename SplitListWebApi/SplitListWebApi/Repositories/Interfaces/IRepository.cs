@@ -9,7 +9,7 @@ namespace SplitListWebApi.Repositories.Interfaces
         where TSource : class, IDTO
     {
         IQueryable<TSource> GetAll();
-        TSource GetById(double id);
+        TSource GetById(int id);
         TSource Create(TSource entity);
         TSource Update(TSource entity);
         void Delete(TSource entity);

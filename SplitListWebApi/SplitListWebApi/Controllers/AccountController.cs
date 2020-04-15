@@ -46,7 +46,7 @@ namespace SplitListWebApi.Controllers
                 Name = info.Principal.FindFirst(ClaimTypes.Name).Value,
                 Email = info.Principal.FindFirst(ClaimTypes.Email).Value,
                 UserName = info.Principal.FindFirst(ClaimTypes.Email).Value,
-                Id = Double.Parse(info.Principal.FindFirst(ClaimTypes.NameIdentifier).Value),
+                Id = info.Principal.FindFirst(ClaimTypes.NameIdentifier).Value,
                 EmailConfirmed = true
             };
 

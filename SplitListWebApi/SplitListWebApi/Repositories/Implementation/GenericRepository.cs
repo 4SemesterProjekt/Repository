@@ -25,7 +25,7 @@ namespace SplitListWebApi.Repositories.Implementation
 
         public IQueryable<TSource> GetAll() => _mapper.Map<IQueryable<TSource>>(_dbContext.Set<TEntity>().AsNoTracking());
 
-        public TSource GetById(double id) => id.GetFromDatabase<TSource, TEntity>(_dbContext, _mapper);
+        public TSource GetById(int id) => id.GetFromDatabase<TSource, TEntity>(_dbContext, _mapper);
 
         public TSource Create(TSource entity)
         {

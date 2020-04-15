@@ -14,7 +14,7 @@ namespace SplitListWebApi.Areas.AutoMapper
             CreateMap<PantryDTO, PantryModel>()
                 .ForMember(pm => pm.PantryItems, opt => opt.Ignore())
                 .ForMember(pm => pm.GroupModel, opt => opt.Ignore())
-                .ForMember(pm => pm.GroupModelID, 
+                .ForMember(pm => pm.GroupModelModelID, 
                     opt => 
                         opt.MapFrom(
                             dto => dto.GroupID));
@@ -34,7 +34,7 @@ namespace SplitListWebApi.Areas.AutoMapper
                     dto => dto.GroupID,
                     opt =>
                         opt.MapFrom(
-                            pm => pm.GroupModelID));
+                            pm => pm.GroupModelModelID));
         }
     }
 }

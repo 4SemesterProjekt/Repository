@@ -6,13 +6,11 @@ using Microsoft.AspNetCore.Identity;
 
 namespace ApiFormat.User
 {
-    public class UserModel : IdentityUser<double>, IModel
+    public class UserModel : IdentityUser, IModel
     {
+        public int ModelId { get; set; }
         public string Name { get; set; }
-        public List<UserGroup> UserGroups { get; set; }
-    }
 
-    public class ApplicationRole : IdentityRole<double>
-    {
+        public List<UserGroup> UserGroups { get; set; }
     }
 }

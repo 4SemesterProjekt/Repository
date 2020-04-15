@@ -29,11 +29,11 @@ namespace SplitListWebApi.Utilities
             }
         }
 
-        public static TSource GetFromDatabase<TSource, TEntity>(this double id, SplitListContext db, IMapper mapper)
+        public static TSource GetFromDatabase<TSource, TEntity>(this int id, SplitListContext db, IMapper mapper)
             where TEntity : class, IModel
             where TSource : class, IDTO
         {
-            var query = db.Set<TEntity>().Where(i => Math.Abs(i.Id - id) < 0.1).AsQueryable();
+            var query = db.Set<TEntity>().Where(i => i.ModelId == id).AsQueryable();
 
             using (var transaction = db.Database.BeginTransaction())
             {

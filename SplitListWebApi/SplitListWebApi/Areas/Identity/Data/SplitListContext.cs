@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SplitListWebApi.Areas.Identity.Data
 {
-   public partial class SplitListContext : IdentityDbContext<UserModel, ApplicationRole, double>
+   public partial class SplitListContext : IdentityDbContext<UserModel>
     {
         public DbSet<GroupModel> Groups { get; set; }
         public DbSet<PantryModel> Pantries { get; set; }
@@ -38,18 +38,20 @@ namespace SplitListWebApi.Areas.Identity.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+
             //Setup for User-Group Many-to-Many
-            modelBuilder.Entity<UserGroup>().HasKey(ug => new {ug.UserModelID, ug.GroupModelID});
-            
+            modelBuilder.Entity<UserGroup>().HasKey(ug => new {ug.GroupModelModelID, ug.UserModelId });
+
             modelBuilder.Entity<UserGroup>()
                 .HasOne(ug => ug.UserModel)
                 .WithMany(u => u.UserGroups)
-                .HasForeignKey(ug => ug.UserModelID);
+                .HasForeignKey(ug =>  ug.UserModelId);
 
             modelBuilder.Entity<UserGroup>()
                 .HasOne(ug => ug.GroupModel)
                 .WithMany(g => g.UserGroups)
-                .HasForeignKey(ug => ug.GroupModelID);
+                .HasForeignKey(ug => ug.GroupModelModelID);
 
             //Setup for ShoppingList-Item Many-to-Many
             modelBuilder.Entity<ShoppingListItem>().HasKey(sli => new {sli.ShoppingListModelID, sli.ItemModelID});

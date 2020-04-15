@@ -47,6 +47,8 @@
     <Compile Remove="Migrations\20200414142059_ChangedPantryDTOToContainAGroupDTO.Designer.cs" />
     <Compile Remove="Migrations\20200414151414_InitialMigration.cs" />
     <Compile Remove="Migrations\20200414151414_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200414173729_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200414173729_InitialMigration.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

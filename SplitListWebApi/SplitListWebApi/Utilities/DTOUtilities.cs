@@ -12,6 +12,6 @@ namespace SplitListWebApi.Utilities
 
         public static void Delete<T>(this T source, IRepository<T> repo) where T : class, IDTO => repo.Delete(source);
 
-        public static T GetById<T>(this T source, IRepository<T> repo, double id) where T : class, IDTO => repo.GetById(id);
+        public static T GetById<T>(this T source, IRepository<T> repo, int id) where T : class, IDTO => repo.GetById(id);
     }
 }

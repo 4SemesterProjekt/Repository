@@ -7,9 +7,9 @@ namespace ApiFormat.Group
 {
     public class GroupDTO : IDTO
     {
-        public double Id { get; set; }
+        public int ModelId { get; set; }
         public string Name { get; set; }
-        public double OwnerID { get; set; }
+        public int OwnerID { get; set; }
         public List<UserDTO> Users { get; set; }
         public PantryDTO Pantry { get; set; }
         public List<ShoppingListDTO> ShoppingLists { get; set; }

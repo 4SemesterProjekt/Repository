@@ -30,7 +30,7 @@ namespace SplitListWebApi.Controllers
 
         //GET: User's Groups
         [HttpGet("{id}")]
-        public UserDTO GetUserById(double id)
+        public UserDTO GetUserById(int id)
         {
             UserDTO dto = new UserDTO();
             return dto.GetById(_repository, id);

@@ -5,9 +5,10 @@ namespace ApiFormat.ShadowTables
 {
     public class UserGroup
     {
-        public double UserModelID { get; set; }
+        public string UserModelId { get; set; }
         public UserModel UserModel { get; set; }
-        public double GroupModelID { get; set; }
+
+        public int GroupModelModelID { get; set; }
         public GroupModel GroupModel { get; set; }
     }
 }

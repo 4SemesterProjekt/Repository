@@ -29,7 +29,7 @@ namespace SplitListWebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public PantryDTO GetById(double id)
+        public PantryDTO GetById(int id)
         {
             PantryDTO dto = new PantryDTO();
             return dto.GetById(_repository, id);

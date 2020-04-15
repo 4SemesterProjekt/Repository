@@ -31,7 +31,7 @@ namespace SplitListWebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public ShoppingListDTO GetById(double id)
+        public ShoppingListDTO GetById(int id)
         {
             ShoppingListDTO dto = new ShoppingListDTO();
             return dto.GetById(_repository, id);
