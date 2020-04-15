@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SplitListWebApi.Areas.Identity.Data;
 using SplitListWebApi.Repositories.Implementation;
+using SplitListWebApi.Utilities;
 
 namespace SplitListWebApi.Controllers
 {
@@ -28,11 +29,26 @@ namespace SplitListWebApi.Controllers
         }
 
         //GET: User's Groups
-        [HttpGet("/{id}")]
+        [HttpGet("{id}")]
         public UserDTO GetUserById(double id)
         {
             UserDTO dto = new UserDTO();
-            return null;
+            return dto.GetById(_repository, id);
+        }
+
+        //POST: Update User
+        [HttpPost("Save")]
+        public UserDTO Save([FromBody] UserDTO user)
+        {
+            return user.Save(_repository);
+        }
+
+        //DELETE: Delete User
+        [HttpDelete("Delete")]
+        public ActionResult Delete([FromBody] UserDTO user)
+        {
+            user.Delete(_repository);
+            return Ok(user);
         }
     }
 }
