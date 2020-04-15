@@ -8,6 +8,7 @@ namespace ApiFormat.User
 {
     public class UserModel : IdentityUser, IModel
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ModelId { get; set; }
         public string Name { get; set; }
 

@@ -49,6 +49,12 @@
     <Compile Remove="Migrations\20200414151414_InitialMigration.Designer.cs" />
     <Compile Remove="Migrations\20200414173729_InitialMigration.cs" />
     <Compile Remove="Migrations\20200414173729_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200415122008_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200415122008_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200415131313_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200415131313_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200415132046_AutoIncrement.cs" />
+    <Compile Remove="Migrations\20200415132046_AutoIncrement.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

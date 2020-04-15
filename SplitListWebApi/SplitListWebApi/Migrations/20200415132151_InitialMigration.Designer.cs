@@ -10,7 +10,7 @@ using SplitListWebApi.Areas.Identity.Data;
 namespace SplitListWebApi.Migrations
 {
     [DbContext(typeof(SplitListContext))]
-    [Migration("20200415122008_InitialMigration")]
+    [Migration("20200415132151_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -205,7 +205,9 @@ namespace SplitListWebApi.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<int>("ModelId")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");

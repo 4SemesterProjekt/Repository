@@ -203,7 +203,9 @@ namespace SplitListWebApi.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<int>("ModelId")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
