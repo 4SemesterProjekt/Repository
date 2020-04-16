@@ -12,12 +12,9 @@ namespace SplitListWebApi.Areas.AutoMapper
         public PantryProfile()
         {
             CreateMap<PantryDTO, PantryModel>()
-                .ForMember(pm => pm.PantryItems, opt => opt.Ignore())
-                .ForMember(pm => pm.GroupModel, opt => opt.Ignore())
-                .ForMember(pm => pm.GroupModelModelID, 
-                    opt => 
-                        opt.MapFrom(
-                            dto => dto.GroupID));
+                .ForMember(pm => pm.PantryItems, opt => opt.MapFrom(dto => dto.Items))
+                .ForMember(pm => pm.GroupModel, opt => opt.MapFrom(dto => dto.Group))
+                .ForMember(pm => pm.GroupModelModelID, opt => opt.MapFrom(dto => dto.GroupID));
 
             CreateMap<PantryModel, PantryDTO>()
                 .ForMember(

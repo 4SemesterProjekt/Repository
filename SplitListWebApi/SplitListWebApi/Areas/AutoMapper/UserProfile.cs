@@ -12,7 +12,7 @@ namespace SplitListWebApi.Areas.AutoMapper
         public UserProfile()
         {
             CreateMap<UserDTO, UserModel>()
-                .ForMember(um => um.UserGroups, opt => opt.Ignore());
+                .ForMember(um => um.UserGroups, opt => opt.MapFrom(dto => dto.Groups));
 
 
             CreateMap<UserModel, UserDTO>()

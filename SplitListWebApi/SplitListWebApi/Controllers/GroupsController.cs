@@ -1,6 +1,7 @@
 ﻿using System;
 using ApiFormat;
 using ApiFormat.Group;
+using ApiFormat.ShadowTables;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,6 +27,7 @@ namespace SplitListWebApi.Controllers
         [HttpPost("Create")]
         public GroupDTO Create([FromBody] GroupDTO dto)
         {
+            
             return dto.Add(_repository);
         }
 

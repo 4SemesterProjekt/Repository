@@ -5,6 +5,10 @@ using System.Threading.Tasks;
 using System.Transactions;
 using ApiFormat;
 using ApiFormat.Group;
+using ApiFormat.Pantry;
+using ApiFormat.ShadowTables;
+using ApiFormat.ShoppingList;
+using ApiFormat.User;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -12,12 +16,39 @@ namespace SplitListWebApi.Areas.AutoMapper
 {
     public class GroupProfile : Profile
     {
+        public class GroupDTOToModel : ITypeConverter<GroupDTO, GroupModel>  //ITypeConverter<GroupDTO, List<UserGroup>>
+        {
+            public GroupModel Convert(GroupDTO source, GroupModel destination, ResolutionContext context)
+            {
+                GroupModel result = new GroupModel()
+                {
+                    Name = source.Name,
+                    OwnerId = source.OwnerID,
+                    ModelId = source.ModelId,
+                    PantryModel = new PantryModel(),
+                    ShoppingLists = new List<ShoppingListModel>(),
+                    UserGroups = new List<UserGroup>()
+                };
+
+                foreach (UserDTO user in source.Users)
+                {
+                    result.UserGroups.Add(new UserGroup
+                    {
+                        GroupModel = result,
+                        GroupModelModelID = result.ModelId,
+                        UserModel = context.Mapper.Map<UserDTO, UserModel>(user),
+                        UserModelId = user.Id
+                    });
+
+                }
+                return result;
+            }
+        }
+
         public GroupProfile()
         {
-            CreateMap<GroupDTO, GroupModel>() //Only the primary keys are needed to search for a model, which is what the conversion is used for.
-                .ForMember(gm => gm.ShoppingLists, opt => opt.Ignore()) //Ignoring these properties when converting to model.
-                .ForMember(gm => gm.PantryModel, opt => opt.Ignore())
-                .ForMember(gm => gm.UserGroups, opt => opt.Ignore());
+            CreateMap<GroupDTO, GroupModel>().ConvertUsing(new GroupDTOToModel());
+               
 
             CreateMap<GroupModel, GroupDTO>()
                 .ForMember( //Many-To-Many
