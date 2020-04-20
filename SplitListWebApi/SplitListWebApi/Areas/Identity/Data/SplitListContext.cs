@@ -45,12 +45,12 @@ namespace SplitListWebApi.Areas.Identity.Data
                 .Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
 
             //Setup for User-Group Many-to-Many
-            modelBuilder.Entity<UserGroup>().HasKey(ug => new {ug.GroupModelModelID, ug.UserModelId });
+            modelBuilder.Entity<UserGroup>().HasKey(ug => new {ug.GroupModelModelID, ug.UserId });
 
             modelBuilder.Entity<UserGroup>()
                 .HasOne(ug => ug.UserModel)
                 .WithMany(u => u.UserGroups)
-                .HasForeignKey(ug =>  ug.UserModelId);
+                .HasForeignKey(ug =>  ug.UserId);
 
             modelBuilder.Entity<UserGroup>()
                 .HasOne(ug => ug.GroupModel)

@@ -147,12 +147,12 @@ namespace SplitListWebApi.Migrations
                     b.Property<int>("GroupModelModelID")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserModelId")
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("GroupModelModelID", "UserModelId");
+                    b.HasKey("GroupModelModelID", "UserId");
 
-                    b.HasIndex("UserModelId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserGroups");
                 });
@@ -451,7 +451,7 @@ namespace SplitListWebApi.Migrations
 
                     b.HasOne("ApiFormat.User.UserModel", "UserModel")
                         .WithMany("UserGroups")
-                        .HasForeignKey("UserModelId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

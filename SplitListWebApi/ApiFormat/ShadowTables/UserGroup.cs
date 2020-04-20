@@ -7,7 +7,7 @@ namespace ApiFormat.ShadowTables
     public class UserGroup
     {
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public string UserModelId { get; set; }
+        public string UserId { get; set; }
         public UserModel UserModel { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int GroupModelModelID { get; set; }

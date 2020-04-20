@@ -16,7 +16,7 @@ namespace SplitListWebApi.Areas.AutoMapper
 {
     public class GroupProfile : Profile
     {
-        public class GroupDTOToModel : ITypeConverter<GroupDTO, GroupModel>  //ITypeConverter<GroupDTO, List<UserGroup>>
+        public class GroupDTOToModel : ITypeConverter<GroupDTO, GroupModel>
         {
             public GroupModel Convert(GroupDTO source, GroupModel destination, ResolutionContext context)
             {
@@ -29,17 +29,50 @@ namespace SplitListWebApi.Areas.AutoMapper
                     ShoppingLists = new List<ShoppingListModel>(),
                     UserGroups = new List<UserGroup>()
                 };
-
-                foreach (UserDTO user in source.Users)
+                if (source.Users != null)
                 {
-                    result.UserGroups.Add(new UserGroup
+                    foreach (UserDTO user in source.Users)
                     {
-                        GroupModel = result,
-                        GroupModelModelID = result.ModelId,
-                        UserModel = context.Mapper.Map<UserDTO, UserModel>(user),
-                        UserModelId = user.Id
-                    });
+                        result.UserGroups.Add(new UserGroup
+                        {
+                            GroupModel = result,
+                            GroupModelModelID = result.ModelId,
+                            UserModel = context.Mapper.Map<UserDTO, UserModel>(user),
+                            UserId = user.Id
+                        });
 
+                    }
+                }
+                return result;
+            }
+        }
+
+        public class GroupModelToDTO : ITypeConverter<GroupModel, GroupDTO>
+        {
+            public GroupDTO Convert(GroupModel source, GroupDTO destination, ResolutionContext context)
+            {
+                GroupDTO result = new GroupDTO()
+                {
+                    OwnerID = source.OwnerId,
+                    Name = source.Name,
+                    ModelId = source.ModelId,
+                    Pantry = context.Mapper.Map<PantryModel, PantryDTO>(source.PantryModel),
+                    ShoppingLists = new List<ShoppingListDTO>(),
+                    Users = new List<UserDTO>()
+                };
+                if (source.UserGroups != null)
+                {
+                    foreach (UserGroup user in source.UserGroups)
+                    {
+                        result.Users.Add(context.Mapper.Map<UserModel, UserDTO>(user.UserModel));
+                    }
+                }
+                if (source.ShoppingLists != null)
+                {
+                    foreach (ShoppingListModel shoppingList in source.ShoppingLists)
+                    {
+                        result.ShoppingLists.Add(context.Mapper.Map<ShoppingListModel, ShoppingListDTO>(shoppingList));
+                    }
                 }
                 return result;
             }
@@ -48,24 +81,8 @@ namespace SplitListWebApi.Areas.AutoMapper
         public GroupProfile()
         {
             CreateMap<GroupDTO, GroupModel>().ConvertUsing(new GroupDTOToModel());
-               
 
-            CreateMap<GroupModel, GroupDTO>()
-                .ForMember( //Many-To-Many
-                    dto => dto.Users, //From DTO
-                    opt => 
-                        opt.MapFrom(gm =>  //Map from the group-model's
-                            gm.UserGroups.Select(st => st.UserModel).ToList())) //Navigational property into its model, and convert to a list.
-                .ForMember( //One-To-One
-                    dto => dto.Pantry,
-                    opt => 
-                        opt.MapFrom(gm => 
-                                gm.PantryModel))
-                .ForMember( //Many-To-Many
-                    gm => gm.ShoppingLists,
-                    opt =>
-                        opt.MapFrom(gm => gm.ShoppingLists));
-
+            CreateMap<GroupModel, GroupDTO>().ConvertUsing(new GroupModelToDTO());
         }
     }
 }

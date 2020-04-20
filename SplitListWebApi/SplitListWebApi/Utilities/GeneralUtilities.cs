@@ -23,9 +23,9 @@ namespace SplitListWebApi.Utilities
                 }
                 catch (Exception)
                 {
-                    source = null;
                     transaction.Rollback();
                 }
+                db.Entry(source).State = EntityState.Detached;
             }
         }
 

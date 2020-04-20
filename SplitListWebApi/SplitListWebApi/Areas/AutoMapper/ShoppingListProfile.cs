@@ -29,8 +29,7 @@ namespace SplitListWebApi.Areas.AutoMapper
                 .ForMember(
                     dto => dto.Group,
                     opt =>
-                        opt.MapFrom(
-                            sm => sm.GroupModel))
+                        opt.Ignore())
                 .ForMember(
                     dto => dto.GroupID,
                     opt => 
