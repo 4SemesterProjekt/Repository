@@ -1,13 +1,15 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:SplitList.ViewModels;assembly=SplitList"
+             xmlns:b="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
+             xmlns:utility="clr-namespace:SplitList.Utility;assembly=SplitList"
              mc:Ignorable="d"
              x:Class="SplitList.Views.MultiRecipesView">
-  <ContentView.Content>
+  <ContentPage.Content>
       <StackLayout>
-
 			<Grid>
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="10*"/>
@@ -53,10 +55,20 @@
 							</ViewCell>
 						</DataTemplate>
 					</ListView.ItemTemplate>
+
+					<ListView.Behaviors>
+						<b:EventToCommandBehavior
+							EventName="ItemTapped"
+							Command="{Binding itemTappedCommand}"
+							EventArgsConverter="{StaticResource EventArgConverter}"
+							>
+
+						</b:EventToCommandBehavior>
+					</ListView.Behaviors>
 				</ListView>
 
 			</Grid>
 
 		</StackLayout>
-  </ContentView.Content>
-</ContentView>
+  </ContentPage.Content>
+</ContentPage>

@@ -6,10 +6,7 @@
              xmlns:viewModels="clr-namespace:SplitList.ViewModels;assembly=SplitList"
              mc:Ignorable="d"
              x:Class="SplitList.Views.RecipeView">
-	<ContentPage.Content>
-        <StackLayout>
-
-			
-		</StackLayout>
-    </ContentPage.Content>
+	<ContentPage.BindingContext>
+        <viewModels:RecipeViewModel x:Name="RecipeViewModel"/>
+    </ContentPage.BindingContext>
 </ContentPage>

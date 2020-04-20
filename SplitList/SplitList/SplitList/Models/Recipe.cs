@@ -16,15 +16,24 @@ namespace SplitList.Models
             Instructions = "";
         }
 
-        public Recipe(string name, string introduction, string instructions)
+        public Recipe(int id, string name, string introduction, string instructions)
         {
             Items = new ObservableCollection<Item>();
             Name = name;
             Introduction = introduction;
             Instructions = instructions;
+            Id = id;
         }
 
         #region Properties
+
+        private int _id;
+
+        public int Id
+        {
+            get => _id; 
+            set => SetProperty(ref _id, value);
+        }
 
         private string _name;
         public string Name
