@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Android.Support.Design.Behavior;
+using ApiFormat;
 using Prism.Commands;
 using Prism.Mvvm;
 using SplitList.Views;
@@ -15,8 +16,8 @@ namespace SplitList.ViewModels
 {
     class LoginViewModel
     {
-        private Uri AuthenticationUri = new Uri("https://localhost:44393/weatherforecast"); //URL på vores webapi, som appen skal requeste et link til en loginside fra.
-        private Uri CallBackUri = new Uri("SplitList://"); //URL til vores app, som loginsiden bruger til at åbne for appen, når login er gennemført.
+        private Uri AuthenticationUri = new Uri("https://splitlistwebapi.azurewebsites.net/api/account/googlelogin"); //URL på vores webapi, som appen skal requeste et link til en loginside fra.
+        private Uri CallBackUri = new Uri("splitlist://"); //URL til vores app, som loginsiden bruger til at åbne for appen, når login er gennemført.
 
         private ICommand _LoginCommand;
         public ICommand LoginCommand
@@ -43,7 +44,7 @@ namespace SplitList.ViewModels
 
             if(accessToken != "")
             {
-                //Application.Current.MainPage = new MDP();
+                Application.Current.MainPage = new GroupSelectView();
             }
             else
             {

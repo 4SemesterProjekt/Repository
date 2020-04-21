@@ -34,7 +34,7 @@ namespace SplitList.Droid
         [Activity(NoHistory = true, LaunchMode = LaunchMode.SingleTop)]
         [IntentFilter(new[] { "android.intent.action.VIEW" },
             Categories = new[] { "android.intent.category.DEFAULT", "android.intent.category.BROWSABLE" },
-            DataScheme = "SplitList")]
+            DataScheme = "splitlist")]
         public class WebAuth : Xamarin.Essentials.WebAuthenticatorCallbackActivity
         {
 

@@ -13,16 +13,22 @@
   <ItemGroup>
     <None Remove="EmbeddedResources\checklist.png" />
     <None Remove="EmbeddedResources\delete.svg" />
+    <None Remove="EmbeddedResources\deleteGray.png" />
     <None Remove="EmbeddedResources\deleteWhite.png" />
+    <None Remove="EmbeddedResources\exit.png" />
     <None Remove="EmbeddedResources\fridge.png" />
     <None Remove="EmbeddedResources\minus.png" />
     <None Remove="EmbeddedResources\plus.png" />
     <None Remove="EmbeddedResources\recipe.png" />
+    <None Remove="EmbeddedResources\user.png" />
+    <None Remove="EmbeddedResources\user.svg" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="EmbeddedResources\checklist.png" />
+    <EmbeddedResource Include="EmbeddedResources\deleteGray.png" />
     <EmbeddedResource Include="EmbeddedResources\deleteWhite.png" />
+    <EmbeddedResource Include="EmbeddedResources\exit.png" />
     <EmbeddedResource Include="EmbeddedResources\fridge.png" />
     <EmbeddedResource Include="EmbeddedResources\minus.png" />
     <EmbeddedResource Include="EmbeddedResources\plus.png" />
@@ -33,7 +39,7 @@
     <PackageReference Include="Prism.Core" Version="7.2.0.1422" />
     <PackageReference Include="Prism.Forms" Version="7.2.0.1422" />
     <PackageReference Include="System.Runtime" Version="4.3.1" />
-    <PackageReference Include="Xamarin.Forms" Version="4.5.0.530" />  
+    <PackageReference Include="Xamarin.Forms" Version="4.5.0.617" />  
     <PackageReference Include="Xamarin.Essentials" Version="1.5.2" />
   </ItemGroup>
 
@@ -42,6 +48,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="ApiFormat">
+      <HintPath>..\..\..\DLLs\ApiFormat\ApiFormat.dll</HintPath>
+    </Reference>
     <ProjectReference Include="..\..\ClientLibAPI\ClientLibAPI.csproj" />
   </ItemGroup>
 
@@ -58,6 +67,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="EmbeddedResources\user.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Views\GroupSelectView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Views\LoginView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -77,6 +93,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\ShoppingListView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\UserView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>

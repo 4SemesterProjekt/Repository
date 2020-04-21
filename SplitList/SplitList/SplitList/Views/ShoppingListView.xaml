@@ -25,34 +25,62 @@
                     <ColumnDefinition Width="70*"/>
                     <ColumnDefinition Width="20*"/>
                 </Grid.ColumnDefinitions>
-                <Label Text="Item" 
-                       Grid.Column="1"
-                       VerticalOptions="Center"
-                       HorizontalOptions="Start"
-                       Margin="0,5,0,5"/>
-                <Label Text="Amount"
-                       Grid.Column="2"
-                       VerticalOptions="Center"
-                       HorizontalOptions="Start"
-                       Margin="0,5,0,5"/>
+                <Label 
+                    Text="Item" 
+                    Grid.Column="1"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Start"
+                    Margin="0,5,0,5"/>
+                <Label 
+                    Text="Amount"
+                    Grid.Column="2"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Start"
+                    Margin="0,5,0,5"/>
             </Grid>
             <ContentView HeightRequest="1" BackgroundColor="Gray"/>
-            <ListView x:Name="ShoppingList" ItemsSource="{Binding ShoppingList.Items}" SelectionMode="None">
+            <ListView 
+                x:Name="ShoppingList" 
+                ItemsSource="{Binding ShoppingList.Items}" 
+                SelectionMode="None">
                 <ListView.ItemTemplate>
                     <DataTemplate x:Name="ItemTemplate">
-                        <ViewCell StyleId="">
+                        <ViewCell>
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="10*"/>
                                     <ColumnDefinition Width="70*"/>
                                     <ColumnDefinition Width="20*"/>
                                 </Grid.ColumnDefinitions>
-                                <CheckBox Grid.Column="0" x:Name="CBox" IsVisible="{Binding IsVisible}" IsChecked="{Binding IsChecked}" Color="#2196f3"/>
+                                <CheckBox 
+                                    Grid.Column="0" 
+                                    x:Name="CBox" IsVisible="{Binding IsVisible}" 
+                                    IsChecked="{Binding IsChecked}" 
+                                    Color="#2196f3"/>
 
-                                <Editor Text="{Binding Path=Name}" 
-                                        Grid.Column="1"
+                                <Editor 
+                                    Text="{Binding Path=Name}" 
+                                    Grid.Column="1"
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="Start"
+                                    FontSize="16"
+                                    Placeholder="Item"
+                                    AutoSize="TextChanges"
+                                    IsTextPredictionEnabled="False"/>
+
+                                <StackLayout Orientation="Horizontal" Grid.Column="2">
+                                    <ImageButton 
+                                        Source="{utility:ImageResource SplitList.EmbeddedResources.plus.png}"
+                                        WidthRequest="10"
+                                        VerticalOptions="Center"
+                                        Command="{Binding IncItemAmountCommand}"
+                                        BackgroundColor="Transparent"
+                                        BorderColor="Transparent"/>
+                                    <Label 
+                                        Text="{Binding Path=Amount}"
                                         VerticalOptions="Center"
                                         HorizontalOptions="Start"
+
                                         FontSize="16"
                                         Placeholder="Item"
                                         AutoSize="TextChanges"
@@ -65,11 +93,15 @@
                                     <Label Text="{Binding Path=Amount}"
                                            VerticalOptions="Center"
                                            HorizontalOptions="Start"
-                                           FontSize="16"/>
-                                    <ImageButton Source="{utility:ImageResource SplitList.EmbeddedResources.minus.png}"
-                                                 WidthRequest="10"
-                                                 VerticalOptions="Center"
-                                                 Command="{Binding DecItemAmountCommand}"/>
+                                        FontSize="16"/>
+                                    <ImageButton 
+                                        Source="{utility:ImageResource SplitList.EmbeddedResources.minus.png}"
+                                        WidthRequest="10"
+                                        VerticalOptions="Center"
+                                        Command="{Binding DecItemAmountCommand}"
+                                        BackgroundColor="Transparent"
+                                        BorderColor="Transparent"/>
+
                                 </StackLayout>
 
                             </Grid>

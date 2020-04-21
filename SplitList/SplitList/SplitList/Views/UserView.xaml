@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:utility="clr-namespace:SplitList.Utility;assembly=SplitList"
+             xmlns:b="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
+             xmlns:viewModels="clr-namespace:SplitList.ViewModels;assembly=SplitList"
+             xmlns:system="clr-namespace:System;assembly=netstandard"
+             xmlns:models="clr-namespace:SplitList.Models;assembly=SplitList"
+             mc:Ignorable="d"
+             x:Class="SplitList.Views.UserView">
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Text="Groups"
+                   FontSize="30"
+                   TextColor="Gray"
+                   Grid.Row="0"
+                   Margin="5"/>
+            <ContentView HeightRequest="1" BackgroundColor="Gray" Grid.Row="1"/>
+            <ListView ItemsSource="{Binding User.Groups}" Grid.Row="2" SelectionMode="None">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="10*"/>
+                                    <ColumnDefinition Width="90*"/>
+                                </Grid.ColumnDefinitions>
+                                <ImageButton Source="{utility:ImageResource SplitList.EmbeddedResources.deleteGray.png}"
+                                             WidthRequest="20"
+                                             VerticalOptions="Center"
+                                             Grid.Column="0"
+                                             BackgroundColor="Transparent"
+                                             BorderColor="Transparent">
+                                </ImageButton>
+
+                                <Label Text="{Binding Path=Name}"
+                                       FontSize="20"
+                                       TextColor="Gray"
+                                       Grid.Column="1"
+                                       VerticalOptions="Center"/>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.Behaviors>
+                    <b:EventToCommandBehavior EventName="ItemTapped"
+                                              Command="{Binding RemoveGroupCommand}"
+                                              EventArgsConverter="{StaticResource EventArgConverter}"/>
+                </ListView.Behaviors>
+            </ListView>
+            <ContentView HeightRequest="1" BackgroundColor="Gray" Grid.Row="4"/>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
