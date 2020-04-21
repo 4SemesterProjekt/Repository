@@ -36,13 +36,6 @@
                                     <ColumnDefinition Width="10*"/>
                                     <ColumnDefinition Width="90*"/>
                                 </Grid.ColumnDefinitions>
-                                <ImageButton Source="{utility:ImageResource SplitList.EmbeddedResources.deleteGray.png}"
-                                             WidthRequest="20"
-                                             VerticalOptions="Center"
-                                             Grid.Column="0"
-                                             BackgroundColor="Transparent"
-                                             BorderColor="Transparent">
-                                </ImageButton>
 
                                 <Label Text="{Binding Path=Name}"
                                        FontSize="20"
@@ -55,7 +48,7 @@
                 </ListView.ItemTemplate>
                 <ListView.Behaviors>
                     <b:EventToCommandBehavior EventName="ItemTapped"
-                                              Command="{Binding RemoveGroupCommand}"
+                                              Command="{Binding EditGroupCommand}"
                                               EventArgsConverter="{StaticResource EventArgConverter}"/>
                 </ListView.Behaviors>
             </ListView>

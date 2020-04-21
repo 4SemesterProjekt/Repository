@@ -46,8 +46,8 @@ namespace SplitList.Views
                     Detail = new NavigationPage( new PantryView());
                 
                 //Go to RecipeView
-                if(item.TargetType == typeof(Views.RecipeView))
-                    Detail = new NavigationPage(new RecipeView());
+                if(item.TargetType == typeof(Views.MultiRecipesView))
+                    Detail = new NavigationPage(new MultiRecipesView());
 
                 // Go to UserView
                 if (item.TargetType == typeof(Views.UserView))

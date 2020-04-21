@@ -40,7 +40,6 @@ namespace SplitList.Models
         {
             get => _name;
             set => SetProperty(ref _name, value);
-
         }
 
         private bool _isVisible;
@@ -50,7 +49,6 @@ namespace SplitList.Models
         {
             get => _isVisible;
             set => SetProperty(ref _isVisible, value);
-
         }
 
         public bool IsChecked

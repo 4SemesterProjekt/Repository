@@ -94,7 +94,6 @@ namespace SplitList.Models
             get
             {
                 return _decItemAmountCommand ?? (_decItemAmountCommand = new DelegateCommand(DecItemAmountCommandExecute));
-
             }
         }
         /// <summary>

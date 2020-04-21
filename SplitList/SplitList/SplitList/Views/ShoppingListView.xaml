@@ -12,7 +12,7 @@
         <viewModels:ShoppingListViewModel x:Name="ShoppingListViewModel"/>
     </ContentPage.BindingContext>
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Delete"
+        <ToolbarItem
                   BindingContext="{x:Reference ShoppingListViewModel}"
                   Command="{Binding DeleteItemCommand}"
                   IconImageSource="{utility:ImageResource SplitList.EmbeddedResources.deleteWhite.png}"/>
@@ -76,11 +76,13 @@
                                         Command="{Binding IncItemAmountCommand}"
                                         BackgroundColor="Transparent"
                                         BorderColor="Transparent"/>
+
                                     <Label 
                                         Text="{Binding Path=Amount}"
                                         VerticalOptions="Center"
                                         HorizontalOptions="Start"
                                         FontSize="16"/>
+
                                     <ImageButton 
                                         Source="{utility:ImageResource SplitList.EmbeddedResources.minus.png}"
                                         WidthRequest="10"
@@ -88,6 +90,7 @@
                                         Command="{Binding DecItemAmountCommand}"
                                         BackgroundColor="Transparent"
                                         BorderColor="Transparent"/>
+
                                 </StackLayout>
 
                             </Grid>

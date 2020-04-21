@@ -24,7 +24,7 @@
                 <x:Array Type="{x:Type models:MenuViewItem}">
                     <models:MenuViewItem Title="Shopping list" ImageSource="{utility:ImageResource SplitList.EmbeddedResources.checklist.png}" TargetType="{x:Type view:MultiShopListView}"/>
                     <models:MenuViewItem Title="Pantry" ImageSource="{utility:ImageResource SplitList.EmbeddedResources.fridge.png}" TargetType="{x:Type view:PantryView}"/>
-                    <models:MenuViewItem Title="Recipe" ImageSource="{utility:ImageResource SplitList.EmbeddedResources.recipe.png}" TargetType="{x:Type view:RecipeView}"/>
+                    <models:MenuViewItem Title="Recipe" ImageSource="{utility:ImageResource SplitList.EmbeddedResources.recipe.png}" TargetType="{x:Type view:MultiRecipesView}"/>
                 </x:Array>
             </ListView.ItemsSource>
             <ListView.ItemTemplate>

@@ -5,7 +5,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:SplitList.ViewModels;assembly=SplitList"
              mc:Ignorable="d"
-             x:Class="SplitList.Views.LoginView">
+             x:Class="SplitList.Views.LoginView"
+             AutomationId="LoginView">
     <ContentPage.BindingContext>
         <viewModels:LoginViewModel x:Name="LoginViewModel" />
     </ContentPage.BindingContext>
@@ -16,7 +17,8 @@
             <Button Text="Login to SplitList"
                     VerticalOptions="CenterAndExpand"
                     Margin="50"
-                    Command="{Binding LoginCommand}"></Button>
+                    Command="{Binding LoginCommand}"
+                    AutomationId="LoginBtn"></Button>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
