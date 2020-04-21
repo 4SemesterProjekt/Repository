@@ -1,40 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using ApiFormat;
 using Prism.Mvvm;
-using SplitList.Annotations;
-using Xamarin.Forms;
 
 namespace SplitList.Models
 {
-    public class ShoppingList : BindableBase
+    public class Pantry : BindableBase
     {
-        public ShoppingList()
+        public Pantry()
         {
             Items = new ObservableCollection<Item>();
             Name = "";
-            ShoppingListId = 0;
+            GroupName = "";
+            PantryId = 0;
             GroupId = 1;
             IsVisible = false;
             IsChecked = false;
         }
-        public ShoppingList(string name, int groupId)
+
+        public Pantry(string name, string groupName, int groupId)
         {
             Items = new ObservableCollection<Item>();
             Name = name;
-            ShoppingListId = 0;
+            GroupName = groupName;
+            PantryId = 0;
             GroupId = groupId;
             IsVisible = false;
             IsChecked = false;
         }
 
-        public int ShoppingListId { get; set; }
         public int GroupId { get; set; }
+        public int PantryId { get; set; }
         private string _name;
         public string Name
         {
@@ -42,19 +37,11 @@ namespace SplitList.Models
             set => SetProperty(ref _name, value);
         }
 
-        private bool _isVisible;
-        private bool _isChecked;
-
-        public bool IsVisible
+        private string _groupName;
+        public string GroupName
         {
-            get => _isVisible;
-            set => SetProperty(ref _isVisible, value);
-        }
-
-        public bool IsChecked
-        {
-            get => _isChecked;
-            set => SetProperty(ref _isChecked, value);
+            get => _groupName;
+            set => SetProperty(ref _groupName, value);
         }
 
         private ObservableCollection<Item> _items;
@@ -65,5 +52,18 @@ namespace SplitList.Models
             set => SetProperty(ref _items, value);
         }
 
+        private bool _isVisible;
+        public bool IsVisible
+        {
+            get => _isVisible;
+            set => SetProperty(ref _isVisible, value);
+        }
+
+        private bool _isChecked;
+        public bool IsChecked
+        {
+            get => _isChecked;
+            set => SetProperty(ref _isChecked, value);
+        }
     }
 }
