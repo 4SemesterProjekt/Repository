@@ -13,8 +13,6 @@ namespace SplitList.Models
             GroupName = "";
             PantryId = 0;
             GroupId = 1;
-            IsVisible = false;
-            IsChecked = false;
         }
 
         public Pantry(string name, string groupName, int groupId)
@@ -24,8 +22,6 @@ namespace SplitList.Models
             GroupName = groupName;
             PantryId = 0;
             GroupId = groupId;
-            IsVisible = false;
-            IsChecked = false;
         }
 
         public int GroupId { get; set; }
@@ -52,18 +48,5 @@ namespace SplitList.Models
             set => SetProperty(ref _items, value);
         }
 
-        private bool _isVisible;
-        public bool IsVisible
-        {
-            get => _isVisible;
-            set => SetProperty(ref _isVisible, value);
-        }
-
-        private bool _isChecked;
-        public bool IsChecked
-        {
-            get => _isChecked;
-            set => SetProperty(ref _isChecked, value);
-        }
     }
 }
