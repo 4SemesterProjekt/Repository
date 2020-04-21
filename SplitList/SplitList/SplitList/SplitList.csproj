@@ -20,6 +20,7 @@
     <None Remove="EmbeddedResources\minus.png" />
     <None Remove="EmbeddedResources\plus.png" />
     <None Remove="EmbeddedResources\recipe.png" />
+    <None Remove="EmbeddedResources\supermarket.png" />
     <None Remove="EmbeddedResources\user.png" />
     <None Remove="EmbeddedResources\user.svg" />
   </ItemGroup>
@@ -33,6 +34,7 @@
     <EmbeddedResource Include="EmbeddedResources\minus.png" />
     <EmbeddedResource Include="EmbeddedResources\plus.png" />
     <EmbeddedResource Include="EmbeddedResources\recipe.png" />
+    <EmbeddedResource Include="EmbeddedResources\supermarket.png" />
   </ItemGroup>
 
   <ItemGroup>

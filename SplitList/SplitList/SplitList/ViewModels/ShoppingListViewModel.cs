@@ -20,10 +20,42 @@ namespace SplitList.ViewModels
         public ShoppingListViewModel()
         {
             ShoppingList = new ShoppingList();
+            
         }
 
         
         #region Properties
+
+        private bool _addBtnIsVisible = true;
+        private bool _addBtnIsEnabled = true;
+
+        public bool AddBtnIsVisible
+        {
+            get => _addBtnIsVisible;
+            set => SetProperty(ref _addBtnIsVisible, value);
+
+        }
+
+        public bool AddBtnIsEnabled
+        {
+            get => _addBtnIsEnabled;
+            set => SetProperty(ref _addBtnIsEnabled, value);
+        }
+        private bool _confirmBtnIsVisible;
+        private bool _confirmBtnIsEnabled;
+
+        public bool ConfirmBtnIsVisible
+        {
+            get => _confirmBtnIsVisible;
+            set => SetProperty(ref _confirmBtnIsVisible, value);
+
+        }
+
+        public bool ConfirmBtnIsEnabled
+        {
+            get => _confirmBtnIsEnabled;
+            set => SetProperty(ref _confirmBtnIsEnabled, value);
+        }
 
         public Page Page { get; set; }
         private bool deleteState = false;
@@ -119,7 +151,69 @@ namespace SplitList.ViewModels
             
         }
 
-        
+        private ICommand _startShoppingCommand;
+
+        public ICommand StartShoppingCommand
+        {
+            get => _startShoppingCommand ?? (_startShoppingCommand = new DelegateCommand(StartShoppingExecute));
+        }
+
+        public void StartShoppingExecute()
+        {
+            foreach (var shoppingListItem in ShoppingList.Items)
+            {
+                shoppingListItem.IsVisible = true;
+            }
+
+            AddBtnIsEnabled = false;
+            AddBtnIsVisible = false;
+            ConfirmBtnIsEnabled = true;
+            ConfirmBtnIsVisible = true;
+        }
+
+        private ICommand _confirmBtnCommand;
+
+        public ICommand ConfirmBtnCommand => _confirmBtnCommand ?? (_confirmBtnCommand = new DelegateCommand(ConfirmBtnExecute));
+
+        public void ConfirmBtnExecute()
+        {
+            // Get pantry by groupID
+            // Add checked items to pantry
+            // Post pantry by group ID
+
+            for (int i = ShoppingList.Items.Count - 1; i >= 0; i--)
+            {
+                if (ShoppingList.Items[i].IsChecked)
+                    ShoppingList.Items.Remove(ShoppingList.Items[i]);
+
+                ShoppingList.Items[i].IsVisible = false;
+                ShoppingList.Items[i].IsChecked = false;
+            }
+
+            AddBtnIsVisible = true;
+            AddBtnIsEnabled = true;
+            ConfirmBtnIsEnabled = false;
+            ConfirmBtnIsVisible = false;
+        }
+
+        private ICommand _onDisappearing;
+
+        public ICommand OnDisappearing => _onDisappearing ?? (_onDisappearing = new DelegateCommand(OnDisappearingExecute));
+
+        public async void OnDisappearingExecute()
+        {
+            foreach (var shoppingListItem in ShoppingList.Items)
+            {
+                shoppingListItem.IsVisible = false;
+                shoppingListItem.IsChecked = false;
+            }
+            AddBtnIsVisible = true;
+            AddBtnIsEnabled = true;
+            ConfirmBtnIsEnabled = false;
+            ConfirmBtnIsVisible = false;
+            ShoppingListDTO tobj = ShoppingListMapper.ShoppingListToShoppingListDto(ShoppingList);
+            var result = await SerializerShoppingList.PostShoppingList(tobj);
+        }
         #endregion
     }
 }

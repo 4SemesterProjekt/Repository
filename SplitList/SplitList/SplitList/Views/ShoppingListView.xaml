@@ -5,17 +5,27 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:SplitList.ViewModels;assembly=SplitList"
              xmlns:utility="clr-namespace:SplitList.Utility;assembly=SplitList"
+             xmlns:b="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
              mc:Ignorable="d"
              x:Name="This"
              x:Class="SplitList.Views.ShoppingListView">
+    <ContentPage.Behaviors>
+        <b:EventToCommandBehavior
+            EventName="Disappearing"
+            Command="{Binding OnDisappearing}"/>
+    </ContentPage.Behaviors>
     <ContentPage.BindingContext>
         <viewModels:ShoppingListViewModel x:Name="ShoppingListViewModel"/>
     </ContentPage.BindingContext>
     <ContentPage.ToolbarItems>
         <ToolbarItem
-                  BindingContext="{x:Reference ShoppingListViewModel}"
-                  Command="{Binding DeleteItemCommand}"
-                  IconImageSource="{utility:ImageResource SplitList.EmbeddedResources.deleteWhite.png}"/>
+            BindingContext="{x:Reference ShoppingListViewModel}"
+            Command="{Binding StartShoppingCommand}"
+            IconImageSource="{utility:ImageResource SplitList.EmbeddedResources.supermarket.png}"/>
+        <ToolbarItem
+            BindingContext="{x:Reference ShoppingListViewModel}"
+            Command="{Binding DeleteItemCommand}"
+            IconImageSource="{utility:ImageResource SplitList.EmbeddedResources.deleteWhite.png}"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout>
@@ -108,10 +118,19 @@
                                      x:Name="BtnAddItem"
                                      Grid.Column="1"
                                      WidthRequest="12"
+                                     IsVisible="{Binding AddBtnIsVisible}"
+                                     IsEnabled="{Binding AddBtnIsEnabled}"
                                      VerticalOptions="Center"
                                      HorizontalOptions="Start"
                                      Margin="5,10,0,0"
-                                     Command="{Binding AddItemToListCommand}" />
+                                     Command="{Binding AddItemToListCommand}"/>
+                        <Button Text="Check Out"
+                                VerticalOptions="Center"
+                                Grid.Column="1"
+                                IsVisible="{Binding ConfirmBtnIsVisible}"
+                                IsEnabled="{Binding ConfirmBtnIsEnabled}"
+                                Margin="5,10,0,0"
+                                Command="{Binding ConfirmBtnCommand}" />
                     </Grid>
                 </ListView.Footer>
             </ListView>
