@@ -16,7 +16,7 @@ namespace SplitList.Views
         public UserView(User user)
         {
             InitializeComponent();
-            BindingContext = new UserViewModel(user);
+            BindingContext = new UserViewModel(user, Navigation);
         }
     }
 }

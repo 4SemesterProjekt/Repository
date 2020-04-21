@@ -5,17 +5,20 @@ using System.Text;
 using System.Windows.Input;
 using Prism.Commands;
 using SplitList.Models;
+using SplitList.Views;
 using Xamarin.Forms;
 
 namespace SplitList.ViewModels
 {
     public class UserViewModel : BindableBase
     {
-        public UserViewModel(User user)
+        public UserViewModel(User user, INavigation navigation)
         {
             User = user;
+            Navigation = navigation;
         }
 
+        public INavigation Navigation { get; set; }
         private User _user;
 
         public User User
@@ -24,19 +27,17 @@ namespace SplitList.ViewModels
             set => SetProperty(ref _user, value);
         }
 
-        private ICommand _removeGroupCommand;
+        private ICommand _editGroupCommand;
 
-        public ICommand RemoveGroupCommand
+        public ICommand EditGroupCommand
         {
-            get => _removeGroupCommand ?? (_removeGroupCommand = new DelegateCommand<object>(RemoveGroupCommandExecute));
+            get => _editGroupCommand ?? (_editGroupCommand = new DelegateCommand<object>(EditGroupCommandExecute));
         }
 
-        public async void RemoveGroupCommandExecute(object sender)
+        public async void EditGroupCommandExecute(object sender)
         {
-            var group = sender as Group;
-            var result = await Application.Current.MainPage.DisplayAlert("Warning", "Are you sure you want to leave this group?", "Yes", "Cancel");
-            if (result)
-                User.Groups.Remove(group);
+            if(sender is Group group)
+                await Navigation.PushAsync(new GroupEditView(group.GroupId));
         }
     }
 }

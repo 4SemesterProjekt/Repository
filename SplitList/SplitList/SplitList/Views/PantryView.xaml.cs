@@ -17,15 +17,15 @@ namespace SplitList.Views
         public PantryView()
         {
             InitializeComponent();
-            PantryViewModel.Page = this;
+            // PantryViewModel.Page = this;
             //ToDo Get GroupID from user active group
         }
 
         protected override async void OnDisappearing()
         {
             base.OnDisappearing();
-            PantryDTO dto = PantryMapper.PantryToPantryDto(PantryViewModel.Pantry);
-            var result = await SerializerPantry.PostPantry(dto);
+            // PantryDTO dto = PantryMapper.PantryToPantryDto(PantryViewModel.Pantry);
+            // var result = await SerializerPantry.PostPantry(dto);
         }
     }
 }

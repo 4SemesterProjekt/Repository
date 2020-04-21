@@ -13,7 +13,8 @@ namespace SplitList.ViewModels
     {
         public PantryViewModel()
         {
-            Pantry = PantryMapper.PantryDtoToPantry(SerializerPantry.GetPantryByGroupId(1).Result);
+            Pantry = new Pantry();
+           // Pantry = PantryMapper.PantryDtoToPantry(SerializerPantry.GetPantryByGroupId(1).Result);
         }
 
         #region Properties
