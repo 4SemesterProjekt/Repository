@@ -39,9 +39,8 @@ namespace SplitListWebApi.Areas.Identity.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<UserModel>()
-                .Property(um => um.ModelId)
-                .UseIdentityColumn()
+
+            modelBuilder.Entity<UserModel>().Property(p => p.ModelId).UseIdentityColumn()
                 .Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
 
             //Setup for User-Group Many-to-Many

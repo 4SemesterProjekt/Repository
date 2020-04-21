@@ -57,6 +57,24 @@
     <Compile Remove="Migrations\20200415132046_AutoIncrement.Designer.cs" />
     <Compile Remove="Migrations\20200415132151_InitialMigration.cs" />
     <Compile Remove="Migrations\20200415132151_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200415133751_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200415133751_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200416113255_ConfiguredUserGroup.cs" />
+    <Compile Remove="Migrations\20200416113255_ConfiguredUserGroup.Designer.cs" />
+    <Compile Remove="Migrations\20200421093209_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200421093209_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200421125749_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200421125749_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200421130646_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200421130646_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200421131316_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200421131316_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200421132521_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200421132521_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200421133254_ModifiedAutoIdentity.cs" />
+    <Compile Remove="Migrations\20200421133254_ModifiedAutoIdentity.Designer.cs" />
+    <Compile Remove="Migrations\20200421133348_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200421133348_InitialMigration.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

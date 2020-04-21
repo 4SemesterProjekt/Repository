@@ -240,12 +240,12 @@ namespace SplitListWebApi.Migrations
                 name: "UserGroups",
                 columns: table => new
                 {
-                    UserModelId = table.Column<string>(nullable: false),
+                    UserId = table.Column<string>(nullable: false),
                     GroupModelModelID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserGroups", x => new { x.GroupModelModelID, x.UserModelId });
+                    table.PrimaryKey("PK_UserGroups", x => new { x.GroupModelModelID, x.UserId });
                     table.ForeignKey(
                         name: "FK_UserGroups_Groups_GroupModelModelID",
                         column: x => x.GroupModelModelID,
@@ -253,8 +253,8 @@ namespace SplitListWebApi.Migrations
                         principalColumn: "ModelId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserGroups_AspNetUsers_UserModelId",
-                        column: x => x.UserModelId,
+                        name: "FK_UserGroups_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -400,7 +400,7 @@ namespace SplitListWebApi.Migrations
                 column: "GroupModelId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserGroups_UserModelId",
+                name: "IX_UserGroups_UserId",
                 table: "UserGroups",
                 column: "UserId");
         }

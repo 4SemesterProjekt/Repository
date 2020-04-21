@@ -11,9 +11,9 @@ using SplitListWebApi.Utilities;
 
 namespace SplitListWebApi.Repositories.Implementation
 {
-    public class GenericRepository<TSource, TEntity> : IRepository<TSource>
-        where TSource : class, IDTO
-        where TEntity : class, IModel
+    public class GenericRepository<TDTO, TModel> : IRepository<TDTO>
+        where TDTO : class, IDTO
+        where TModel : class, IModel
     {
         private readonly SplitListContext _dbContext;
         private IMapper _mapper;
@@ -23,27 +23,36 @@ namespace SplitListWebApi.Repositories.Implementation
             _mapper = mapper;
         }
 
-        public IQueryable<TSource> GetAll() => _mapper.Map<IQueryable<TSource>>(_dbContext.Set<TEntity>().AsNoTracking());
+        public IQueryable<TDTO> GetAll() => _mapper.Map<IQueryable<TDTO>>(_dbContext.Set<TModel>().AsNoTracking());
 
-        public TSource GetById(int id) => id.GetFromDatabase<TSource, TEntity>(_dbContext, _mapper);
+        public TDTO GetById(int id) => _mapper.Map<TModel, TDTO>(id.GetFromDatabase<TModel>(_dbContext));
 
-        public TSource Create(TSource entity)
+        public TDTO Create(TDTO entity)
         {
-            var model = _mapper.Map<TEntity>(entity);
-            model.WriteToDatabase(_dbContext.Add, _dbContext);
-            return _mapper.Map<TSource>(model);
+            var model = _mapper.Map<TModel>(entity);
+            model = model.WriteToDatabase(_dbContext.Add, _dbContext);
+            return _mapper.Map<TDTO>(model);
         }
 
-        public TSource Update(TSource entity)
+        public TDTO Update(TDTO dto)
         {
-            var model = _mapper.Map<TEntity>(entity);
+            /*
+            * Map from TSource to TEntity
+            * Get TEntity from DB
+            * Assign mapped TEntity to DB_TEntity
+            * Update DB_TEntity
+            * Map from TEntity to TSource
+            */
+
+            var model = dto.ModelId.GetFromDatabase<TModel>(_dbContext);
+            model = _mapper.Map<TModel>(dto);
             model.WriteToDatabase(_dbContext.Update, _dbContext);
-            return _mapper.Map<TSource>(model); //To check whether any entries has been updated. Look in DTOUtilities.Update.
+            return _mapper.Map<TDTO>(model); //To check whether any entries has been updated. Look in DTOUtilities.Update.
         }
 
-        public void Delete(TSource entity)
+        public void Delete(TDTO entity)
         {
-            var model = _mapper.Map<TEntity>(entity);
+            var model = _mapper.Map<TModel>(entity);
             model.WriteToDatabase(_dbContext.Remove, _dbContext);
         }
     }

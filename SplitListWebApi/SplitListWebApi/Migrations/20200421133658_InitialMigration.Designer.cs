@@ -10,8 +10,8 @@ using SplitListWebApi.Areas.Identity.Data;
 namespace SplitListWebApi.Migrations
 {
     [DbContext(typeof(SplitListContext))]
-    [Migration("20200416113255_ConfiguredUserGroup")]
-    partial class ConfiguredUserGroup
+    [Migration("20200421133658_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

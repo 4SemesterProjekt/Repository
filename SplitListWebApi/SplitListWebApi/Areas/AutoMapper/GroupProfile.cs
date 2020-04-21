@@ -20,30 +20,32 @@ namespace SplitListWebApi.Areas.AutoMapper
         {
             public GroupModel Convert(GroupDTO source, GroupModel destination, ResolutionContext context)
             {
-                GroupModel result = new GroupModel()
+                destination = new GroupModel()
                 {
                     Name = source.Name,
                     OwnerId = source.OwnerID,
                     ModelId = source.ModelId,
-                    PantryModel = new PantryModel(),
                     ShoppingLists = new List<ShoppingListModel>(),
                     UserGroups = new List<UserGroup>()
                 };
+
                 if (source.Users != null)
                 {
                     foreach (UserDTO user in source.Users)
                     {
-                        result.UserGroups.Add(new UserGroup
+                        destination.UserGroups.Add(new UserGroup
                         {
-                            GroupModel = result,
-                            GroupModelModelID = result.ModelId,
+                            GroupModel = destination,
+                            GroupModelModelID = destination.ModelId,
                             UserModel = context.Mapper.Map<UserDTO, UserModel>(user),
                             UserId = user.Id
                         });
-
                     }
                 }
-                return result;
+
+                //TODO: ShoppingList and Pantry mapping
+
+                return destination;
             }
         }
 
@@ -78,11 +80,29 @@ namespace SplitListWebApi.Areas.AutoMapper
             }
         }
 
+        public class UserGroupToGroupDTO : ITypeConverter<UserGroup, GroupDTO>
+        {
+            public GroupDTO Convert(UserGroup source, GroupDTO destination, ResolutionContext context)
+            {
+                return new GroupDTO()
+                {
+                    Name = source.GroupModel.Name,
+                    ModelId = source.GroupModel.ModelId,
+                    OwnerID = source.GroupModel.OwnerId,
+                    Users = context.Mapper.Map<List<UserGroup>, List<UserDTO>>(source.GroupModel.UserGroups),
+                    Pantry = context.Mapper.Map<PantryModel, PantryDTO>(source.GroupModel.PantryModel),
+                    ShoppingLists = context.Mapper.Map<List<ShoppingListModel>, List<ShoppingListDTO>>(source.GroupModel.ShoppingLists)
+                };
+            }
+        }
+
         public GroupProfile()
         {
-            CreateMap<GroupDTO, GroupModel>().ConvertUsing(new GroupDTOToModel());
+            CreateMap<GroupDTO, GroupModel>().PreserveReferences().ConvertUsing(new GroupDTOToModel());
 
-            CreateMap<GroupModel, GroupDTO>().ConvertUsing(new GroupModelToDTO());
+            CreateMap<GroupModel, GroupDTO>().PreserveReferences().ConvertUsing(new GroupModelToDTO());
+
+            CreateMap<UserGroup, GroupDTO>().PreserveReferences().ConvertUsing(new UserGroupToGroupDTO());
         }
     }
 }

@@ -11,36 +11,37 @@ namespace SplitListWebApi.Utilities
     public static class GeneralUtilities
     {
         //Encapsulate Db-funcitions into transactions.
-        public static void WriteToDatabase<T>(this T source, Func<T, EntityEntry<T>> dbFunc, SplitListContext db) where T : class, IModel
+        public static T WriteToDatabase<T>(this T source, Func<T, EntityEntry<T>> dbFunc, SplitListContext db) where T : class, IModel
         {
             using (var transaction = db.Database.BeginTransaction())
             {
                 try
                 {
-                    dbFunc(source);
+                    var entry = dbFunc(source);
                     db.SaveChanges();
                     transaction.Commit();
+                    db.Entry(source).State = EntityState.Detached;
+                    return entry.Entity;
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     transaction.Rollback();
+                    return null;
                 }
-                db.Entry(source).State = EntityState.Detached;
             }
         }
 
-        public static TSource GetFromDatabase<TSource, TEntity>(this int id, SplitListContext db, IMapper mapper)
-            where TEntity : class, IModel
-            where TSource : class, IDTO
+        public static T GetFromDatabase<T>(this int id, SplitListContext db)
+            where T : class, IModel
         {
-            var query = db.Set<TEntity>().Where(i => i.ModelId == id).AsQueryable();
+            var query = db.Set<T>().Where(i => i.ModelId == id).AsQueryable().AsNoTracking();
 
             using (var transaction = db.Database.BeginTransaction())
             {
                 try
                 {
                     query = db.Model
-                        .FindEntityType(typeof(TEntity))
+                        .FindEntityType(typeof(T))
                         .GetNavigations()
                         .Aggregate(query, (current, property) => current.Include(property.Name));
 
@@ -51,9 +52,7 @@ namespace SplitListWebApi.Utilities
                     transaction.Rollback();
                 }
             }
-
-            var dto = mapper.Map<TSource>(query.SingleOrDefault());
-            return dto;
+            return query.FirstOrDefault();
         }
     }
 }

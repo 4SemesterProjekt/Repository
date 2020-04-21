@@ -2,6 +2,7 @@
 using System.Linq;
 using ApiFormat;
 using ApiFormat.Group;
+using ApiFormat.User;
 using AutoMapper;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -60,9 +61,9 @@ namespace SplitListWebApi.Tests
                     OwnerID = 45
                 };
 
-                group.Add(groupRepo);
+                group = group.Add(groupRepo);
 
-                GroupDTO groupDTO = groupRepo.GetById(1);
+                GroupDTO groupDTO = groupRepo.GetById(group.ModelId);
 
                 Assert.AreEqual(groupDTO.Name, group.Name);
                 Assert.AreEqual(groupDTO.OwnerID, group.OwnerID);
@@ -84,19 +85,60 @@ namespace SplitListWebApi.Tests
                     OwnerID = 45
                 };
 
-                group.Add(groupRepo);
+                group = group.Add(groupRepo);
 
-                GroupDTO groupDTO = groupRepo.GetById(1);
+                GroupDTO groupDTO = groupRepo.GetById(group.ModelId);
                 groupDTO.Name = "GroupTest";
                 groupDTO.OwnerID = 54;
 
                 groupDTO.Save(groupRepo);
-                GroupDTO dbGroup = groupRepo.GetById(1);
+                GroupDTO dbGroup = groupRepo.GetById(group.ModelId);
 
                 Assert.AreEqual(groupDTO.Name, dbGroup.Name);
                 Assert.AreEqual(groupDTO.OwnerID, dbGroup.OwnerID);
             }
 
+        }
+
+        [Test]
+        public void UpdateGroupUsers()
+        {
+            using (var context = new SplitListContext(options))
+            {
+
+                GenericRepository<GroupDTO, GroupModel> groupRepo = new GenericRepository<GroupDTO, GroupModel>(context, mapper);
+                GenericRepository<UserDTO, UserModel> userRepo = new GenericRepository<UserDTO, UserModel>(context, mapper);
+                context.Database.EnsureCreated();
+
+                GroupDTO group = new GroupDTO()
+                {
+                    Name = "TestGroup",
+                    OwnerID = 45,
+                    Users = new List<UserDTO>()
+                };
+
+                group = group.Add(groupRepo);
+
+                GroupDTO groupDTO = groupRepo.GetById(group.ModelId);
+
+                var karl = new UserDTO()
+                {
+                    Groups = new List<GroupDTO>() { group },
+                    Id = "abcetellerandetlort",
+                    Name = "Karl"
+                };
+
+                karl = karl.Add(userRepo);
+
+                groupDTO.Users.Add(karl);
+
+                groupDTO.Save(groupRepo);
+                GroupDTO dbGroup = groupRepo.GetById(groupDTO.ModelId);
+
+                Assert.AreEqual(groupDTO.Name, dbGroup.Name);
+                Assert.AreEqual(groupDTO.OwnerID, dbGroup.OwnerID);
+                Assert.AreEqual(1, dbGroup.Users.Count);
+            }
         }
     }
 }

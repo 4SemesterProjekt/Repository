@@ -11,7 +11,7 @@ namespace SplitListWebApi.Repositories.Interfaces
         IQueryable<TSource> GetAll();
         TSource GetById(int id);
         TSource Create(TSource entity);
-        TSource Update(TSource entity);
+        TSource Update(TSource dto);
         void Delete(TSource entity);
     }
 }
