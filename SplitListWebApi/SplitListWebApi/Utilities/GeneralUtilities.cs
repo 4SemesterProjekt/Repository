@@ -17,6 +17,7 @@ namespace SplitListWebApi.Utilities
             {
                 try
                 {
+                    //Forhold os til den specifikke case -tjek fx. om User eksisterer
                     var entry = dbFunc(source);
                     db.SaveChanges();
                     transaction.Commit();

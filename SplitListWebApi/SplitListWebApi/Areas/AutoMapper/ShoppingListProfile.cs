@@ -12,26 +12,17 @@ namespace SplitListWebApi.Areas.AutoMapper
     {
         public ShoppingListProfile()
         {
-            CreateMap<ShoppingListDTO, ShoppingListModel>().PreserveReferences()
-                .ForMember(sm => sm.ShoppingListItems, opt => opt.MapFrom(dto => dto.Items))
+            CreateMap<ShoppingListDTO, ShoppingListModel>()
+                .PreserveReferences()
+                .ForMember(sm => sm.ShoppingListItems, opt => opt.Ignore())
                 .ForMember(sm => sm.GroupModel, opt => opt.MapFrom(dto => dto.Group))
                 .ForMember(sm => sm.GroupModelId, opt => opt.MapFrom(dto => dto.GroupID));
 
-            CreateMap<ShoppingListModel, ShoppingListDTO>().PreserveReferences()
-                .ForMember(
-                    dto => dto.Items,
-                    opt =>
-                        opt.MapFrom(
-                            sm => sm.ShoppingListItems.Select(st => st.ItemModel)))
-                .ForMember(
-                    dto => dto.Group,
-                    opt =>
-                        opt.Ignore())
-                .ForMember(
-                    dto => dto.GroupID,
-                    opt => 
-                        opt.MapFrom(
-                            sm => sm.GroupModelId));
+            CreateMap<ShoppingListModel, ShoppingListDTO>()
+                .PreserveReferences()
+                .ForMember(dto => dto.Items, opt =>opt.MapFrom(sm => sm.ShoppingListItems))
+                .ForMember( dto => dto.Group,opt => opt.MapFrom(sm => sm.GroupModel))
+                .ForMember( dto => dto.GroupID, opt => opt.MapFrom(sm => sm.GroupModelId));
         }
     }
 }

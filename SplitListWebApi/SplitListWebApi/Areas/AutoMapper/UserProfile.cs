@@ -28,16 +28,17 @@ namespace SplitListWebApi.Areas.AutoMapper
                     Name = source.Name,
                     UserGroups = new List<UserGroup>()
                 };
-
-                foreach (var groupDto in source.Groups)
+                if (source.Groups != null)
                 {
-                    result.UserGroups.Add(new UserGroup()
+                    foreach (var groupDto in source.Groups)
                     {
-                        GroupModel = context.Mapper.Map<GroupDTO, GroupModel>(groupDto),
-                        UserModel = result
-                    });
+                        result.UserGroups.Add(new UserGroup()
+                        {
+                            GroupModel = context.Mapper.Map<GroupDTO, GroupModel>(groupDto),
+                            UserModel = result
+                        });
+                    }
                 }
-
                 return result;
             }
         }

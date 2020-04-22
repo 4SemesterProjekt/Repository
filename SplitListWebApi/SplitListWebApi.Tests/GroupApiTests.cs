@@ -123,7 +123,6 @@ namespace SplitListWebApi.Tests
 
                 var karl = new UserDTO()
                 {
-                    Groups = new List<GroupDTO>() { group },
                     Id = "abcetellerandetlort",
                     Name = "Karl"
                 };
@@ -131,6 +130,8 @@ namespace SplitListWebApi.Tests
                 karl = karl.Add(userRepo);
 
                 groupDTO.Users.Add(karl);
+
+                // use Shadowtable UserGroups to update db in order to have existing navigational properties
 
                 groupDTO.Save(groupRepo);
                 GroupDTO dbGroup = groupRepo.GetById(groupDTO.ModelId);
