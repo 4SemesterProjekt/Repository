@@ -10,19 +10,20 @@ namespace SplitList.Models
     {
         public Recipe()
         {
-            Items = new ObservableCollection<Item>();
+            Ingredients = new ObservableCollection<Item>();
             Name = "";
             Introduction = "";
             Instructions = "";
+            Id = 0;
         }
 
-        public Recipe(int id, string name, string introduction, string instructions)
+        public Recipe(string name, string introduction, string instructions)
         {
-            Items = new ObservableCollection<Item>();
+            Ingredients = new ObservableCollection<Item>();
             Name = name;
             Introduction = introduction;
             Instructions = instructions;
-            Id = id;
+            Id = 0;
         }
 
         #region Properties
@@ -51,12 +52,12 @@ namespace SplitList.Models
         }
 
 
-        private ObservableCollection<Item> _items;
+        private ObservableCollection<Item> _ingredients;
 
-        public ObservableCollection<Item> Items
+        public ObservableCollection<Item> Ingredients
         {
-            get => _items; 
-            set => SetProperty(ref _items, value);
+            get => _ingredients; 
+            set => SetProperty(ref _ingredients, value);
         }
 
         private string _instructions;

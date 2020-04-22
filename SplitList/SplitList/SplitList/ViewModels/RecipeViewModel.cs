@@ -32,6 +32,16 @@ namespace SplitList.ViewModels
             set => SetProperty(ref _recipe, value);
         }
 
+        private List<Item> _ingredients;
+
+        public List<Item> Ingredients
+        {
+            get => _ingredients; 
+            set => SetProperty(ref _ingredients, value);
+        }
+
+
+
         #endregion
     }
 }

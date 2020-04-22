@@ -29,6 +29,14 @@ namespace SplitList.Models
             IsVisible = false;
             IsChecked = false;
         }
+        public Item(string name, int amount, string category = "unknown")
+        {
+            Name = name;
+            Amount = (amount > 0 ? amount : 1);
+            Category = category;
+            IsVisible = false;
+            IsChecked = false;
+        }
 
         #region Properties
         public int ItemId { get; set; }

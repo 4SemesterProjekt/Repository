@@ -24,7 +24,7 @@ namespace SplitList.ViewModels
         }
 
         
-        #region Properties
+         #region Properties
 
         private bool _addBtnIsVisible = true;
         private bool _addBtnIsEnabled = true;
@@ -183,11 +183,15 @@ namespace SplitList.ViewModels
 
             for (int i = ShoppingList.Items.Count - 1; i >= 0; i--)
             {
+
                 if (ShoppingList.Items[i].IsChecked)
                     ShoppingList.Items.Remove(ShoppingList.Items[i]);
 
-                ShoppingList.Items[i].IsVisible = false;
-                ShoppingList.Items[i].IsChecked = false;
+                if (ShoppingList.Items.Count != 0)
+                {
+                    ShoppingList.Items[i].IsVisible = false;
+                    ShoppingList.Items[i].IsChecked = false;
+                }
             }
 
             AddBtnIsVisible = true;

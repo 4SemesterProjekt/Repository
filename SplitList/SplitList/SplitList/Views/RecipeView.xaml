@@ -8,5 +8,90 @@
              x:Class="SplitList.Views.RecipeView">
 	<ContentPage.BindingContext>
         <viewModels:RecipeViewModel x:Name="RecipeViewModel"/>
-    </ContentPage.BindingContext>
+	</ContentPage.BindingContext>
+
+	<ContentPage.Content>
+		<ScrollView>
+			<StackLayout>
+	            <Grid>
+	                <Grid.ColumnDefinitions>
+	                    <ColumnDefinition Width="10*"/>
+	                    <ColumnDefinition Width="80*"/>
+	                    <ColumnDefinition Width="10*"/>
+	                </Grid.ColumnDefinitions>
+
+	                <Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+	                    <RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="*"/>
+	                </Grid.RowDefinitions>
+
+					<Label Text="{Binding Recipe.Name}"
+	                       Grid.Column="1"
+	                       Grid.Row="0"
+	                       FontSize="32"/>
+
+					<Frame Grid.Row="1"
+					       Grid.Column="1"
+					       BorderColor="Black"
+					       Padding="8"
+					       CornerRadius="4"
+					       >
+						<Label Text="{Binding Recipe.Introduction}"/>
+					</Frame>
+
+					<Frame
+						Grid.Row="2"
+						Grid.Column="1"
+						BorderColor="Black"
+						HasShadow="True"
+						Padding="8"
+						CornerRadius="4">
+						<Label Text="{Binding Recipe.Instructions}"/>
+					</Frame>
+
+					
+						<Frame
+							Grid.Row="3"
+							Grid.Column="1"
+							BorderColor="Black"
+							HasShadow="True"
+							Padding="8"
+							CornerRadius="4"
+							HeightRequest="400">
+							<ListView ItemsSource="{Binding Recipe.Ingredients}">
+								<ListView.ItemTemplate>
+									<DataTemplate>
+										<ViewCell>
+											<Grid>
+												<Grid.ColumnDefinitions>
+													<ColumnDefinition Width="10*"/>
+													<ColumnDefinition Width="80*"/>
+													<ColumnDefinition Width="10*"/>
+												</Grid.ColumnDefinitions>
+											<Label Text="{Binding Name}"
+												       Grid.Column="0"
+													   Grid.ColumnSpan="2"
+												       VerticalTextAlignment="Center"
+												       HorizontalTextAlignment="Start"/>
+											<Label Text="{Binding Amount}"
+											       Grid.Column="2"
+											       VerticalTextAlignment="Center"
+											       HorizontalTextAlignment="Start"/>
+										</Grid>
+										</ViewCell>
+									</DataTemplate>
+								</ListView.ItemTemplate>
+							</ListView>
+						</Frame>
+					
+		            
+
+
+
+				</Grid>
+	        </StackLayout>
+		</ScrollView>
+	</ContentPage.Content>
 </ContentPage>
