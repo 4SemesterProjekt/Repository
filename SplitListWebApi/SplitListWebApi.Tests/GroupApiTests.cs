@@ -10,6 +10,7 @@ using NUnit.Framework;
 using SplitListWebApi.Areas.AutoMapper;
 using SplitListWebApi.Areas.Identity.Data;
 using SplitListWebApi.Repositories.Implementation;
+using SplitListWebApi.Services;
 using SplitListWebApi.Utilities;
 
 namespace SplitListWebApi.Tests
@@ -36,6 +37,7 @@ namespace SplitListWebApi.Tests
                 cfg.AddProfile<PantryProfile>();
                 cfg.AddProfile<UserProfile>();
                 cfg.AddProfile<ShoppingListProfile>();
+                cfg.AddProfile<ItemProfile>();
             });
             mapper = config.CreateMapper();
         }
@@ -51,9 +53,8 @@ namespace SplitListWebApi.Tests
         {
             using (var context = new SplitListContext(options))
             {
-
-                GenericRepository<GroupDTO, GroupModel> groupRepo = new GenericRepository<GroupDTO, GroupModel>(context, mapper);
                 context.Database.EnsureCreated();
+                GroupService service = new GroupService(context, mapper);
 
                 GroupDTO group = new GroupDTO()
                 {
@@ -61,41 +62,56 @@ namespace SplitListWebApi.Tests
                     OwnerID = 45
                 };
 
-                group = group.Add(groupRepo);
+                GroupDTO dbGroupDto = service.Create(group);
 
-                GroupDTO groupDTO = groupRepo.GetById(group.ModelId);
-
-                Assert.AreEqual(groupDTO.Name, group.Name);
-                Assert.AreEqual(groupDTO.OwnerID, group.OwnerID);
+                Assert.AreEqual(group.Name, dbGroupDto.Name);
             }
         }
 
         [Test]
-        public void UpdateGroupUpdatesProperties()
+        public void InsertedUsersIntoGroup()
         {
             using (var context = new SplitListContext(options))
             {
 
-                GenericRepository<GroupDTO, GroupModel> groupRepo = new GenericRepository<GroupDTO, GroupModel>(context, mapper);
                 context.Database.EnsureCreated();
+                GroupService service = new GroupService(context, mapper);
+                UserService userService = new UserService(context, mapper);
+
+                UserDTO jordkim = new UserDTO()
+                {
+                    Name = "Jordkim",
+                    Id = "1234567890"
+                };
+
+                var entry = context.Users.Add(mapper.Map<UserModel>(jordkim));
+                entry.State = EntityState.Detached;
+                context.SaveChanges();
+
+                UserDTO theBetterJordkim = new UserDTO()
+                {
+                    Name = "Jordkim The Master of EVERYTHING",
+                    Id = "etellerandetlort-nikolaj2020"
+                };
+
+                entry = context.Users.Add(mapper.Map<UserModel>(theBetterJordkim));
+                entry.State = EntityState.Detached;
+                context.SaveChanges();
 
                 GroupDTO group = new GroupDTO()
                 {
                     Name = "TestGroup",
-                    OwnerID = 45
+                    OwnerID = 45,
+                    Users = new List<UserDTO>()
+                    {
+                        jordkim,
+                        theBetterJordkim
+                    }
                 };
 
-                group = group.Add(groupRepo);
+                GroupDTO dbGroupDto = service.Create(group);
 
-                GroupDTO groupDTO = groupRepo.GetById(group.ModelId);
-                groupDTO.Name = "GroupTest";
-                groupDTO.OwnerID = 54;
-
-                groupDTO.Save(groupRepo);
-                GroupDTO dbGroup = groupRepo.GetById(group.ModelId);
-
-                Assert.AreEqual(groupDTO.Name, dbGroup.Name);
-                Assert.AreEqual(groupDTO.OwnerID, dbGroup.OwnerID);
+                Assert.AreEqual(dbGroupDto.Users.Count, group.Users.Count);
             }
 
         }
@@ -106,39 +122,8 @@ namespace SplitListWebApi.Tests
             using (var context = new SplitListContext(options))
             {
 
-                GenericRepository<GroupDTO, GroupModel> groupRepo = new GenericRepository<GroupDTO, GroupModel>(context, mapper);
-                GenericRepository<UserDTO, UserModel> userRepo = new GenericRepository<UserDTO, UserModel>(context, mapper);
                 context.Database.EnsureCreated();
 
-                GroupDTO group = new GroupDTO()
-                {
-                    Name = "TestGroup",
-                    OwnerID = 45,
-                    Users = new List<UserDTO>()
-                };
-
-                group = group.Add(groupRepo);
-
-                GroupDTO groupDTO = groupRepo.GetById(group.ModelId);
-
-                var karl = new UserDTO()
-                {
-                    Id = "abcetellerandetlort",
-                    Name = "Karl"
-                };
-
-                karl = karl.Add(userRepo);
-
-                groupDTO.Users.Add(karl);
-
-                // use Shadowtable UserGroups to update db in order to have existing navigational properties
-
-                groupDTO.Save(groupRepo);
-                GroupDTO dbGroup = groupRepo.GetById(groupDTO.ModelId);
-
-                Assert.AreEqual(groupDTO.Name, dbGroup.Name);
-                Assert.AreEqual(groupDTO.OwnerID, dbGroup.OwnerID);
-                Assert.AreEqual(1, dbGroup.Users.Count);
             }
         }
     }

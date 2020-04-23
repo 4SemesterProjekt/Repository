@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Linq.Expressions;
 using ApiFormat;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -21,10 +22,9 @@ namespace SplitListWebApi.Utilities
                     var entry = dbFunc(source);
                     db.SaveChanges();
                     transaction.Commit();
-                    db.Entry(source).State = EntityState.Detached;
                     return entry.Entity;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     transaction.Rollback();
                     return null;
@@ -32,19 +32,24 @@ namespace SplitListWebApi.Utilities
             }
         }
 
-        public static T GetFromDatabase<T>(this int id, SplitListContext db)
+        public static T GetFromDatabase<T>(SplitListContext db, Expression<Func<T, bool>> predicate)
             where T : class, IModel
         {
-            var query = db.Set<T>().Where(i => i.ModelId == id).AsQueryable().AsNoTracking();
+            var query = db.Set<T>().Where(predicate).AsQueryable().AsNoTracking();
 
             using (var transaction = db.Database.BeginTransaction())
             {
                 try
                 {
-                    query = db.Model
-                        .FindEntityType(typeof(T))
-                        .GetNavigations()
-                        .Aggregate(query, (current, property) => current.Include(property.Name));
+                    //query = db.Model
+                    //    .FindEntityType(typeof(T))
+                    //    .GetNavigations()
+                    //    .Aggregate(query, (current, property) => current.Include(property.Name));
+
+                    foreach (var property in db.Model.FindEntityType(typeof(T)).GetNavigations())
+                    {
+                        query = query.Include(property.Name);
+                    }
 
                     transaction.Commit();
                 }

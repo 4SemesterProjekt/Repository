@@ -10,5 +10,7 @@ namespace ApiFormat.ShadowTables
 
         public int RecipeModelID { get; set; }
         public RecipeModel RecipeModel { get; set; }
+
+        public int Amount { get; set; }
     }
 }

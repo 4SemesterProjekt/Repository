@@ -1,17 +1,17 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using ApiFormat;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace SplitListWebApi.Repositories.Interfaces
 {
-    public interface IRepository<TSource>
-        where TSource : class, IDTO
+    public interface IRepository<TModel>
     {
-        IQueryable<TSource> GetAll();
-        TSource GetById(int id);
-        TSource Create(TSource entity);
-        TSource Update(TSource dto);
-        void Delete(TSource entity);
+        TModel GetBy(Expression<Func<TModel, bool>> predicate);
+        TModel Create(TModel entity);
+        TModel Update(TModel model);
+        void Delete(TModel entity);
     }
 }
