@@ -60,7 +60,7 @@ namespace SplitListWebApi.Tests
                 GroupDTO group = new GroupDTO()
                 {
                     Name = "TestGroup",
-                    OwnerID = 45
+                    OwnerID = "45"
                 };
 
                 GroupDTO dbGroupDto = service.Create(group);
@@ -80,7 +80,7 @@ namespace SplitListWebApi.Tests
                 GroupDTO group = new GroupDTO()
                 {
                     Name = "TestGroup",
-                    OwnerID = 45
+                    OwnerID = "45"
                 };
 
                 GroupDTO dbGroupDto = service.Create(group);
@@ -88,7 +88,7 @@ namespace SplitListWebApi.Tests
                 Assert.AreEqual(group.OwnerID, dbGroupDto.OwnerID);
 
                 dbGroupDto.Name = "GroupTest";
-                dbGroupDto.OwnerID = 54;
+                dbGroupDto.OwnerID = "54";
                 GroupDTO updatedGroup = service.Update(dbGroupDto);
 
                 Assert.AreEqual(updatedGroup.OwnerID, dbGroupDto.OwnerID);
@@ -130,7 +130,7 @@ namespace SplitListWebApi.Tests
                 GroupDTO group = new GroupDTO()
                 {
                     Name = "TestGroup",
-                    OwnerID = 45,
+                    OwnerID = "45",
                     Users = new List<UserDTO>()
                     {
                         jordkim,
@@ -165,7 +165,7 @@ namespace SplitListWebApi.Tests
                 GroupDTO group = new GroupDTO()
                 {
                     Name = "TestGroup",
-                    OwnerID = 45,
+                    OwnerID = "45",
                     Users = new List<UserDTO>()
                     {
                         jordkim
@@ -205,7 +205,7 @@ namespace SplitListWebApi.Tests
                 GroupDTO group = new GroupDTO()
                 {
                     Name = "TestGroup",
-                    OwnerID = 45
+                    OwnerID = "45"
                 };
 
                 var groupFromDB = service.Update(group);
@@ -228,7 +228,7 @@ namespace SplitListWebApi.Tests
                 GroupDTO group = new GroupDTO()
                 {
                     Name = "TestGroup",
-                    OwnerID = 45
+                    OwnerID = "45"
                 };
 
                 var groupFromDB = service.Create(group);
@@ -252,15 +252,58 @@ namespace SplitListWebApi.Tests
                 GroupDTO group = new GroupDTO()
                 {
                     Name = "TestGroup",
-                    OwnerID = 45
+                    OwnerID = "45"
                 };
 
-                service.Delete(group);
+                Assert.Throws(typeof(NullReferenceException), () => service.Delete(group));
+            }
+        }
 
-                // !!!
-                // Mangler noget kode her der tjekker at der ikke bliver throwed en exception.
-                // Kunne ikke lige finde ud af hvordan man gjorde det.
-                // !!!
+        [Test]
+        public void UpdateGroupRemovesUsers()
+        {
+            using (var context = new SplitListContext(options))
+            {
+                context.Database.EnsureCreated();
+                GroupService service = new GroupService(context, mapper);
+
+                UserDTO jordkim = new UserDTO()
+                {
+                    Name = "Jordkim",
+                    Id = "1234567890"
+                };
+
+                context.Users.Add(mapper.Map<UserModel>(jordkim));
+                context.SaveChanges();
+
+                UserDTO theBetterJordkim = new UserDTO()
+                {
+                    Name = "Jordkim The Master of EVERYTHING",
+                    Id = "etellerandetlort-nikolaj2020"
+                };
+
+                context.Users.Add(mapper.Map<UserModel>(theBetterJordkim));
+                context.SaveChanges();
+
+                GroupDTO group = new GroupDTO()
+                {
+                    Name = "TestGroup",
+                    OwnerID = "45",
+                    Users = new List<UserDTO>()
+                    {
+                        jordkim,
+                        theBetterJordkim
+                    }
+                };
+
+                var groupFromDB = service.Create(group);
+
+                groupFromDB.Users.RemoveAt(1);
+
+                groupFromDB = service.Update(groupFromDB);
+
+                Assert.AreEqual(1, groupFromDB.Users.Count);
+                Assert.AreEqual("Jordkim", groupFromDB.Users[0].Name);
             }
         }
     }

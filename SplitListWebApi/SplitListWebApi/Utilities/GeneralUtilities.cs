@@ -5,6 +5,7 @@ using ApiFormat;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Query;
 using SplitListWebApi.Areas.Identity.Data;
 
 namespace SplitListWebApi.Utilities
@@ -14,31 +15,55 @@ namespace SplitListWebApi.Utilities
         //Encapsulate Db-funcitions into transactions.
         public static T WriteToDatabase<T>(this T source, Func<T, EntityEntry<T>> dbFunc, SplitListContext db) where T : class, IModel
         {
-            /*using (var transaction = db.Database.BeginTransaction())
+            using (var transaction = db.Database.BeginTransaction())
             {
                 try
                 {
-                    //Forhold os til den specifikke case -tjek fx. om User eksisterer
                     var entry = dbFunc(source);
                     db.SaveChanges();
                     transaction.Commit();
                     return entry.Entity;
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    transaction.Rollback();
-                    return null;
+                    Console.WriteLine(e);
+                    throw;
                 }
-            }*/
-            var entry = dbFunc(source);
-            db.SaveChanges();
-            return entry.Entity;
+            }
         }
 
-        public static T GetFromDatabase<T>(SplitListContext db, Expression<Func<T, bool>> predicate)
-            where T : class, IModel
+        public static TResult GetFromDatabase<TResult, TEntity>(
+            SplitListContext db,
+            Expression<Func<TEntity, TResult>> selector,
+            Expression<Func<TEntity, bool>> predicate = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
+            bool disableTracking = true)
+        where TEntity : class
         {
-            return db.Set<T>().Where(predicate).FirstOrDefault();
+            IQueryable<TEntity> query = db.Set<TEntity>();
+
+            if (disableTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
+            if (include != null)
+            {
+                query = include(query);
+            }
+
+            if (predicate != null)
+            {
+                query = query.Where(predicate);
+            }
+
+            if (orderBy != null)
+            {
+                return orderBy(query).Select(selector).FirstOrDefault();
+            }
+
+            return query.Select(selector).FirstOrDefault();
         }
     }
 }

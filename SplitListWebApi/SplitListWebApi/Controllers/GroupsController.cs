@@ -1,116 +1,48 @@
-﻿//using System;
-//using ApiFormat;
-//using ApiFormat.Group;
-//using ApiFormat.ShadowTables;
-//using AutoMapper;
-//using Microsoft.AspNetCore.Authorization;
-//using Microsoft.AspNetCore.Mvc;
-//using SplitListWebApi.Areas.Identity.Data;
-//using SplitListWebApi.Repositories.Implementation;
-//using SplitListWebApi.Utilities;
+﻿using ApiFormat.Group;
+using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using SplitListWebApi.Areas.Identity.Data;
+using SplitListWebApi.Services;
 
-//namespace SplitListWebApi.Controllers
-//{
-//    [Route("api/[controller]")]
-//    [ApiController]
-//    public class GroupsController : ControllerBase
-//    {
-//        private SplitListContext _context;
-//        private GenericRepository<GroupModel> _repository;
+namespace SplitListWebApi.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class GroupsController : ControllerBase
+    {
+        private SplitListContext _context;
+        private IMapper _mapper;
+        private GroupService _service;
 
-//        public GroupsController(SplitListContext context, IMapper mapper)
-//        {
-//            _context = context;
-//            _repository = new GenericRepository<GroupDTO>(_context, mapper);
-//        }
+        public GroupsController(SplitListContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+            _service = new GroupService(context, mapper);
+        }
 
-//        [HttpPost("Create")]
-//        public GroupDTO Create([FromBody] GroupDTO dto)
-//        {
-            
-//            return dto.Add(_repository);
-//        }
+        [HttpGet("{id}")]
+        public GroupDTO Get(int id)
+        {
+            return _service.GetById(id);
+        }
 
-//        [HttpGet("{id}")]
-//        public GroupDTO GetById(int id)
-//        {
-//            GroupDTO dto = new GroupDTO();
-//            return dto.GetById(_repository, id);
-//        }
+        [HttpPost]
+        public GroupDTO Create(GroupDTO dto)
+        {
+            return _service.Create(dto);
+        }
 
-//        [HttpDelete("Delete")]
-//        public void Delete([FromBody] GroupDTO dto)
-//        {
-//            dto.Delete(_repository);
-//        }
+        [HttpDelete]
+        public void Delete(GroupDTO dto)
+        {
+            _service.Delete(dto);
+        }
 
-//        [HttpPost("Save")]
-//        public GroupDTO Save(GroupDTO dto)
-//        {
-//            return dto.Save(_repository);
-//        }
-//    }
-//}
-
-////using System;
-////using System.Collections.Generic;
-////using System.Linq;
-////using System.Threading.Tasks;
-////using ApiFormat;
-////using ApiFormat.User;
-////using Microsoft.AspNetCore.Authorization;
-////using Microsoft.AspNetCore.Http;
-////using Microsoft.AspNetCore.Mvc;
-////using Microsoft.EntityFrameworkCore;
-////using SplitListWebApi.Areas.Identity.Data;
-////using SplitListWebApi.Repository;
-
-////namespace SplitListWebApi.Controllers
-////{
-////    [Route("api/[controller]")]
-////    [ApiController]
-////    public class GroupsController : ControllerBase
-////    {
-////        private SplitListContext _context;
-////        private IGroupRepository repo;
-
-////        public GroupsController(SplitListContext context)
-////        {
-////            _context = context;
-////            repo = new GenericRepository(_context);
-////        }
-
-////        //Get: api/groups/5
-////        //Returns GroupDTO from specific ID.
-////        [HttpGet("{id}")]
-////        public IGroupDTO GetGroupByID(int id)
-////        {
-////            return repo.GetGroupByGroupID(id);
-////        }
-
-////        //Get: api/groups/5/owner
-////        //Returns the IUserDTO of the owner of the group specified by an ID.
-////        [HttpGet("{id}/owner")]
-////        public IUserDTO GetOwnerOfGroup(int id)
-////        {
-////            IGroupDTO group = repo.GetGroupByGroupID(id);
-////            return repo.GetOwnerOfGroup(group);
-////        }
-
-////        //Post: api/groups
-////        //Updates/Creates a group and its members.
-////        [HttpPost]
-////        public IGroupDTO UpdateGroup(IGroupDTO group)
-////        {
-////            return repo.UpdateGroup(group);
-////        }
-
-////        //Delete: api/groups
-////        //Deletes group from db.
-////        [HttpDelete]
-////        public void DeleteGroup(IGroupDTO group)
-////        {
-////            repo.DeleteGroup(group);
-////        }
-////    }
-////}
+        [HttpPut]
+        public GroupDTO Update(GroupDTO dto)
+        {
+            return _service.Update(dto);
+        }
+    }
+}

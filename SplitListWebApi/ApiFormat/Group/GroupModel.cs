@@ -15,6 +15,6 @@ namespace ApiFormat
         [Key]
         public int ModelId { get; set; }
         public string Name { get; set; }
-        public int OwnerId { get; set; }
+        public string OwnerId { get; set; }
     }
 }

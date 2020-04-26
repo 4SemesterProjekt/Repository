@@ -33,13 +33,27 @@ namespace SplitListWebApi.Services
 
         public GroupDTO GetById(int id)
         {
-            return _mapper.Map<GroupDTO>(groupRepo.GetBy(model => model.ModelId == id));
+            return _mapper.Map<GroupDTO>(groupRepo.GetBy(
+                selector: source => source,
+                predicate: model => model.ModelId == id,
+                include: source =>
+                    source
+                        .Include(gm => gm.UserGroups)
+                            .ThenInclude(ug => ug.UserModel)
+                        .Include(gm => gm.ShoppingLists)
+                        .Include(gm => gm.PantryModel)));
         }
 
         public GroupDTO Create(GroupDTO dto)
         {
             var model = _mapper.Map<GroupModel>(dto);
-            var dbModel = groupRepo.GetBy(m => m.ModelId == model.ModelId);
+            var dbModel = groupRepo.GetBy(
+                selector: source => source,
+                predicate: gm => gm.ModelId == model.ModelId,
+                include: source =>
+                    source.Include(groupModel => groupModel.UserGroups)
+                        .ThenInclude(ug => ug.UserModel));
+
             if (dbModel == null)
             {
                 dbModel = groupRepo.Create(model);
@@ -56,23 +70,23 @@ namespace SplitListWebApi.Services
         public GroupDTO Update(GroupDTO dto)
         {
             var model = _mapper.Map<GroupModel>(dto);
-            var dbModel = groupRepo.GetBy(m => m.ModelId == model.ModelId); //Denne ignorer UserGroups. Derfor giver "DeleteUSerGroups" nedenunder ingen mening
+            var dbModel = groupRepo.GetBy(
+                selector: m => m,
+                predicate: gm => gm.ModelId == model.ModelId,
+                include: source =>
+                    source.Include(groupModel => groupModel.UserGroups)
+                        .ThenInclude(ug => ug.UserModel),
+                disableTracking: false);
 
             if (dbModel == null)
                 return _mapper.Map<GroupDTO>(groupRepo.Create(model));
 
+            //TODO: Update Property Function
             //Update Properties (missing pantry & SL)
             dbModel.Name = dto.Name;
             dbModel.OwnerId = dto.OwnerID;
 
-            //mangler query til at hente UserGroups
-            dbModel.UserGroups = _context.UserGroups
-                .Include(ug => ug.UserModel)
-                .Include(ug => ug.GroupModel)
-                .Where(ug => ug.GroupModelModelID == dbModel.ModelId)
-                .ToList(); //Query må gerne omformuleres eller skrives til at anvende repo
-
-            _ugRepo.DeleteUserGroups(dbModel.UserGroups); //Virker aldrig pga ovenstående mapping
+            _ugRepo.DeleteUserGroups(dbModel.UserGroups);
             _ugRepo.CreateUserGroups(dbModel, dto.Users);
             return _mapper.Map<GroupDTO>(dbModel);
         }
@@ -80,8 +94,14 @@ namespace SplitListWebApi.Services
         public void Delete(GroupDTO dto)
         {
             var model = _mapper.Map<GroupModel>(dto);
-            var dbModel = groupRepo.GetBy(model => model.ModelId == dto.ModelId);
-            if (dbModel == null) return;
+            var dbModel = groupRepo.GetBy(
+                selector: source => source,
+                predicate: gm => gm.ModelId == model.ModelId,
+                include: source =>
+                    source.Include(groupModel => groupModel.UserGroups)
+                        .ThenInclude(ug => ug.UserModel),
+                disableTracking: false);
+            if (dbModel == null) throw new NullReferenceException("GroupDTO wasn't found in the database when trying to delete.");
 
             _ugRepo.DeleteUserGroups(dbModel.UserGroups);
             groupRepo.Delete(dbModel);
