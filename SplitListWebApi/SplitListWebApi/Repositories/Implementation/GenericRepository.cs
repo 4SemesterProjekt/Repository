@@ -23,19 +23,21 @@ namespace SplitListWebApi.Repositories.Implementation
 
         public TModel GetBy(Expression<Func<TModel, bool>> predicate) => GeneralUtilities.GetFromDatabase(_dbContext, predicate);
 
-        public TModel Create(TModel entity)
+        public TModel Create(TModel model)
         {
-            return entity.WriteToDatabase(_dbContext.Add, _dbContext);
+            //_dbContext.Entry(model).State = EntityState.Detached;
+            return model.WriteToDatabase(_dbContext.Add, _dbContext);
         }
 
         public TModel Update(TModel model)
         {
+            _dbContext.Entry(model).State = EntityState.Detached;
             return model.WriteToDatabase(_dbContext.Update, _dbContext); ; //To check whether any entries has been updated. Look in DTOUtilities.Update.
         }
 
-        public void Delete(TModel entity)
+        public void Delete(TModel model)
         {
-            entity.WriteToDatabase(_dbContext.Remove, _dbContext);
+            model.WriteToDatabase(_dbContext.Remove, _dbContext);
         }
     }
 }

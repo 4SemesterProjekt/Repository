@@ -7,6 +7,7 @@ using ApiFormat;
 using ApiFormat.Group;
 using ApiFormat.ShadowTables;
 using ApiFormat.User;
+using Microsoft.EntityFrameworkCore;
 using SplitListWebApi.Areas.Identity.Data;
 
 namespace SplitListWebApi.Repositories.Implementation
@@ -19,17 +20,22 @@ namespace SplitListWebApi.Repositories.Implementation
 
         public void CreateUserGroups(GroupModel groupModel, List<UserModel> userModels)
         {
-            foreach (var userModel in userModels)
+            if (userModels != null)
             {
-                _context.UserGroups.Add(new UserGroup()
+                foreach (var userModel in userModels)
                 {
-                    GroupModel = groupModel,
-                    UserModel = userModel,
-                    GroupModelModelID = groupModel.ModelId,
-                    UserId = userModel.Id
-                });
+                    if (_context.UserGroups.Find(groupModel.ModelId, userModel.Id) == null)
+                    {
+                        var entry = _context.UserGroups.Add(new UserGroup()
+                        {
+                            GroupModel = groupModel,
+                            UserModel = userModel
+                        });
+                        // Hvis vi kun sætter ID kastes exception om foreign key failed.
+                        _context.SaveChanges();
+                    }
+                }
             }
-            _context.SaveChanges();
         }
 
         public void CreateUserGroups(List<GroupModel> groupModels, UserModel userModel)
@@ -49,8 +55,11 @@ namespace SplitListWebApi.Repositories.Implementation
 
         public void DeleteUserGroups(List<UserGroup> userGroups)
         {
-            _context.UserGroups.RemoveRange(userGroups);
-            _context.SaveChanges();
+            if (userGroups != null)
+            {
+                _context.UserGroups.RemoveRange(userGroups);
+                _context.SaveChanges();
+            }
         }
 
         public List<UserGroup> GetBy(int groupId, IEnumerable<string> userIds)

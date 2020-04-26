@@ -35,30 +35,8 @@ namespace SplitListWebApi.Utilities
         public static T GetFromDatabase<T>(SplitListContext db, Expression<Func<T, bool>> predicate)
             where T : class, IModel
         {
-            var query = db.Set<T>().Where(predicate).AsQueryable().AsNoTracking();
+            return db.Set<T>().Where(predicate).AsNoTracking().FirstOrDefault();
 
-            using (var transaction = db.Database.BeginTransaction())
-            {
-                try
-                {
-                    //query = db.Model
-                    //    .FindEntityType(typeof(T))
-                    //    .GetNavigations()
-                    //    .Aggregate(query, (current, property) => current.Include(property.Name));
-
-                    foreach (var property in db.Model.FindEntityType(typeof(T)).GetNavigations())
-                    {
-                        query = query.Include(property.Name);
-                    }
-
-                    transaction.Commit();
-                }
-                catch (Exception)
-                {
-                    transaction.Rollback();
-                }
-            }
-            return query.FirstOrDefault();
         }
     }
 }
