@@ -7,6 +7,7 @@ using ApiFormat.Group;
 using ApiFormat.ShadowTables;
 using ApiFormat.User;
 using AutoMapper;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using SplitListWebApi.Areas.Identity.Data;
 using SplitListWebApi.Repositories.Implementation;
@@ -38,21 +39,14 @@ namespace SplitListWebApi.Services
         public GroupDTO Create(GroupDTO dto)
         {
             var model = _mapper.Map<GroupModel>(dto);
-            var dbModel = groupRepo.GetBy(model => model.ModelId == dto.ModelId);
+            var dbModel = groupRepo.GetBy(m => m.ModelId == model.ModelId);
             if (dbModel == null)
             {
-                //var createdGroupModel = groupRepo.Create(model);
-                //var userModels = _mapper.Map<List<UserModel>>(dto.Users);
-                //_ugRepo.CreateUserGroups(createdGroupModel, userModels);
-
-                //dbModel = groupRepo.GetBy(model => model.ModelId == createdGroupModel.ModelId);
-                //dbModel.UserGroups = _ugRepo.GetBy(dbModel.ModelId, userModels.Select(u => u.Id));
-                //return _mapper.Map<GroupDTO>(dbModel);
-
                 dbModel = groupRepo.Create(model);
-                var userModels = _mapper.Map<List<UserModel>>(dto.Users);
-                _ugRepo.CreateUserGroups(dbModel, userModels);
-                dbModel.UserGroups = _ugRepo.GetBy(dbModel.ModelId, userModels.Select(u => u.Id));
+
+                _ugRepo.CreateUserGroups(dbModel, dto.Users);
+                dbModel.UserGroups = _ugRepo.GetBy(dbModel.ModelId, dto.Users);
+
                 return _mapper.Map<GroupDTO>(dbModel);
             }
 
@@ -62,7 +56,7 @@ namespace SplitListWebApi.Services
         public GroupDTO Update(GroupDTO dto)
         {
             var model = _mapper.Map<GroupModel>(dto);
-            var dbModel = groupRepo.GetBy(model => model.ModelId == dto.ModelId); //Denne ignorer UserGroups. Derfor giver "DeleteUSerGroups" nedenunder ingen mening
+            var dbModel = groupRepo.GetBy(m => m.ModelId == model.ModelId); //Denne ignorer UserGroups. Derfor giver "DeleteUSerGroups" nedenunder ingen mening
 
             if (dbModel == null)
                 return _mapper.Map<GroupDTO>(groupRepo.Create(model));
@@ -70,7 +64,6 @@ namespace SplitListWebApi.Services
             //Update Properties (missing pantry & SL)
             dbModel.Name = dto.Name;
             dbModel.OwnerId = dto.OwnerID;
-
 
             //mangler query til at hente UserGroups
             dbModel.UserGroups = _context.UserGroups
@@ -80,7 +73,7 @@ namespace SplitListWebApi.Services
                 .ToList(); //Query må gerne omformuleres eller skrives til at anvende repo
 
             _ugRepo.DeleteUserGroups(dbModel.UserGroups); //Virker aldrig pga ovenstående mapping
-            _ugRepo.CreateUserGroups(dbModel, _mapper.Map<List<UserModel>>(dto.Users));
+            _ugRepo.CreateUserGroups(dbModel, dto.Users);
             return _mapper.Map<GroupDTO>(dbModel);
         }
 

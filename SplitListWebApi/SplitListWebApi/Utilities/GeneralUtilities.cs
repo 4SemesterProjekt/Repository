@@ -14,7 +14,7 @@ namespace SplitListWebApi.Utilities
         //Encapsulate Db-funcitions into transactions.
         public static T WriteToDatabase<T>(this T source, Func<T, EntityEntry<T>> dbFunc, SplitListContext db) where T : class, IModel
         {
-            using (var transaction = db.Database.BeginTransaction())
+            /*using (var transaction = db.Database.BeginTransaction())
             {
                 try
                 {
@@ -29,14 +29,16 @@ namespace SplitListWebApi.Utilities
                     transaction.Rollback();
                     return null;
                 }
-            }
+            }*/
+            var entry = dbFunc(source);
+            db.SaveChanges();
+            return entry.Entity;
         }
 
         public static T GetFromDatabase<T>(SplitListContext db, Expression<Func<T, bool>> predicate)
             where T : class, IModel
         {
-            return db.Set<T>().Where(predicate).AsNoTracking().FirstOrDefault();
-
+            return db.Set<T>().Where(predicate).FirstOrDefault();
         }
     }
 }

@@ -25,14 +25,12 @@ namespace SplitListWebApi.Repositories.Implementation
 
         public TModel Create(TModel model)
         {
-            //_dbContext.Entry(model).State = EntityState.Detached;
             return model.WriteToDatabase(_dbContext.Add, _dbContext);
         }
 
         public TModel Update(TModel model)
         {
-            _dbContext.Entry(model).State = EntityState.Detached;
-            return model.WriteToDatabase(_dbContext.Update, _dbContext); ; //To check whether any entries has been updated. Look in DTOUtilities.Update.
+            return model.WriteToDatabase(_dbContext.Update, _dbContext); //To check whether any entries has been updated. Look in DTOUtilities.Update.
         }
 
         public void Delete(TModel model)

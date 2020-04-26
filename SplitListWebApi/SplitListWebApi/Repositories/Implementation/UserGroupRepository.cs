@@ -18,23 +18,45 @@ namespace SplitListWebApi.Repositories.Implementation
 
         public UserGroupRepository(SplitListContext context) => _context = context;
 
+        // Denne metode er ny. Den tjekker users i context mod users der er passed med i DTO'en og laver UserGroups derudfra.
+        // Det er ikke den mest effektive metode, men den virker. Der skal nok laves en lignende for User siden af den.
+        // Jeg har ladt de to andre CreateUserGroups metoder stå, hvis de nu skulle bruges.
+        public void CreateUserGroups(GroupModel groupModel, List<UserDTO> userDtos)
+        {
+            foreach (var user in _context.Users.ToList())
+            {
+                foreach (var userDto in userDtos)
+                {
+                    if (user.Id == userDto.Id)
+                    {
+                        _context.UserGroups.Add(new UserGroup()
+                        {
+                            GroupModelModelID = groupModel.ModelId,
+                            UserId = user.Id,
+                            GroupModel = groupModel,
+                            UserModel = user
+                        });
+                    }
+                }
+            }
+            _context.SaveChanges();
+        }
+
         public void CreateUserGroups(GroupModel groupModel, List<UserModel> userModels)
         {
             if (userModels != null)
             {
                 foreach (var userModel in userModels)
                 {
-                    if (_context.UserGroups.Find(groupModel.ModelId, userModel.Id) == null)
+                    var entry = _context.UserGroups.Add(new UserGroup()
                     {
-                        var entry = _context.UserGroups.Add(new UserGroup()
-                        {
-                            GroupModel = groupModel,
-                            UserModel = userModel
-                        });
-                        // Hvis vi kun sætter ID kastes exception om foreign key failed.
-                        _context.SaveChanges();
-                    }
+                        GroupModelModelID = groupModel.ModelId,
+                        UserId = userModel.Id,
+                        GroupModel = groupModel,
+                        UserModel = userModel
+                    });
                 }
+                _context.SaveChanges();
             }
         }
 
@@ -62,12 +84,16 @@ namespace SplitListWebApi.Repositories.Implementation
             }
         }
 
-        public List<UserGroup> GetBy(int groupId, IEnumerable<string> userIds)
+        public List<UserGroup> GetBy(int groupId, List<UserDTO> users)
         {
             var userGroups = new List<UserGroup>();
-            foreach (var userId in userIds)
+            if (users != null)
             {
-                userGroups.Add(_context.UserGroups.FirstOrDefault(ug => ug.GroupModelModelID == groupId && ug.UserId == userId));
+                foreach (var user in users)
+                {
+                    userGroups.Add(_context.UserGroups.FirstOrDefault(ug =>
+                        ug.GroupModelModelID == groupId && ug.UserId == user.Id));
+                }
             }
 
             return userGroups;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ApiFormat;
 using ApiFormat.Group;
@@ -112,8 +113,7 @@ namespace SplitListWebApi.Tests
                     Id = "1234567890"
                 };
 
-                var entry = context.Users.Add(mapper.Map<UserModel>(jordkim));
-                entry.State = EntityState.Detached;
+                context.Users.Add(mapper.Map<UserModel>(jordkim));
                 context.SaveChanges();
                 
 
@@ -123,8 +123,7 @@ namespace SplitListWebApi.Tests
                     Id = "etellerandetlort-nikolaj2020"
                 };
 
-                entry = context.Users.Add(mapper.Map<UserModel>(theBetterJordkim));
-                entry.State = EntityState.Detached;
+                context.Users.Add(mapper.Map<UserModel>(theBetterJordkim));
                 context.SaveChanges();
                 
 
@@ -160,11 +159,8 @@ namespace SplitListWebApi.Tests
                     Id = "1234567890"
                 };
 
-                var entry = context.Users.Add(mapper.Map<UserModel>(jordkim));
-                entry.State = EntityState.Detached;
+                context.Users.Add(mapper.Map<UserModel>(jordkim));
                 context.SaveChanges();
-
-                //her er jordkim endnu ikke registreret i context.Users, selvom forventet?
 
                 GroupDTO group = new GroupDTO()
                 {
@@ -186,10 +182,8 @@ namespace SplitListWebApi.Tests
                     Id = "etellerandetlort-nikolaj2020"
                 };
 
-                entry = context.Users.Add(mapper.Map<UserModel>(theBetterJordkim));
-                entry.State = EntityState.Detached;
+                context.Users.Add(mapper.Map<UserModel>(theBetterJordkim));
                 context.SaveChanges();
-
 
                 groupFromDB.Users.Add(theBetterJordkim);
 
@@ -197,6 +191,76 @@ namespace SplitListWebApi.Tests
 
                 Assert.AreEqual(2, groupFromDB.Users.Count);
                 Assert.AreEqual("Jordkim The Master of EVERYTHING", groupFromDB.Users[1].Name);
+            }
+        }
+
+        [Test]
+        public void UpdateGroupCalledOnNotExistingGroup()
+        {
+            using (var context = new SplitListContext(options))
+            {
+                context.Database.EnsureCreated();
+                GroupService service = new GroupService(context, mapper);
+
+                GroupDTO group = new GroupDTO()
+                {
+                    Name = "TestGroup",
+                    OwnerID = 45
+                };
+
+                var groupFromDB = service.Update(group);
+
+                Assert.AreEqual(1, context.Groups.Count());
+                Assert.AreEqual(groupFromDB.Name, group.Name);
+                Assert.AreEqual(groupFromDB.OwnerID, group.OwnerID);
+                Assert.AreEqual(1, groupFromDB.ModelId);
+            }
+        }
+
+        [Test]
+        public void DeleteGroupDeletesGroup()
+        {
+            using (var context = new SplitListContext(options))
+            {
+                context.Database.EnsureCreated();
+                GroupService service = new GroupService(context, mapper);
+
+                GroupDTO group = new GroupDTO()
+                {
+                    Name = "TestGroup",
+                    OwnerID = 45
+                };
+
+                var groupFromDB = service.Create(group);
+
+                Assert.AreEqual(1, context.Groups.Count());
+
+                service.Delete(groupFromDB);
+
+                Assert.AreEqual(0, context.Groups.Count());
+            }
+        }
+
+        [Test]
+        public void DeleteGroupTriesToDeleteNotExistingGroup()
+        {
+            using (var context = new SplitListContext(options))
+            {
+                context.Database.EnsureCreated();
+                GroupService service = new GroupService(context, mapper);
+
+                GroupDTO group = new GroupDTO()
+                {
+                    Name = "TestGroup",
+                    OwnerID = 45
+                };
+
+                service.Delete(group);
+
+                // !!!
+                // Mangler noget kode her der tjekker at der ikke bliver throwed en exception.
+                // Kunne ikke lige finde ud af hvordan man gjorde det.
+                // !!!
             }
         }
     }
