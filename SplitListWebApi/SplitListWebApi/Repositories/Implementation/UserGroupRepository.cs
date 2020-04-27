@@ -23,21 +23,16 @@ namespace SplitListWebApi.Repositories.Implementation
         // Jeg har ladt de to andre CreateUserGroups metoder stå, hvis de nu skulle bruges.
         public void CreateUserGroups(GroupModel groupModel, List<UserDTO> userDtos)
         {
-            foreach (var user in _context.Users.ToList())
+            if (userDtos == null) return;
+            foreach (var userModel in userDtos.Select(userDto => _context.Users.FirstOrDefault(um => um.Id == userDto.Id)))
             {
-                foreach (var userDto in userDtos)
+                _context.UserGroups.Add(new UserGroup()
                 {
-                    if (user.Id == userDto.Id)
-                    {
-                        _context.UserGroups.Add(new UserGroup()
-                        {
-                            GroupModelModelID = groupModel.ModelId,
-                            UserId = user.Id,
-                            GroupModel = groupModel,
-                            UserModel = user
-                        });
-                    }
-                }
+                    GroupModelModelID = groupModel.ModelId,
+                    UserId = userModel.Id,
+                    GroupModel = groupModel,
+                    UserModel = userModel
+                });
             }
             _context.SaveChanges();
         }
