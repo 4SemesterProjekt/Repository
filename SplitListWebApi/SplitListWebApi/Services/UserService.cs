@@ -54,12 +54,15 @@ namespace SplitListWebApi.Services
             _ugRepo.DeleteUserGroups(dbModel.UserGroups);
             _ugRepo.CreateUserGroups(_mapper.Map<List<GroupModel>>(dto.Groups), dbModel);
 
-            dbModel = _userRepo.GetBy(selector: userModel => userModel,
+            // Opdater navn
+
+            dbModel = _userRepo.GetBy(
+                selector: userModel => userModel,
                 predicate: userModel => userModel.Id == model.Id,
                 include: source => source.Include(um => um.UserGroups)
-                    .ThenInclude(ug => ug.GroupModel)
-            );
-            dbModel.UserGroups = _ugRepo.GetBy(dbModel.UserGroups.Select(ug => ug.GroupModelModelID), dbModel.Id);
+                    .ThenInclude(ug => ug.GroupModel),
+                disableTracking: false);
+
             return _mapper.Map<UserDTO>(dbModel);
         }
 

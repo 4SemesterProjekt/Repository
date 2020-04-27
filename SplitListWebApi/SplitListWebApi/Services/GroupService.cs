@@ -41,7 +41,8 @@ namespace SplitListWebApi.Services
                         .Include(gm => gm.UserGroups)
                             .ThenInclude(ug => ug.UserModel)
                         .Include(gm => gm.ShoppingLists)
-                        .Include(gm => gm.PantryModel)));
+                        .Include(gm => gm.PantryModel),
+                disableTracking: false));
         }
 
         public GroupDTO Create(GroupDTO dto)
@@ -52,14 +53,21 @@ namespace SplitListWebApi.Services
                 predicate: gm => gm.ModelId == model.ModelId,
                 include: source =>
                     source.Include(groupModel => groupModel.UserGroups)
-                        .ThenInclude(ug => ug.UserModel));
+                        .ThenInclude(ug => ug.UserModel),
+                disableTracking: false);
 
             if (dbModel == null)
             {
                 dbModel = groupRepo.Create(model);
 
                 _ugRepo.CreateUserGroups(dbModel, dto.Users);
-                dbModel.UserGroups = _ugRepo.GetBy(dbModel.ModelId, dto.Users);
+                dbModel.UserGroups = groupRepo.GetBy(
+                    selector: source => source,
+                    predicate: gm => gm.ModelId == dbModel.ModelId,
+                    include: source =>
+                        source.Include(groupModel => groupModel.UserGroups)
+                            .ThenInclude(ug => ug.UserModel),
+                    disableTracking: false).UserGroups;
 
                 return _mapper.Map<GroupDTO>(dbModel);
             }

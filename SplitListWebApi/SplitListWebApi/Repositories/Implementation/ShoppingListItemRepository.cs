@@ -6,6 +6,7 @@ using ApiFormat.ShadowTables;
 using ApiFormat.ShoppingList;
 using ApiFormat.User;
 using SplitListWebApi.Areas.Identity.Data;
+using SplitListWebApi.Utilities;
 
 namespace SplitListWebApi.Repositories.Implementation
 {
@@ -32,7 +33,8 @@ namespace SplitListWebApi.Repositories.Implementation
 
         public void CreateShoppingListItems(List<ItemModel> itemModels, ShoppingListModel shoppingListModel)
         {
-            foreach (var itemModel in itemModels)
+            if (itemModels == null) return;
+            foreach (var itemModel in itemModels.Select(it => _context.Items.FirstOrDefault(im => im.ModelId == it.ModelId)))
             {
                 _context.ShoppingListItems.Add(new ShoppingListItem()
                 {
@@ -47,18 +49,21 @@ namespace SplitListWebApi.Repositories.Implementation
 
         public void DeleteShoppingListItems(List<ShoppingListItem> shoppingListItems)
         {
-            _context.ShoppingListItems.RemoveRange(shoppingListItems);
-            _context.SaveChanges();
+            if (shoppingListItems != null)
+            {
+                _context.ShoppingListItems.RemoveRange(shoppingListItems);
+                _context.SaveChanges();
+            }
         }
 
         public List<ShoppingListItem> GetBy(int itemId, IEnumerable<int> shoppingListIds)
         {
-            var shoppingListItems = new List<ShoppingListItem>();
-            foreach (var shoppingListId in shoppingListIds)
-            {
-                shoppingListItems.Add(_context.ShoppingListItems.FirstOrDefault(sli => sli.ItemModelID == itemId && sli.ShoppingListModelID == shoppingListId));
-            }
-            return shoppingListItems;
+            return null;
+            /*return GeneralUtilities.GetFromDatabase(
+                _context,
+                selector: source => source,
+                predi
+                )*/
         }
 
         public List<ShoppingListItem> GetBy(IEnumerable<int> itemIds, int shoppingListId)

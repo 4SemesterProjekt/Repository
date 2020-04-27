@@ -9,6 +9,7 @@ using ApiFormat.ShadowTables;
 using ApiFormat.User;
 using Microsoft.EntityFrameworkCore;
 using SplitListWebApi.Areas.Identity.Data;
+using SplitListWebApi.Utilities;
 
 namespace SplitListWebApi.Repositories.Implementation
 {
@@ -37,24 +38,6 @@ namespace SplitListWebApi.Repositories.Implementation
             _context.SaveChanges();
         }
 
-        public void CreateUserGroups(GroupModel groupModel, List<UserModel> userModels)
-        {
-            if (userModels != null)
-            {
-                foreach (var userModel in userModels)
-                {
-                    var entry = _context.UserGroups.Add(new UserGroup()
-                    {
-                        GroupModelModelID = groupModel.ModelId,
-                        UserId = userModel.Id,
-                        GroupModel = groupModel,
-                        UserModel = userModel
-                    });
-                }
-                _context.SaveChanges();
-            }
-        }
-
         public void CreateUserGroups(List<GroupModel> groupModels, UserModel userModel)
         {
             foreach (var groupModel in groupModels)
@@ -77,32 +60,6 @@ namespace SplitListWebApi.Repositories.Implementation
                 _context.UserGroups.RemoveRange(userGroups);
                 _context.SaveChanges();
             }
-        }
-
-        public List<UserGroup> GetBy(int groupId, List<UserDTO> users)
-        {
-            var userGroups = new List<UserGroup>();
-            if (users != null)
-            {
-                foreach (var user in users)
-                {
-                    userGroups.Add(_context.UserGroups.FirstOrDefault(ug =>
-                        ug.GroupModelModelID == groupId && ug.UserId == user.Id));
-                }
-            }
-
-            return userGroups;
-        }
-
-        public List<UserGroup> GetBy(IEnumerable<int> groupIds, string userId)
-        {
-            var userGroups = new List<UserGroup>();
-            foreach (var groupId in groupIds)
-            {
-                userGroups.Add(_context.UserGroups.FirstOrDefault(ug => ug.GroupModelModelID == groupId && ug.UserId == userId));
-            }
-
-            return userGroups;
         }
     }
 }

@@ -33,6 +33,9 @@ namespace SplitListWebApi.Areas.AutoMapper
                 .ForMember(dto => dto.ModelId, opt => opt.MapFrom(ri => ri.ItemModelID))
                 .ForMember(dto => dto.Type, opt => opt.MapFrom(ri => ri.ItemModel.Type))
                 .ForMember(dto => dto.Amount, opt => opt.MapFrom(ri => ri.Amount));
+
+            CreateMap<ItemDTO, ItemModel>()
+                .PreserveReferences();
         }
     }
 }
