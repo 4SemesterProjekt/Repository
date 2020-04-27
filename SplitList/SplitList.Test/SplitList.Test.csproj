@@ -25,17 +25,29 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Prism">
+      <HintPath>..\..\..\..\..\..\.nuget\packages\prism.core\7.2.0.1422\lib\netstandard2.0\Prism.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NUnit" Version="3.12.0" />
+    <PackageReference Include="Prism.Core">
+      <Version>7.2.0.1422</Version>
+    </PackageReference>
     <PackageReference Include="Xamarin.UITest" Version="3.0.7" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SplitList\SplitList\SplitList.csproj">
+      <Project>{BACB2D60-EAC4-4830-870E-1E9A23FAED81}</Project>
+      <Name>SplitList</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Tests.cs" />
+    <Compile Include="ModelItemTests.cs" />
+    <Compile Include="ShoppingListViewModelTest.cs" />
+    <Compile Include="UITests.cs" />
     <Compile Include="AppInitializer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

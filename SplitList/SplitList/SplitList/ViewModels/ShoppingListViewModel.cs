@@ -24,7 +24,7 @@ namespace SplitList.ViewModels
         }
 
         
-         #region Properties
+        #region Properties
 
         private bool _addBtnIsVisible = true;
         private bool _addBtnIsEnabled = true;
@@ -77,16 +77,16 @@ namespace SplitList.ViewModels
         {
             get
             {
-                return _addItemToListCommand ?? (_addItemToListCommand = new DelegateCommand<object>(AddItemToListCommandExecute));
+                return _addItemToListCommand ?? (_addItemToListCommand = new DelegateCommand(AddItemToListCommandExecute));
             }
         }
         /// <summary>
         /// Ads an item to the shown shopping list defaults empty name and amount of 1, for the user to edit afterwards
         /// </summary>
         /// <param name="obj">Is the checkbox used for checks</param>
-        public void AddItemToListCommandExecute(object obj)
+        public void AddItemToListCommandExecute()
         {
-           ShoppingList.Items.Add(new Item("",1,obj as CheckBox));
+           ShoppingList.Items.Add(new Item("",1));
 
         }
 

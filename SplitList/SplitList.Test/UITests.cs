@@ -8,12 +8,12 @@ using Xamarin.UITest.Queries;
 namespace SplitList.Test
 {
     [TestFixture(Platform.Android)]
-    public class Tests
+    public class UITests
     {
         IApp app;
         Platform platform;
 
-        public Tests(Platform platform)
+        public UITests(Platform platform)
         {
             this.platform = platform;
         }
@@ -31,5 +31,6 @@ namespace SplitList.Test
             AppResult[] results = app.Query(view => view.Marked("LoginBtn"));
             Assert.IsTrue(results.Any());
         }
+
     }
 }

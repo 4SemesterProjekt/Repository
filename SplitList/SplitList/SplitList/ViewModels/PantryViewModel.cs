@@ -39,13 +39,13 @@ namespace SplitList.ViewModels
         {
             get
             {
-                return _addItemToListCommand ?? (_addItemToListCommand = new DelegateCommand<object>(AddItemToListCommandExecute));
+                return _addItemToListCommand ?? (_addItemToListCommand = new DelegateCommand(AddItemToListCommandExecute));
             }
         }
 
-        public void AddItemToListCommandExecute(object obj)
+        public void AddItemToListCommandExecute()
         {
-            Pantry.Items.Add(new Item("",1,obj as CheckBox));
+            Pantry.Items.Add(new Item("",1));
         }
 
         private ICommand _deleteItemCommand;
