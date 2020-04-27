@@ -23,7 +23,7 @@ namespace SplitList.ViewModels
             _page = page;
             GroupId = groupId;
             Lists = new ObservableCollection<ShoppingList>();
-            Lists = ListMapper.ListToObservableCollection(SerializerShoppingList.GetShoppingListByGroupId(GroupId).Result);
+            // Lists = ListMapper.ListToObservableCollection(SerializerShoppingList.GetShoppingListByGroupId(GroupId).Result);
         }
 
         #region Properties
