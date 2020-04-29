@@ -5,6 +5,7 @@ using Prism.Navigation.Xaml;
 using Xamarin.Forms;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using ApiFormat;
 using SplitList.Mapping;
 using SplitList.Models;
 using SplitList.Views;
@@ -60,7 +61,7 @@ namespace SplitList.ViewModels
             pantry.Items.Add(new Item("Peber", 1));
             pantry.Items.Add(new Item("Meat", 4));
 
-            ObservableCollection<Item> notInPantry = new ObservableCollection<Item>();
+            List<Item> notInPantry = new List<Item>();
 
             // Search Pantry for ingredients
             foreach (var ingredient in Ingredients)
@@ -74,13 +75,29 @@ namespace SplitList.ViewModels
                 if(!isInPantry)
                     notInPantry.Add(ingredient);
             }
+            string action;
             // if all ingredients are in pantry
             if (notInPantry.Count == 0)
-                await Page.DisplayAlert("Alert", "All ingredients are already in your pantry","Okay");
-            // DisplayMessage to user that all ingredients are already in pantry
+            {
+                await Page.DisplayAlert("Alert", "All ingredients are already in your pantry", "Okay");
+            }
+            // if not all ingredients are in pantry
+            else
+            {
+                // Get shoppinglist by group id
+                List<ShoppingListDTO> shoppinglists = new List<ShoppingListDTO>();
+                shoppinglists.Add(new ShoppingListDTO(){shoppingListName = "Test 1"});
+                shoppinglists.Add(new ShoppingListDTO() { shoppingListName = "Test 2" });
+                string[] options = new string[shoppinglists.Count];
+                for (int i = 0; i < shoppinglists.Count; i++)
+                {
+                    options[i] = shoppinglists[i].shoppingListName;
+                }
 
-            // If not all ingredients in pantry
-            // DisplayMessage to user to select which shoppinglist to add ingredients to
+                // DisplayMessage to user to select which shoppinglist to add ingredients to
+                action = await Page.DisplayActionSheet("Choose shoppinglist", "Cancel", null, options);
+            }
+            
             // Get shoppinglist by id
             // add items to shoppinglist
             // post shopping by id
@@ -91,16 +108,64 @@ namespace SplitList.ViewModels
 
         public ICommand RemoveFromPantryCommand => _removeFromPantryCommand ?? (_removeFromPantryCommand = new DelegateCommand(RemoveFromPantryExecute));
 
-        public void RemoveFromPantryExecute()
+        async void RemoveFromPantryExecute()
         {
             // Get Pantry by group id
-            // Search Pantry for ingredients
-            // if all ingredients are in pantry 
-            // Remove ingredients from pantry
+            Pantry pantry = new Pantry();
+            pantry.Items.Add(new Item("Salt", 1));
+            pantry.Items.Add(new Item("Peber", 1));
+            pantry.Items.Add(new Item("Meat", 4));
 
+            // Search Pantry for ingredients
+            List<Item> notInPantry = new List<Item>();
+            bool allIsInPantry = false;
+            foreach (var ingredient in Ingredients)
+            {
+                bool isInPantry = false;
+                foreach (var pantryItem in pantry.Items)
+                {
+                    if (pantryItem.Name.ToLower() == ingredient.Name.ToLower())
+                        isInPantry = true;
+                }
+                if (!isInPantry)
+                    notInPantry.Add(ingredient);
+            }
+            // if all ingredients are in pantry 
+            if (notInPantry.Count == 0)
+            {
+                // Remove ingredients from pantry
+                for (int i = 0; i < pantry.Items.Count; i++)
+                {
+                    if (Ingredients[i].Name.ToLower() == pantry.Items[i].Name.ToLower())
+                        pantry.Items.Remove(Ingredients[i]);
+                }
+            }
             // if not all ingredients are in pantry
+            else
+            {
+                // Prompt do you want to add them to a shoppinglist
+                var result =await Page.DisplayAlert("Not all items found in pantry", "Do you want to add them to a shoppinglist?",
+                    "Yes", "No");
+                if (result)
+                {
+                    // Get shoppinglist by group id
+                    List<ShoppingListDTO> shoppinglists = new List<ShoppingListDTO>();
+                    shoppinglists.Add(new ShoppingListDTO() { shoppingListName = "Test 1" });
+                    shoppinglists.Add(new ShoppingListDTO() { shoppingListName = "Test 2" });
+                    string[] options = new string[shoppinglists.Count];
+                    for (int i = 0; i < shoppinglists.Count; i++)
+                    {
+                        options[i] = shoppinglists[i].shoppingListName;
+                    }
+
+                    string action;
+                    // DisplayMessage to user to select which shoppinglist to add ingredients to
+                    action = await Page.DisplayActionSheet("Choose shoppinglist", "Cancel", null, options);
+                }
+            }
+            
             // DisplayMessage inform user of missing ingredients
-            // Prompt do you want to add them to a shoppinglist
+            
         }
 
         #endregion
