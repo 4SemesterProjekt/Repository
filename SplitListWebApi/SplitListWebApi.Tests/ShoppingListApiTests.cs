@@ -14,6 +14,7 @@ using SplitListWebApi.Areas.AutoMapper;
 using SplitListWebApi.Areas.Identity.Data;
 using SplitListWebApi.Repositories.Implementation;
 using SplitListWebApi.Services;
+using SplitListWebApi.Services.Interfaces;
 using SplitListWebApi.Utilities;
 
 namespace SplitListWebApi.Tests
@@ -115,9 +116,6 @@ namespace SplitListWebApi.Tests
                     }
                 };
 
-                context.Items.AddRange(mapper.Map<List<ItemModel>>(items));
-                context.SaveChanges();
-
                 ShoppingListDTO slDto = new ShoppingListDTO()
                 {
                     Name = "ShoppingList1",
@@ -166,9 +164,6 @@ namespace SplitListWebApi.Tests
                     }
                 };
 
-                context.Items.AddRange(mapper.Map<List<ItemModel>>(items));
-                context.SaveChanges();
-
                 ShoppingListDTO slDto = new ShoppingListDTO()
                 {
                     Name = "ShoppingList1",
@@ -185,9 +180,6 @@ namespace SplitListWebApi.Tests
                     Amount = 10
                 };
 
-                context.Items.Add(mapper.Map<ItemModel>(extraItem));
-                context.SaveChanges();
-
                 slFromDb.Items.Add(extraItem);
 
                 slFromDb = slService.Update(slFromDb);
@@ -195,6 +187,101 @@ namespace SplitListWebApi.Tests
                 Assert.AreEqual(3, context.ShoppingListItems.Count());
                 Assert.AreEqual(3, slFromDb.Items.Count);
                 Assert.AreEqual(3, context.Items.Count());
+            }
+        }
+
+        [Test]
+        public void UpdateSLUpdatesItemProperties()
+        {
+            using (var context = new SplitListContext(options))
+            {
+                context.Database.EnsureCreated();
+                IService<ShoppingListDTO, int> slService = new ShoppingListService(context, mapper);
+                IService<GroupDTO, int> groupService = new GroupService(context, mapper);
+                IService<ItemDTO, int> itemService = new ItemService(context, mapper);
+
+                GroupDTO groupDto = new GroupDTO()
+                {
+                    Name = "Group1",
+                    OwnerID = "1"
+                };
+
+                groupDto = groupService.Create(groupDto);
+
+                List<ItemDTO> items = new List<ItemDTO>()
+                {
+                    new ItemDTO()
+                    {
+                        Name = "Banana",
+                        Type = "Fruit",
+                        Amount = 5
+                    },
+                    new ItemDTO()
+                    {
+                        Name = "Apple",
+                        Type = "Fruit",
+                        Amount = 2
+                    }
+                };
+
+                ShoppingListDTO slDto = new ShoppingListDTO()
+                {
+                    Name = "ShoppingList1",
+                    Group = groupDto,
+                    Items = items
+                };
+
+                var slFromDb = slService.Create(slDto);
+
+                ItemDTO cashew = new ItemDTO
+                {
+                    Name = "Cashew",
+                    Type = "Nut",
+                    Amount = 67
+                };
+                slFromDb.Items[0] = cashew;
+                slFromDb = slService.Update(slFromDb);
+                ItemDTO cashewFromDb = slFromDb.Items[0];
+                
+                Assert.AreEqual(2, context.ShoppingListItems.Count());
+                Assert.AreEqual(2, slFromDb.Items.Count);
+                Assert.AreEqual(3, context.Items.Count());
+                Assert.AreEqual(cashew.Name, cashewFromDb.Name);
+                Assert.AreEqual(cashew.Amount, cashewFromDb.Amount);
+                Assert.AreEqual(cashew.Type, cashewFromDb.Type);
+            }
+        }
+
+        [Test]
+        public void UpdateSLUpdatesPorperties()
+        {
+            using (var context = new SplitListContext(options))
+            {
+                context.Database.EnsureCreated();
+                ShoppingListService slService = new ShoppingListService(context, mapper);
+                GroupService groupService = new GroupService(context, mapper);
+
+                GroupDTO groupDto = new GroupDTO()
+                {
+                    Name = "Group1",
+                    OwnerID = "1"
+                };
+
+                groupDto = groupService.Create(groupDto);
+
+                ShoppingListDTO dto = new ShoppingListDTO()
+                {
+                    Name = "TestList",
+                    Group = groupDto
+                };
+
+                ShoppingListDTO dbList = slService.Create(dto);
+
+                dbList.Name = "ListTest";
+                dbList = slService.Update(dbList);
+
+                Assert.AreNotEqual(context.ShoppingLists.FirstOrDefault().Name, dto.Name);
+                Assert.AreEqual(context.ShoppingLists.FirstOrDefault().Name, dbList.Name);
             }
         }
     }

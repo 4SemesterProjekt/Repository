@@ -19,7 +19,7 @@ namespace SplitListWebApi.Services
         private readonly GenericRepository<ShoppingListModel> _shoppingListRepository;
         private readonly GenericRepository<GroupModel> _groupRepository;
         private readonly ShoppingListItemRepository _shoppingListItemRepo;
-
+        private readonly IService<ItemDTO, int> _itemService;
         public ShoppingListService(SplitListContext context, IMapper mapper)
         {
             _context = context;
@@ -27,6 +27,7 @@ namespace SplitListWebApi.Services
             _shoppingListRepository = new GenericRepository<ShoppingListModel>(context);
             _groupRepository = new GenericRepository<GroupModel>(context);
             _shoppingListItemRepo = new ShoppingListItemRepository(context);
+            _itemService = new ItemService(context, mapper);
         }
 
 
@@ -62,9 +63,18 @@ namespace SplitListWebApi.Services
                         disableTracking: false
                     );
                 }
+
                 dbModel = _shoppingListRepository.Create(model);
-                var itemModels = _mapper.Map<List<ItemModel>>(dto.Items);
-                _shoppingListItemRepo.CreateShoppingListItems(itemModels, dbModel);
+
+                if (dto.Items != null)
+                {
+                    for (int i = 0; i < dto.Items.Count; i++) //Sets Ids on dtos
+                    {
+                        dto.Items[i] = _itemService.Create(dto.Items[i]);
+                    }
+
+                    _shoppingListItemRepo.CreateShoppingListItems(dto.Items, dbModel);
+                }
 
                 dbModel = _shoppingListRepository.GetBy(
                     selector: source => source,
@@ -75,10 +85,8 @@ namespace SplitListWebApi.Services
                             .Include(slm => slm.GroupModel),
                     disableTracking: false);
 
-                //dbModel.ShoppingListItems = _shoppingListItemRepo.GetBy(dbModel.ModelId, itemModels.Select(im => im.ModelId));
                 return _mapper.Map<ShoppingListDTO>(dbModel);
             }
-
             return _mapper.Map<ShoppingListDTO>(dbModel);
         }
 
@@ -99,8 +107,15 @@ namespace SplitListWebApi.Services
 
             dbModel.Name = dto.Name;
 
+            if (dto.Items != null)
+            {
+                for (int i = 0; i < dto.Items.Count; i++)
+                {
+                    dto.Items[i] = _itemService.Update(dto.Items[i]);
+                }
+            }
             _shoppingListItemRepo.DeleteShoppingListItems(dbModel.ShoppingListItems);
-            _shoppingListItemRepo.CreateShoppingListItems(_mapper.Map<List<ItemModel>>(dto.Items), dbModel);
+            _shoppingListItemRepo.CreateShoppingListItems(dto.Items, dbModel);
             return _mapper.Map<ShoppingListDTO>(dbModel);
         }
 

@@ -36,6 +36,10 @@ namespace SplitListWebApi.Areas.AutoMapper
 
             CreateMap<ItemDTO, ItemModel>()
                 .PreserveReferences();
+
+            CreateMap<ItemModel, ItemDTO>()
+                .PreserveReferences()
+                .ForMember(dto => dto.Amount, opt => opt.Ignore());
         }
     }
 }

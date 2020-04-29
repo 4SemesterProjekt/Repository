@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ApiFormat;
 using ApiFormat.Item;
+using ApiFormat.Pantry;
 using ApiFormat.ShadowTables;
 using ApiFormat.ShoppingList;
 using ApiFormat.User;
@@ -12,13 +13,13 @@ using SplitListWebApi.Utilities;
 
 namespace SplitListWebApi.Repositories.Implementation
 {
-    public class ShoppingListItemRepository
+    public class PantryItemRepository
     {
         private SplitListContext _context;
         private IService<ItemDTO, int> itemService;
-        public ShoppingListItemRepository(SplitListContext context) => _context = context;
+        public PantryItemRepository(SplitListContext context) => _context = context;
 
-        public void CreateShoppingListItems(List<ItemDTO> itemDTOs, ShoppingListModel shoppingListModel)
+        public void CreatePantryItems(List<ItemDTO> itemDTOs, PantryModel pantryModel)
         {
             if (itemDTOs == null) throw new ArgumentNullException("ItemDTOs passed was null.");
 
@@ -26,23 +27,23 @@ namespace SplitListWebApi.Repositories.Implementation
             {
                 int amount = itemDTOs.Where(dto => dto.ModelId == itemModel.ModelId).Select(dto => dto.Amount).FirstOrDefault();
 
-                _context.ShoppingListItems.Add(new ShoppingListItem()
+                _context.PantryItems.Add(new PantryItem()
                 {
                     ItemModel = itemModel,
-                    ShoppingListModel = shoppingListModel,
+                    PantryModel = pantryModel,
                     ItemModelID = itemModel.ModelId,
-                    ShoppingListModelID = shoppingListModel.ModelId,
+                    PantryModelID = pantryModel.ModelId,
                     Amount = amount
                 });
             }
             _context.SaveChanges();
         }
 
-        public void DeleteShoppingListItems(List<ShoppingListItem> shoppingListItems)
+        public void DeletePantryItems(List<PantryItem> pantryItems)
         {
-            if (shoppingListItems != null)
+            if (pantryItems != null)
             {
-                _context.ShoppingListItems.RemoveRange(shoppingListItems);
+                _context.PantryItems.RemoveRange(pantryItems);
                 _context.SaveChanges();
             }
         }
