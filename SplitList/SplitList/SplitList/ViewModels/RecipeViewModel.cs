@@ -15,18 +15,15 @@ using Prism.Mvvm;
 
 namespace SplitList.ViewModels
 {
-    public class RecipeViewModel : BindableBase
-    {
-        public RecipeViewModel()
+    public class RecipeViewModel : BaseViewModel
+    { public RecipeViewModel(INavigation nav, Page page, int groupId) : base(nav, page, groupId)
         {
             Recipe = new Recipe();
-           Ingredients = new ObservableCollection<Item>() { new Item("Salt", 1), new Item("Peber", 1), new Item("Meat", 4) };
+            Ingredients = new ObservableCollection<Item>() { new Item("Salt", 1), new Item("Peber", 1), new Item("Meat", 4) };
         }
 
         #region Properties
-
-        public Page Page { get; set; }
-
+        
         private Recipe _recipe;
 
         public Recipe Recipe
@@ -174,5 +171,7 @@ namespace SplitList.ViewModels
         }
 
         #endregion
+
+        
     }
 }

@@ -5,6 +5,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Windows.Input;
 using ApiFormat;
+using ApiFormat.ShoppingList;
 using ClientLibAPI;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -15,15 +16,13 @@ using Xamarin.Forms;
 
 namespace SplitList.ViewModels
 {
-    public class ShoppingListViewModel : BindableBase
+    public class ShoppingListViewModel : BaseViewModel
     {
-        public ShoppingListViewModel()
+        public ShoppingListViewModel(INavigation nav, Page page, int groupId) : base(nav, page, groupId)
         {
             ShoppingList = new ShoppingList();
-            
         }
 
-        
         #region Properties
 
         private bool _addBtnIsVisible = true;
@@ -57,7 +56,6 @@ namespace SplitList.ViewModels
             set => SetProperty(ref _confirmBtnIsEnabled, value);
         }
 
-        public Page Page { get; set; }
         private bool deleteState = false;
 
         private ShoppingList _shoppingList;
@@ -200,11 +198,7 @@ namespace SplitList.ViewModels
             ConfirmBtnIsVisible = false;
         }
 
-        private ICommand _onDisappearing;
-
-        public ICommand OnDisappearing => _onDisappearing ?? (_onDisappearing = new DelegateCommand(OnDisappearingExecute));
-
-        public async void OnDisappearingExecute()
+        public override async void OnDisappearingExecute()
         {
             foreach (var shoppingListItem in ShoppingList.Items)
             {

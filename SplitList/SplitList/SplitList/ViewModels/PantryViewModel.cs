@@ -9,18 +9,15 @@ using Xamarin.Forms;
 
 namespace SplitList.ViewModels
 {
-    public class PantryViewModel : BindableBase
+    public class PantryViewModel : BaseViewModel
     {
-        public PantryViewModel()
+        public PantryViewModel(INavigation nav, Page page, int groupId) : base(nav, page, groupId)
         {
             Pantry = new Pantry();
-           // Pantry = PantryMapper.PantryDtoToPantry(SerializerPantry.GetPantryByGroupId(1).Result);
         }
-
         #region Properties
 
         private bool _deleteState = false;
-        public Page Page { get; set; }
 
         private Pantry _pantry;
         public Pantry Pantry
@@ -106,5 +103,7 @@ namespace SplitList.ViewModels
             }
         }
         #endregion
+
+        
     }
 }
