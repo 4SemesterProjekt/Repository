@@ -11,12 +11,12 @@ using Xamarin.Forms;
 
 namespace SplitList.ViewModels
 {
-    class GroupSelectViewModel : BindableBase
+    class GroupSelectViewModel : BaseViewModel
     {
-        public GroupSelectViewModel()
+        public GroupSelectViewModel(INavigation nav, Page page, int groupId) : base(nav, page, groupId)
         {
             Groups = new ObservableCollection<Group>();
-            Groups.Add(new Group(){Name = "Familien Splitlist", GroupId = 1});
+            Groups.Add(new Group() { Name = "Familien Splitlist", GroupId = 1 });
         }
 
         private ObservableCollection<Group> _groups;
@@ -40,19 +40,12 @@ namespace SplitList.ViewModels
             Application.Current.MainPage = new MDP(g.GroupId);
         }
 
-        private ICommand _onAppearing;
-
-        public ICommand OnAppearing
-        {
-            get => _onAppearing ?? (_onAppearing = new DelegateCommand(OnAppearingExecute));
-        }
-
-        public async void OnAppearingExecute()
+        public override async void OnAppearingExecute()
         {
             if (Groups.Count == 0)
             {
                 var result = await Application.Current.MainPage.DisplayPromptAsync("No group found", "Please input a name for your group", "Create Group");
-                Groups.Add(new Group(){GroupId = 0, Name = result});
+                Groups.Add(new Group() { GroupId = 0, Name = result });
             }
         }
     }

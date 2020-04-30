@@ -10,15 +10,12 @@ using Xamarin.Forms;
 
 namespace SplitList.ViewModels
 {
-    public class UserViewModel : BindableBase
+    public class UserViewModel : BaseViewModel
     {
-        public UserViewModel(User user, INavigation navigation)
+        public UserViewModel(INavigation nav, Page page, int groupId) : base(nav, page, groupId)
         {
-            User = user;
-            Navigation = navigation;
         }
 
-        public INavigation Navigation { get; set; }
         private User _user;
 
         public User User
@@ -39,5 +36,7 @@ namespace SplitList.ViewModels
             if(sender is Group group)
                 await Navigation.PushAsync(new GroupEditView(group.GroupId));
         }
+
+        
     }
 }

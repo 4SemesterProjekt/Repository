@@ -15,30 +15,18 @@ using SplitList.Views;
 using Xamarin.Forms;
 namespace SplitList.ViewModels
 {
-    public class MultiShopListViewModel : BindableBase
+    public class MultiShopListViewModel : BaseViewModel
     {
-        public MultiShopListViewModel(INavigation navigation, Page page, int groupId)
+        public MultiShopListViewModel(INavigation nav, Page page, int groupId) : base(nav, page, groupId)
         {
-            Navigation = navigation;
-            _page = page;
-            GroupId = groupId;
             Lists = new ObservableCollection<ShoppingList>();
             // Lists = ListMapper.ListToObservableCollection(SerializerShoppingList.GetShoppingListByGroupId(GroupId).Result);
         }
 
         #region Properties
 
-        private Page _page;
 
         private bool deleteState;
-        private INavigation Navigation { get; set; }
-
-        private int _groupId;
-        public int GroupId
-        {
-            get => _groupId;
-            set => SetProperty(ref _groupId, value);
-        }
 
         private ObservableCollection<ShoppingList> _lists;
 
@@ -86,7 +74,7 @@ namespace SplitList.ViewModels
         //Does nothing if cancel is pressed
         async void AddShoppingListExecute()
         {
-            string result = await _page.DisplayPromptAsync("New shoppingList", "Enter a name for your shoppinglist");
+            string result = await Page.DisplayPromptAsync("New shoppingList", "Enter a name for your shoppinglist");
             if (!string.IsNullOrEmpty(result))
             {
                 var newList = new ShoppingList(result, GroupId);
@@ -132,7 +120,7 @@ namespace SplitList.ViewModels
 
                 if (IsAnyChecked)
                 {//Prompts the user to confirm the deletion on the selected shoppinglists
-                    var result = await _page.DisplayAlert("Warning", "Are you sure that you want to delete the selected shoppinglists", "Yes", "No");
+                    var result = await Page.DisplayAlert("Warning", "Are you sure that you want to delete the selected shoppinglists", "Yes", "No");
                     if (result)
                     {
                         for (int i = Lists.Count-1; i >= 0; i--)
