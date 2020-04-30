@@ -5,6 +5,8 @@ using ApiFormat;
 using System.Net.Http;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
+using ApiFormat.Group;
+
 namespace ClientLibAPI
 {
     public class SerializerGroup

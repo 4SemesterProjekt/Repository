@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using Newtonsoft.Json;
 using ApiFormat;
+using ApiFormat.User;
 
 namespace ClientLibAPI
 {

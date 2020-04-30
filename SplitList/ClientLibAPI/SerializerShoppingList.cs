@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using ApiFormat;
+using ApiFormat.ShoppingList;
 using Newtonsoft.Json;
 
 namespace ClientLibAPI
