@@ -12,51 +12,61 @@ namespace ClientLibAPI
     {
         const string URL = "https://splitlistwebapi.azurewebsites.net/api/Pantries/";
 
-        //Return list of PantryDTO based on GroupId
-        public static async Task<PantryDTO> GetPantryByGroupId(int GroupId)
+        // GET: api/Pantries/5
+        // Return a PantryDTO based on PantryId
+        public static async Task<PantryDTO> GetPantryById(int pantryId)
         {
-            var PantriesByIDString = await MSerializer.Client.GetStringAsync($"{URL}group/{GroupId}");
-            var PantriesByGroupID = JsonConvert.DeserializeObject<PantryDTO>(PantriesByIDString);
-            return PantriesByGroupID;
-
+            var pantryByIdString = await MSerializer.Client.GetStringAsync($"{URL}{pantryId}");
+            var pantryById = JsonConvert.DeserializeObject<PantryDTO>(pantryByIdString);
+            return pantryById;
         }
 
-
         // POST: api/Pantries
-        // Updates/Creates Pantry from parameter.
-        // if ID == 0(default) create new PantryDTO
-        // if ID exist database edit entity with that specific ID.
-        public static async Task<PantryDTO> PostPantry(PantryDTO pantry)
+        // Creates Pantry from parameter
+        public static async Task<PantryDTO> CreatePantry(PantryDTO pantry)
         {
-            var PantryContext = JsonConvert.SerializeObject(pantry, Formatting.None);
+            var pantryContext = JsonConvert.SerializeObject(pantry, Formatting.None);
             using (var request = new HttpRequestMessage(HttpMethod.Post, URL))
             {
 
-                var httpContext = new StringContent(PantryContext, Encoding.UTF8, "application/json");
+                var httpContext = new StringContent(pantryContext, Encoding.UTF8, "application/json");
                 request.Content = httpContext;
 
                 var response = await MSerializer.Client.SendAsync(request);
-                var UpdatedPantry = JsonConvert.DeserializeObject<PantryDTO>(response.Content.ReadAsStringAsync().Result);
-                return UpdatedPantry;
+                var createdPantry = JsonConvert.DeserializeObject<PantryDTO>(await response.Content.ReadAsStringAsync());
+                return createdPantry;
             }
         }
 
-        // DELETE: Delete element
-        // If ID exist in DB remove entity with that ID
-        // if ID doesnt exist, do notning. 
+        // POST: api/Pantries
+        // Updates Pantry from parameter
+        public static async Task<PantryDTO> UpdatePantry(PantryDTO pantry)
+        {
+            var pantryContext = JsonConvert.SerializeObject(pantry, Formatting.None);
+            using (var request = new HttpRequestMessage(HttpMethod.Put, URL))
+            {
+                var httpContext = new StringContent(pantryContext, Encoding.UTF8, "application/json");
+                request.Content = httpContext;
+
+                var response = await MSerializer.Client.SendAsync(request);
+                var updatedPantry = JsonConvert.DeserializeObject<PantryDTO>(await response.Content.ReadAsStringAsync());
+                return updatedPantry;
+            }
+        }
+
+        // DELETE: api/Pantries/5
+        // If Id exists in DB remove entity with that Id
+        // If Id does not exist, do nothing
         public static async Task<HttpResponseMessage> DeletePantry(PantryDTO pantry)
         {
-            var PantryContext = JsonConvert.SerializeObject(pantry, Formatting.None);
+            var pantryContext = JsonConvert.SerializeObject(pantry, Formatting.None);
             using (var request = new HttpRequestMessage(HttpMethod.Delete, URL))
             {
-                var httpContext = new StringContent(PantryContext, Encoding.UTF8, "application/json");
+                var httpContext = new StringContent(pantryContext, Encoding.UTF8, "application/json");
                 request.Content = httpContext;
 
                 return await MSerializer.Client.SendAsync(request);
-
-
             }
-
         }
     }
 }

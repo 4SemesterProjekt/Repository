@@ -91,7 +91,7 @@ namespace SplitList.ViewModels
             {
                 var newList = new ShoppingList(result, GroupId);
                 var listDTO = ShoppingListMapper.ShoppingListToShoppingListDto(newList);
-                var listReturned = await SerializerShoppingList.PostShoppingList(listDTO);
+                var listReturned = await SerializerShoppingList.CreateShoppingList(listDTO);
                 Lists.Add(ShoppingListMapper.ShoppingListDtoToShoppingList(listReturned));
             }
         }

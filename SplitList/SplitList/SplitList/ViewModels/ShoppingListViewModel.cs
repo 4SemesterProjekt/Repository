@@ -216,7 +216,7 @@ namespace SplitList.ViewModels
             ConfirmBtnIsEnabled = false;
             ConfirmBtnIsVisible = false;
             ShoppingListDTO tobj = ShoppingListMapper.ShoppingListToShoppingListDto(ShoppingList);
-            var result = await SerializerShoppingList.PostShoppingList(tobj);
+            var result = await SerializerShoppingList.CreateShoppingList(tobj);
         }
         #endregion
     }

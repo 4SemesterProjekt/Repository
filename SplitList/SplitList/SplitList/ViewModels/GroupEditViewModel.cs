@@ -36,7 +36,7 @@ namespace SplitList.ViewModels
 
         public async void OnAppearingExecute()
         {
-            var result = await SerializerGroups.GetGroupByGroupId(Group.GroupId);
+            var result = await SerializerGroup.GetGroupById(Group.GroupId);
             Group = GroupMapper.GroupDtoToGroup(result);
         }
     }

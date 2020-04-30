@@ -12,44 +12,44 @@ namespace ClientLibAPI
     {
         const string URL = "https://splitlistwebapi.azurewebsites.net/api/Users/";
 
-        //Gets a User with groups based on User Id
-        public static async Task<UserDTO> GetUsersGroupByUserId(int UserId) 
+        // GET: api/Users/5
+        // Return a UserDTO based on UserId
+        public static async Task<UserDTO> GetUserById(string userId) 
         {
-            var response = await MSerializer.Client.GetStringAsync($"{URL}{UserId}");
-            var User = JsonConvert.DeserializeObject<UserDTO>(response);
-            return User;
+            var response = await MSerializer.Client.GetStringAsync($"{URL}{userId}");
+            var user = JsonConvert.DeserializeObject<UserDTO>(response);
+            return user;
         }
 
-        public static async Task<UserDTO> PostUserByUserDTO(UserDTO user)
+        // PUT: api/Users
+        // Updates User from parameter
+        public static async Task<UserDTO> UpdateUser(UserDTO user)
         {
-            var Context = JsonConvert.SerializeObject(user, Formatting.None);
-            using (var request = new HttpRequestMessage(HttpMethod.Post, URL))
+            var userContext = JsonConvert.SerializeObject(user, Formatting.None);
+            using (var request = new HttpRequestMessage(HttpMethod.Put, URL))
             {
-
-                var httpContext = new StringContent(Context, Encoding.UTF8, "application/json");
+                var httpContext = new StringContent(userContext, Encoding.UTF8, "application/json");
                 request.Content = httpContext;
 
                 var response = await MSerializer.Client.SendAsync(request);
-                var User = JsonConvert.DeserializeObject<UserDTO>(response.Content.ReadAsStringAsync().Result);
-                return User;
+                var updatedUser = JsonConvert.DeserializeObject<UserDTO>(await response.Content.ReadAsStringAsync());
+                return updatedUser;
             }
         }
 
-
+        // DELETE: api/Users/5
+        // If Id exists in DB remove entity with that Id
+        // if Id does not exist, do nothing
         public static async Task<HttpResponseMessage> DeleteUser(UserDTO user)
         {
-            var Context = JsonConvert.SerializeObject(user, Formatting.None);
+            var userContext = JsonConvert.SerializeObject(user, Formatting.None);
             using (var request = new HttpRequestMessage(HttpMethod.Delete, URL))
             {
-                var httpContext = new StringContent(Context, Encoding.UTF8, "application/json");
+                var httpContext = new StringContent(userContext, Encoding.UTF8, "application/json");
                 request.Content = httpContext;
 
                 return await MSerializer.Client.SendAsync(request);
-
-
             }
-
         }
-
     }
 }
