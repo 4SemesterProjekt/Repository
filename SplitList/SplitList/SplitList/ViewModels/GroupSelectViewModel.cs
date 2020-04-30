@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 using System.Windows.Input;
+using ClientLibAPI;
 using Prism.Commands;
 using Prism.Mvvm;
 using SplitList.Models;
@@ -42,6 +43,7 @@ namespace SplitList.ViewModels
 
         public override async void OnAppearingExecute()
         {
+
             if (Groups.Count == 0)
             {
                 var result = await Application.Current.MainPage.DisplayPromptAsync("No group found", "Please input a name for your group", "Create Group");

@@ -6,6 +6,7 @@ using AutoMapper;
 using Prism.Commands;
 using Prism.Mvvm;
 using SplitList.AutoMapper;
+using SplitList.Models;
 using Xamarin.Forms;
 
 namespace SplitList.ViewModels
@@ -22,6 +23,10 @@ namespace SplitList.ViewModels
                 cfg =>
                 {
                     cfg.AddProfile<GroupProfile>();
+                    cfg.AddProfile<ItemProfile>();
+                    cfg.AddProfile<PantryProfile>();
+                    cfg.AddProfile<ShoppingListProfile>();
+                    cfg.AddProfile<UserProfile>();
                 });
         }
         public IMapper mapper { get; set; }

@@ -49,6 +49,7 @@ namespace SplitList.Models
             get => _group;
             set => SetProperty(ref _group, value);
         }
+        
         private ObservableCollection<Item> _items;
 
         public ObservableCollection<Item> Items
