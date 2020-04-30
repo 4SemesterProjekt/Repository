@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Windows.Input;
 using ApiFormat;
+using ApiFormat.ShoppingList;
 using ClientLibAPI;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation.Xaml;
-using SplitList.Mapping;
 using SplitList.Models;
 using SplitList.Views;
 using Xamarin.Forms;
@@ -17,10 +17,9 @@ namespace SplitList.ViewModels
 {
     public class MultiShopListViewModel : BaseViewModel
     {
-        public MultiShopListViewModel(INavigation nav, Page page, int groupId) : base(nav, page, groupId)
+        public MultiShopListViewModel(INavigation nav, Page page, int groupId, string userId) : base(nav, page, groupId, userId)
         {
             Lists = new ObservableCollection<ShoppingList>();
-            // Lists = ListMapper.ListToObservableCollection(SerializerShoppingList.GetShoppingListByGroupId(GroupId).Result);
         }
 
         #region Properties
@@ -59,7 +58,7 @@ namespace SplitList.ViewModels
         //Inserts UI-layer on top of the previous one, to easily implement navigation
         async void OpenShoppinglistExecute() 
         {
-            await Navigation.PushAsync(new ShoppingListView(CurrentList));
+            await Navigation.PushAsync(new ShoppingListView(CurrentList, GroupId, UserId));
         }
 
         private ICommand _addShoppingListCommand;
@@ -78,9 +77,9 @@ namespace SplitList.ViewModels
             if (!string.IsNullOrEmpty(result))
             {
                 var newList = new ShoppingList(result, GroupId);
-                var listDTO = ShoppingListMapper.ShoppingListToShoppingListDto(newList);
+                var listDTO = mapper.Map<ShoppingListDTO>(newList);
                 var listReturned = await SerializerShoppingList.CreateShoppingList(listDTO);
-                Lists.Add(ShoppingListMapper.ShoppingListDtoToShoppingList(listReturned));
+                Lists.Add(mapper.Map<ShoppingList>(listReturned));
             }
         }
 
@@ -127,7 +126,7 @@ namespace SplitList.ViewModels
                         {
                             if (Lists[i].IsChecked)
                             {//Serializer function deletes the selected shoppinglists on the database
-                                await SerializerShoppingList.DeleteShoppingList(ShoppingListMapper.ShoppingListToShoppingListDto(Lists[i]));
+                                await SerializerShoppingList.DeleteShoppingList(mapper.Map<ShoppingListDTO>(Lists[i]));
                                 Lists.Remove(Lists[i]);
                                 
                             }
@@ -144,6 +143,11 @@ namespace SplitList.ViewModels
             }
         }
 
+        public override async void OnAppearingExecute()
+        {
+            Group group = mapper.Map<Group>(await SerializerGroup.GetGroupById(GroupId));
+            Lists = group.ShoppingLists;
+        }
 
         #endregion
     }

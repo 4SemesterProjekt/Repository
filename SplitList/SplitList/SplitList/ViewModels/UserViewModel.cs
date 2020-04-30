@@ -12,7 +12,7 @@ namespace SplitList.ViewModels
 {
     public class UserViewModel : BaseViewModel
     {
-        public UserViewModel(INavigation nav, Page page, int groupId) : base(nav, page, groupId)
+        public UserViewModel(INavigation nav, Page page, int groupId, string userId) : base(nav, page, groupId, userId)
         {
         }
 

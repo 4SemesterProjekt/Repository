@@ -1,9 +1,7 @@
-﻿using System;
-using System.Windows.Input;
+﻿using System.Windows.Input;
+using ApiFormat.Pantry;
 using ClientLibAPI;
 using Prism.Commands;
-using Prism.Mvvm;
-using SplitList.Mapping;
 using SplitList.Models;
 using Xamarin.Forms;
 
@@ -11,7 +9,7 @@ namespace SplitList.ViewModels
 {
     public class PantryViewModel : BaseViewModel
     {
-        public PantryViewModel(INavigation nav, Page page, int groupId) : base(nav, page, groupId)
+        public PantryViewModel(INavigation nav, Page page, int groupId,string userId) : base(nav, page, groupId, userId)
         {
             Pantry = new Pantry();
         }
@@ -102,6 +100,18 @@ namespace SplitList.ViewModels
                 }
             }
         }
+
+        public override async void OnAppearingExecute()
+        {
+            Group group = mapper.Map<Group>(await SerializerGroup.GetGroupById(GroupId));
+            Pantry = group.Pantry;
+        }
+
+        public override async void OnDisappearingExecute()
+        {
+            var result = await SerializerPantry.UpdatePantry(mapper.Map<PantryDTO>(Pantry));
+        }
+
         #endregion
 
         

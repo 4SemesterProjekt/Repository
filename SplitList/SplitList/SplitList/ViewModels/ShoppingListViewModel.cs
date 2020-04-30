@@ -1,26 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Windows.Input;
-using ApiFormat;
+﻿using System.Windows.Input;
 using ApiFormat.ShoppingList;
 using ClientLibAPI;
 using Prism.Commands;
-using Prism.Mvvm;
-using SplitList.Mapping;
 using SplitList.Models;
-using SplitList.Views;
 using Xamarin.Forms;
 
 namespace SplitList.ViewModels
 {
     public class ShoppingListViewModel : BaseViewModel
     {
-        public ShoppingListViewModel(INavigation nav, Page page, int groupId) : base(nav, page, groupId)
+        public ShoppingListViewModel(ShoppingList list, INavigation nav, Page page, int groupId, string userId) : base(nav, page, groupId, userId)
         {
             ShoppingList = new ShoppingList();
+            ShoppingList = list;
         }
 
         #region Properties
@@ -197,7 +189,7 @@ namespace SplitList.ViewModels
             ConfirmBtnIsEnabled = false;
             ConfirmBtnIsVisible = false;
         }
-
+        
         public override async void OnDisappearingExecute()
         {
             foreach (var shoppingListItem in ShoppingList.Items)
@@ -209,8 +201,7 @@ namespace SplitList.ViewModels
             AddBtnIsEnabled = true;
             ConfirmBtnIsEnabled = false;
             ConfirmBtnIsVisible = false;
-            ShoppingListDTO tobj = ShoppingListMapper.ShoppingListToShoppingListDto(ShoppingList);
-            var result = await SerializerShoppingList.CreateShoppingList(tobj);
+            var result = await SerializerShoppingList.UpdateShoppingList(mapper.Map<ShoppingListDTO>(ShoppingList));
         }
         #endregion
     }

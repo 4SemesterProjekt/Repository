@@ -13,7 +13,7 @@ namespace SplitList.ViewModels
 {
     public class MultiRecipesViewModel : BaseViewModel
     {
-        public MultiRecipesViewModel(INavigation nav, Page page, int groupId) : base(nav, page, groupId)
+        public MultiRecipesViewModel(INavigation nav, Page page, int groupId, string userId) : base(nav, page, groupId, userId)
         {
             Recipes = new ObservableCollection<Recipe>();
 
@@ -54,7 +54,7 @@ namespace SplitList.ViewModels
 
         async void OpenRecipeExecute()
         {
-            await Navigation.PushAsync(new RecipeView(CurrentRecipe));
+            await Navigation.PushAsync(new RecipeView(CurrentRecipe, GroupId, UserId));
         }
 
 

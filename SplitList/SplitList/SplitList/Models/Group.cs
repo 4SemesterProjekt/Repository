@@ -9,6 +9,12 @@ namespace SplitList.Models
 {
     public class Group : BindableBase
     {
+        public Group()
+        {
+            Users = new ObservableCollection<User>();
+            ShoppingLists = new ObservableCollection<ShoppingList>();
+        }
+
         private string _name;
         private int _groupId;
         private string _ownerId;
@@ -42,6 +48,6 @@ namespace SplitList.Models
         }
 
         public Pantry Pantry { get; set; }
-        public List<ShoppingList> ShoppingLists { get; set; }
+        public ObservableCollection<ShoppingList> ShoppingLists { get; set; }
     }
 }

@@ -7,9 +7,6 @@
              xmlns:utility="clr-namespace:SplitList.Utility;assembly=SplitList"
              mc:Ignorable="d"
              x:Class="SplitList.Views.RecipeView">
-	<ContentPage.BindingContext>
-        <viewModels:RecipeViewModel x:Name="RecipeViewModel"/>
-	</ContentPage.BindingContext>
     <ContentPage.ToolbarItems>
         <ToolbarItem Command="{Binding AddToShoppingListCommand}"
                      IconImageSource="{utility:ImageResource SplitList.EmbeddedResources.addtolist.png}"/>

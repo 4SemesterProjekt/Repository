@@ -21,9 +21,10 @@ namespace SplitList.Models
             IsVisible = false;
             IsChecked = false;
         }
-        public Item(string name, int amount)
+        public Item(string name, int amount, string type="")
         {
             Name = name;
+            Type = type;
             Amount = (amount > 0 ? amount : 1);
             IsVisible = false;
             IsChecked = false;

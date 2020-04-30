@@ -7,12 +7,8 @@
              xmlns:utility="clr-namespace:SplitList.Utility;assembly=SplitList"
              mc:Ignorable="d"
              x:Class="SplitList.Views.PantryView">
-    <ContentPage.BindingContext>
-        <viewModels:PantryViewModel x:Name="PantryViewModel"/>
-    </ContentPage.BindingContext>
     <ContentPage.ToolbarItems>
         <ToolbarItem
-            BindingContext="{x:Reference PantryViewModel}"
             Command ="{Binding DeleteItemCommand}"
             IconImageSource="{utility:ImageResource SplitList.EmbeddedResources.deleteWhite.png}"/>
     </ContentPage.ToolbarItems>

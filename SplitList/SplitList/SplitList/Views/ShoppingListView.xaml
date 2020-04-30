@@ -14,16 +14,11 @@
             EventName="Disappearing"
             Command="{Binding OnDisappearing}"/>
     </ContentPage.Behaviors>
-    <ContentPage.BindingContext>
-        <viewModels:ShoppingListViewModel x:Name="ShoppingListViewModel"/>
-    </ContentPage.BindingContext>
     <ContentPage.ToolbarItems>
         <ToolbarItem
-            BindingContext="{x:Reference ShoppingListViewModel}"
             Command="{Binding StartShoppingCommand}"
             IconImageSource="{utility:ImageResource SplitList.EmbeddedResources.supermarket.png}"/>
         <ToolbarItem
-            BindingContext="{x:Reference ShoppingListViewModel}"
             Command="{Binding DeleteItemCommand}"
             IconImageSource="{utility:ImageResource SplitList.EmbeddedResources.deleteWhite.png}"/>
     </ContentPage.ToolbarItems>

@@ -11,7 +11,10 @@
     <ContentPage.Behaviors>
         <b:EventToCommandBehavior
             EventName="Appearing"
-            Command="{Binding OnAppearing}"/>
+            Command="{Binding OnAppearingCommand}"/>
+        <b:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding OnDisappearingCommand}"/>
     </ContentPage.Behaviors>
     <ContentPage.Content>
         <ListView x:Name="GroupList" ItemsSource="{Binding Groups}" SelectionMode="None">

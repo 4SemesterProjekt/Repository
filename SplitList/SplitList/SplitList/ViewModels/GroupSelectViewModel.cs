@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 using System.Windows.Input;
+using ApiFormat.Group;
+using ApiFormat.User;
 using ClientLibAPI;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -14,10 +16,9 @@ namespace SplitList.ViewModels
 {
     class GroupSelectViewModel : BaseViewModel
     {
-        public GroupSelectViewModel(INavigation nav, Page page, int groupId) : base(nav, page, groupId)
+        public GroupSelectViewModel(INavigation nav, Page page, int groupId, string userId) : base(nav, page, groupId, userId)
         {
             Groups = new ObservableCollection<Group>();
-            Groups.Add(new Group() { Name = "Familien Splitlist", GroupId = 1 });
         }
 
         private ObservableCollection<Group> _groups;
@@ -37,17 +38,24 @@ namespace SplitList.ViewModels
 
         public void ItemTappedExecute(object group)
         {
-            var g = group as Group;
-            Application.Current.MainPage = new MDP(g.GroupId);
+            if(group is Group g)
+                Application.Current.MainPage = new MDP(g.GroupId, UserId);
         }
 
         public override async void OnAppearingExecute()
         {
+            var returnedUser = await SerializerUser.GetUserById(UserId);
+            User user = mapper.Map<User>(returnedUser);
+            Groups = user.Groups;
 
             if (Groups.Count == 0)
             {
                 var result = await Application.Current.MainPage.DisplayPromptAsync("No group found", "Please input a name for your group", "Create Group");
-                Groups.Add(new Group() { GroupId = 0, Name = result });
+                Group newGroup = new Group() {Name = result};
+                newGroup.Users.Add(user);
+                var returnedGroup = await SerializerGroup.CreateGroup(mapper.Map<GroupDTO>(newGroup));
+                Groups.Add(mapper.Map<Group>(returnedGroup));
+                
             }
         }
     }

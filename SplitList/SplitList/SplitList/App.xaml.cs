@@ -10,7 +10,7 @@ namespace SplitList
         public App()
         {
             InitializeComponent();
-            MainPage = new GroupSelectView();
+            MainPage = new LoginView();
         }
 
         protected override void OnStart()

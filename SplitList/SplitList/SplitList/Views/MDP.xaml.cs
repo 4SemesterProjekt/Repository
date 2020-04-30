@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Dynamic;
 using SplitList.Models;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -12,21 +9,19 @@ namespace SplitList.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MDP : MasterDetailPage
     {
-        public MDP(int groupId)
+        public MDP(int groupId, string userId)
         {
             InitializeComponent();
             _groupId = groupId;
-            _user = new User(){Name = "Thomas"};
-            _user.Groups.Add( new Group(){GroupId = 1, Name = "Familien SplitList"});
             Master = new MenuView();
-            Detail = new NavigationPage(new MultiShopListView(groupId));
+            Detail = new NavigationPage(new MultiShopListView(groupId, userId));
             MenuView.NavListView.ItemSelected += OnItemSelected;
             MenuView.NavListView1.ItemSelected += OnItemSelected;
         }
 
         private int _groupId;
 
-        private User _user;
+        private string _userId;
         /// <summary>
         /// Navigates the page to the selected page from the menu
         /// </summary>
@@ -39,21 +34,21 @@ namespace SplitList.Views
             {
                 // Go to MultiShoppingListView
                 if (item.TargetType == typeof(Views.MultiShopListView)) 
-                    Detail = new NavigationPage(new MultiShopListView(_groupId));
+                    Detail = new NavigationPage(new MultiShopListView(_groupId, _userId));
 
                 // Go to PantryView
                 if(item.TargetType == typeof(Views.PantryView))
-                    Detail = new NavigationPage( new PantryView());
+                    Detail = new NavigationPage( new PantryView(_groupId, _userId));
                 
                 //Go to RecipeView
                 if(item.TargetType == typeof(Views.MultiRecipesView))
-                    Detail = new NavigationPage(new MultiRecipesView());
+                    Detail = new NavigationPage(new MultiRecipesView(_groupId, _userId));
 
                 // Go to UserView
-                if (item.TargetType == typeof(Views.UserView))
-                    Detail = new NavigationPage(new UserView(_user));
+                //if (item.TargetType == typeof(Views.UserView))
+                    //Detail = new NavigationPage(new UserView(_groupId, _userId));
 
-                // Go to LoginView
+                    // Go to LoginView
                 if (item.TargetType == typeof(Views.LoginView))
                     Application.Current.MainPage = new LoginView();
                 

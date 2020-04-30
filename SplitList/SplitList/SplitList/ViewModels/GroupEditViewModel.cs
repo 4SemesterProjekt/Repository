@@ -5,7 +5,6 @@ using System.Windows.Input;
 using ClientLibAPI;
 using Prism.Commands;
 using Prism.Mvvm;
-using SplitList.Mapping;
 using SplitList.Models;
 
 namespace SplitList.ViewModels
@@ -37,7 +36,7 @@ namespace SplitList.ViewModels
         public async void OnAppearingExecute()
         {
             var result = await SerializerGroup.GetGroupById(Group.GroupId);
-            Group = GroupMapper.GroupDtoToGroup(result);
+            //Group = GroupMapper.GroupDtoToGroup(result);
         }
     }
 }

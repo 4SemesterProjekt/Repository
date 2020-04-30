@@ -1,22 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Prism.Navigation.Xaml;
+﻿using System.Collections.Generic;
 using Xamarin.Forms;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using ApiFormat;
-using SplitList.Mapping;
+using ApiFormat.ShoppingList;
 using SplitList.Models;
-using SplitList.Views;
-using ClientLibAPI;
 using Prism.Commands;
-using Prism.Mvvm;
 
 namespace SplitList.ViewModels
 {
     public class RecipeViewModel : BaseViewModel
-    { public RecipeViewModel(INavigation nav, Page page, int groupId) : base(nav, page, groupId)
+    { public RecipeViewModel(INavigation nav, Page page, int groupId, string userId) : base(nav, page, groupId, userId)
         {
             Recipe = new Recipe();
             Ingredients = new ObservableCollection<Item>() { new Item("Salt", 1), new Item("Peber", 1), new Item("Meat", 4) };
@@ -83,12 +76,11 @@ namespace SplitList.ViewModels
             {
                 // Get shoppinglist by group id
                 List<ShoppingListDTO> shoppinglists = new List<ShoppingListDTO>();
-                shoppinglists.Add(new ShoppingListDTO(){shoppingListName = "Test 1"});
-                shoppinglists.Add(new ShoppingListDTO() { shoppingListName = "Test 2" });
+
                 string[] options = new string[shoppinglists.Count];
                 for (int i = 0; i < shoppinglists.Count; i++)
                 {
-                    options[i] = shoppinglists[i].shoppingListName;
+                    options[i] = shoppinglists[i].Name;
                 }
 
                 // DisplayMessage to user to select which shoppinglist to add ingredients to
@@ -148,12 +140,10 @@ namespace SplitList.ViewModels
                 {
                     // Get shoppinglist by group id
                     List<ShoppingListDTO> shoppinglists = new List<ShoppingListDTO>();
-                    shoppinglists.Add(new ShoppingListDTO() { shoppingListName = "Test 1" });
-                    shoppinglists.Add(new ShoppingListDTO() { shoppingListName = "Test 2" });
                     string[] options = new string[shoppinglists.Count];
                     for (int i = 0; i < shoppinglists.Count; i++)
                     {
-                        options[i] = shoppinglists[i].shoppingListName;
+                        options[i] = shoppinglists[i].Name;
                     }
 
                     string action;

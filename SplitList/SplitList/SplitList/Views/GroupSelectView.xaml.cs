@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SplitList.ViewModels;
+﻿using SplitList.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -12,10 +7,10 @@ namespace SplitList.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class GroupSelectView : ContentPage
     {
-        public GroupSelectView()
+        public GroupSelectView(string userId)
         {
             InitializeComponent();
-            BindingContext = new GroupSelectViewModel();
+            BindingContext = new GroupSelectViewModel(Navigation, this, 0, userId );
         }
     }
 }

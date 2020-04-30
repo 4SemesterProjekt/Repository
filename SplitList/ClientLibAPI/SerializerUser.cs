@@ -9,7 +9,7 @@ using ApiFormat.User;
 
 namespace ClientLibAPI
 {
-    class SerializerUser
+    public static class SerializerUser
     {
         const string URL = "https://splitlistwebapi.azurewebsites.net/api/Users/";
 

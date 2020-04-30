@@ -44,7 +44,7 @@ namespace SplitList.ViewModels
 
             if(accessToken != "")
             {
-                Application.Current.MainPage = new GroupSelectView();
+                Application.Current.MainPage = new GroupSelectView(accessToken);
             }
             else
             {

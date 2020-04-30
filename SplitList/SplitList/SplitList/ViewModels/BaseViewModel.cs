@@ -13,11 +13,12 @@ namespace SplitList.ViewModels
 {
     public abstract class BaseViewModel : BindableBase
     {
-        protected BaseViewModel(INavigation nav, Page page, int groupId)
+        protected BaseViewModel(INavigation nav, Page page, int groupId, string userId)
         {
             Navigation = nav;
             Page = page;
             GroupId = groupId;
+            UserId = userId;
 
             var config = new MapperConfiguration(
                 cfg =>
@@ -28,11 +29,12 @@ namespace SplitList.ViewModels
                     cfg.AddProfile<ShoppingListProfile>();
                     cfg.AddProfile<UserProfile>();
                 });
+            mapper = new Mapper(config);
         }
         public IMapper mapper { get; set; }
         public Page Page { get; set; }
         public INavigation Navigation { get; set; }
-
+        public string UserId { get; set; }
         public int GroupId { get; set; }
 
         private ICommand _onAppearingCommand;
