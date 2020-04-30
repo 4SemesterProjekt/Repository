@@ -75,6 +75,8 @@
     <Compile Remove="Migrations\20200421133254_ModifiedAutoIdentity.Designer.cs" />
     <Compile Remove="Migrations\20200421133348_InitialMigration.cs" />
     <Compile Remove="Migrations\20200421133348_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200421133658_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200421133658_InitialMigration.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

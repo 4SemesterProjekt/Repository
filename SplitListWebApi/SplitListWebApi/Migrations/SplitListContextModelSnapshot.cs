@@ -29,8 +29,8 @@ namespace SplitListWebApi.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OwnerId")
-                        .HasColumnType("int");
+                    b.Property<string>("OwnerId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ModelId");
 
@@ -115,6 +115,9 @@ namespace SplitListWebApi.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("RecipeModelID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Amount")
                         .HasColumnType("int");
 
                     b.HasKey("ItemModelID", "RecipeModelID");

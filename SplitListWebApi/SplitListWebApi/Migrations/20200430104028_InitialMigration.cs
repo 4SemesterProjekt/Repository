@@ -56,7 +56,7 @@ namespace SplitListWebApi.Migrations
                     ModelId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(nullable: true),
-                    OwnerId = table.Column<int>(nullable: false)
+                    OwnerId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -265,7 +265,8 @@ namespace SplitListWebApi.Migrations
                 columns: table => new
                 {
                     ItemModelID = table.Column<int>(nullable: false),
-                    RecipeModelID = table.Column<int>(nullable: false)
+                    RecipeModelID = table.Column<int>(nullable: false),
+                    Amount = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
