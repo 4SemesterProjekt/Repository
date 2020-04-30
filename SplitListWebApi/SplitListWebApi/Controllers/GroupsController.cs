@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using SplitListWebApi.Areas.Identity.Data;
 using SplitListWebApi.Services;
 using System;
+using System.Text.RegularExpressions;
+using SplitListWebApi.Services.Interfaces;
 
 namespace SplitListWebApi.Controllers
 {
@@ -13,7 +15,7 @@ namespace SplitListWebApi.Controllers
     {
         private SplitListContext _context;
         private IMapper _mapper;
-        private GroupService _service;
+        private IService<GroupDTO, int> _service;
 
         public GroupsController(SplitListContext context, IMapper mapper)
         {

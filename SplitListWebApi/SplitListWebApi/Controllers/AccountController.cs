@@ -55,7 +55,7 @@ namespace SplitListWebApi.Controllers
             var result = await _signInManager.ExternalLoginSignInAsync(loginInfo.LoginProvider, loginInfo.ProviderKey, false);
 
             if (result.Succeeded)
-                return Ok(user);
+                return Redirect("splitlist://#access_token=" + user.Id);
             else
             {
                 var identityResult = await _userManager.CreateAsync(user);
@@ -66,7 +66,7 @@ namespace SplitListWebApi.Controllers
                 if (!identityResult.Succeeded) return Forbid();
                 await _signInManager.SignInAsync(user, false);
 
-                return Ok(user);
+                return Redirect("splitlist://#access_token=" + user.Id);
             }
         }
     }

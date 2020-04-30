@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using SplitListWebApi.Areas.Identity.Data;
 using SplitListWebApi.Repositories.Implementation;
 using SplitListWebApi.Services;
+using SplitListWebApi.Services.Interfaces;
 using SplitListWebApi.Utilities;
 
 namespace SplitListWebApi.Controllers
@@ -21,7 +22,7 @@ namespace SplitListWebApi.Controllers
     public class UsersController : ControllerBase
     {
         private SplitListContext _context;
-        private UserService _userService;
+        private IService<UserDTO, string> _userService;
 
         public UsersController(SplitListContext context, IMapper mapper)
         {
