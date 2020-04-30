@@ -139,6 +139,7 @@ namespace SplitList.ViewModels
                     if (Ingredients[i].Name.ToLower() == pantry.Items[i].Name.ToLower())
                         pantry.Items.Remove(Ingredients[i]);
                 }
+                //Post Pantry to Database
             }
             // if not all ingredients are in pantry
             else
@@ -161,6 +162,10 @@ namespace SplitList.ViewModels
                     string action;
                     // DisplayMessage to user to select which shoppinglist to add ingredients to
                     action = await Page.DisplayActionSheet("Choose shoppinglist", "Cancel", null, options);
+
+                    // Get shoppinglist by id
+                    // add items to shoppinglist
+                    // post shopping by id
                 }
             }
             
