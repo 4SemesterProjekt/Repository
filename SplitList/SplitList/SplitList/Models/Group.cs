@@ -11,13 +11,13 @@ namespace SplitList.Models
     {
         private string _name;
         private int _groupId;
-        private string _groupOwnerId;
+        private string _ownerId;
         private ObservableCollection<User> _users;
 
-        public string GroupOwnerId
+        public string OwnerId
         {
-            get => _groupOwnerId;
-            set => SetProperty(ref _groupOwnerId, value);
+            get => _ownerId;
+            set => SetProperty(ref _ownerId, value);
 
         }
 
@@ -41,5 +41,7 @@ namespace SplitList.Models
             set => SetProperty(ref _groupId, value);
         }
 
+        public Pantry Pantry { get; set; }
+        public List<ShoppingList> ShoppingLists { get; set; }
     }
 }
