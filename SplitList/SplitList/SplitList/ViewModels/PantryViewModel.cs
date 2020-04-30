@@ -104,7 +104,7 @@ namespace SplitList.ViewModels
         public override async void OnAppearingExecute()
         {
             Group group = mapper.Map<Group>(await SerializerGroup.GetGroupById(GroupId));
-            Pantry = group.Pantry;
+            Pantry = mapper.Map<Pantry>(await SerializerPantry.GetPantryById(group.Pantry.PantryId));
         }
 
         public override async void OnDisappearingExecute()

@@ -58,7 +58,7 @@ namespace SplitList.ViewModels
         //Inserts UI-layer on top of the previous one, to easily implement navigation
         async void OpenShoppinglistExecute() 
         {
-            await Navigation.PushAsync(new ShoppingListView(CurrentList, GroupId, UserId));
+            await Navigation.PushAsync(new ShoppingListView(CurrentList.ShoppingListId, GroupId, UserId));
         }
 
         private ICommand _addShoppingListCommand;

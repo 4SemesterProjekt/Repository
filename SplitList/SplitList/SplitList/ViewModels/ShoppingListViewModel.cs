@@ -1,4 +1,5 @@
 ﻿using System.Windows.Input;
+using ApiFormat.Pantry;
 using ApiFormat.ShoppingList;
 using ClientLibAPI;
 using Prism.Commands;
@@ -9,14 +10,12 @@ namespace SplitList.ViewModels
 {
     public class ShoppingListViewModel : BaseViewModel
     {
-        public ShoppingListViewModel(ShoppingList list, INavigation nav, Page page, int groupId, string userId) : base(nav, page, groupId, userId)
+        public ShoppingListViewModel(int shoppingListId, INavigation nav, Page page, int groupId, string userId) : base(nav, page, groupId, userId)
         {
-            ShoppingList = new ShoppingList();
-            ShoppingList = list;
+            ShoppingList = new ShoppingList(){ShoppingListId =  shoppingListId};
         }
 
         #region Properties
-
         private bool _addBtnIsVisible = true;
         private bool _addBtnIsEnabled = true;
 
@@ -165,23 +164,43 @@ namespace SplitList.ViewModels
 
         public ICommand ConfirmBtnCommand => _confirmBtnCommand ?? (_confirmBtnCommand = new DelegateCommand(ConfirmBtnExecute));
 
-        public void ConfirmBtnExecute()
+        public async void ConfirmBtnExecute()
         {
             // Get pantry by groupID
+            Group group = mapper.Map<Group>(await SerializerGroup.GetGroupById(GroupId));
+            var pantry = mapper.Map<Pantry>(await SerializerPantry.GetPantryById(group.Pantry.PantryId));
             // Add checked items to pantry
+            foreach (var shoppingListItem in ShoppingList.Items)
+            {
+                if (shoppingListItem.IsChecked)
+                {
+                    bool isInPantry = false;
+                    foreach (var pantryItem in pantry.Items)
+                    {
+                        if (pantryItem.Name.ToLower() == shoppingListItem.Name.ToLower())
+                        {
+                            pantryItem.Amount += shoppingListItem.Amount;
+                            isInPantry = true;
+                        }
+                    }
+                    if(!isInPantry)
+                        pantry.Items.Add(shoppingListItem);
+                }
+            }
             // Post pantry by group ID
+            var returnedPantry = await SerializerPantry.UpdatePantry(mapper.Map<PantryDTO>(pantry));
 
             for (int i = ShoppingList.Items.Count - 1; i >= 0; i--)
             {
-
                 if (ShoppingList.Items[i].IsChecked)
                     ShoppingList.Items.Remove(ShoppingList.Items[i]);
 
-                if (ShoppingList.Items.Count != 0)
-                {
-                    ShoppingList.Items[i].IsVisible = false;
-                    ShoppingList.Items[i].IsChecked = false;
-                }
+            }
+
+            foreach (var shoppingListItem in ShoppingList.Items)
+            {
+                shoppingListItem.IsVisible = false;
+                shoppingListItem.IsChecked = false;
             }
 
             AddBtnIsVisible = true;
@@ -189,7 +208,13 @@ namespace SplitList.ViewModels
             ConfirmBtnIsEnabled = false;
             ConfirmBtnIsVisible = false;
         }
-        
+
+        public override async void OnAppearingExecute()
+        {
+            var result = await SerializerShoppingList.GetShoppingListById(ShoppingList.ShoppingListId);
+            ShoppingList = mapper.Map<ShoppingList>(result);
+        }
+
         public override async void OnDisappearingExecute()
         {
             foreach (var shoppingListItem in ShoppingList.Items)

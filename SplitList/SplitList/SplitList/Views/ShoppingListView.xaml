@@ -11,8 +11,11 @@
              x:Class="SplitList.Views.ShoppingListView">
     <ContentPage.Behaviors>
         <b:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding OnAppearingCommand}"/>
+        <b:EventToCommandBehavior
             EventName="Disappearing"
-            Command="{Binding OnDisappearing}"/>
+            Command="{Binding OnDisappearingCommand}"/>
     </ContentPage.Behaviors>
     <ContentPage.ToolbarItems>
         <ToolbarItem

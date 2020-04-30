@@ -8,10 +8,10 @@ namespace SplitList.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ShoppingListView : ContentPage
     {
-        public ShoppingListView(ShoppingList shoppingList, int groupId, string userId)
+        public ShoppingListView(int shoppingListId, int groupId, string userId)
         {
             InitializeComponent();
-            BindingContext = new ShoppingListViewModel(shoppingList, Navigation, this, groupId, userId);
+            BindingContext = new ShoppingListViewModel(shoppingListId, Navigation, this, groupId, userId);
         }
 
     }

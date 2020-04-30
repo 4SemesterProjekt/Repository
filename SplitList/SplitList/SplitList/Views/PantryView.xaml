@@ -5,8 +5,17 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:SplitList.ViewModels;assembly=SplitList"
              xmlns:utility="clr-namespace:SplitList.Utility;assembly=SplitList"
+             xmlns:b="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
              mc:Ignorable="d"
              x:Class="SplitList.Views.PantryView">
+    <ContentPage.Behaviors>
+        <b:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding OnAppearingCommand}"/>
+        <b:EventToCommandBehavior
+            EventName="Disappearing"
+            Command="{Binding OnDisappearingCommand}"/>
+    </ContentPage.Behaviors>
     <ContentPage.ToolbarItems>
         <ToolbarItem
             Command ="{Binding DeleteItemCommand}"

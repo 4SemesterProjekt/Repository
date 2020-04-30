@@ -29,6 +29,7 @@ namespace SplitList.Models
             Name = name;
             ShoppingListId = 0;
             GroupId = groupId;
+            Group = new Group(){GroupId = groupId};
             IsVisible = false;
             IsChecked = false;
         }
