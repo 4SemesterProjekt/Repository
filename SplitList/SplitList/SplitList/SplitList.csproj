@@ -12,6 +12,8 @@
 
   <ItemGroup>
     <None Remove="EmbeddedResources\checklist.png" />
+    <None Remove="EmbeddedResources\delete.svg" />
+    <None Remove="EmbeddedResources\deleteWhite.png" />
     <None Remove="EmbeddedResources\fridge.png" />
     <None Remove="EmbeddedResources\minus.png" />
     <None Remove="EmbeddedResources\plus.png" />
@@ -20,6 +22,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="EmbeddedResources\checklist.png" />
+    <EmbeddedResource Include="EmbeddedResources\deleteWhite.png" />
     <EmbeddedResource Include="EmbeddedResources\fridge.png" />
     <EmbeddedResource Include="EmbeddedResources\minus.png" />
     <EmbeddedResource Include="EmbeddedResources\plus.png" />
@@ -29,12 +32,23 @@
   <ItemGroup>
     <PackageReference Include="Prism.Core" Version="7.2.0.1422" />
     <PackageReference Include="Prism.Forms" Version="7.2.0.1422" />
-    <PackageReference Include="Xamarin.Forms" Version="4.5.0.495" />  
+    <PackageReference Include="System.Runtime" Version="4.3.1" />
+    <PackageReference Include="Xamarin.Forms" Version="4.5.0.530" />  
     <PackageReference Include="Xamarin.Essentials" Version="1.5.2" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\ClientLibAPI\ClientLibAPI.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ApiFormat">
+      <HintPath>..\..\..\DLLs\ClientLibForAPI\ApiFormat.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

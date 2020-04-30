@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ApiFormat;
+using ClientLibAPI;
+using SplitList.Mapping;
 using SplitList.Models;
 using SplitList.ViewModels;
 using Xamarin.Forms;
@@ -16,7 +19,18 @@ namespace SplitList.Views
         public ShoppingListView(ShoppingList shoppingList)
         {
             InitializeComponent();
-            ShoppingListViewModel.ShoppingList = shoppingList;
+            ShoppingListViewModel.Page = this;
+            ShoppingListViewModel.ShoppingList = ShoppingListMapper.ShoppingListDtoToShoppingList(SerializerShoppingList.GetShoppingListByShoppinglistId(shoppingList.ShoppingListId).Result);
         }
+        /// <summary>
+        /// Overrides the disappearing function to sync changes made in a specific shoppinglist with the database
+        /// </summary>
+        protected override async void OnDisappearing()
+        {
+            base.OnDisappearing();
+            ShoppingListDTO tobj = ShoppingListMapper.ShoppingListToShoppingListDto(ShoppingListViewModel.ShoppingList);
+            var result = await SerializerShoppingList.PostShoppingList(tobj);
+        }
+
     }
 }

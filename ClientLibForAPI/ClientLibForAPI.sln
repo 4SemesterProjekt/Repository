@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29911.84
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientLibForAPI", "ClientLibForAPI\ClientLibForAPI.csproj", "{8B42D1DE-7FFF-4F6B-B19E-FC406FF30E05}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientLibForAPI", "ClientLibForAPI\ClientLibForAPI.csproj", "{8B42D1DE-7FFF-4F6B-B19E-FC406FF30E05}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Console app", "Console app\Console app.csproj", "{8C27B856-EA9A-461C-8311-466E3381C34A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{8B42D1DE-7FFF-4F6B-B19E-FC406FF30E05}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B42D1DE-7FFF-4F6B-B19E-FC406FF30E05}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B42D1DE-7FFF-4F6B-B19E-FC406FF30E05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C27B856-EA9A-461C-8311-466E3381C34A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C27B856-EA9A-461C-8311-466E3381C34A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C27B856-EA9A-461C-8311-466E3381C34A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C27B856-EA9A-461C-8311-466E3381C34A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
