@@ -13,6 +13,11 @@ namespace SplitList.AutoMapper
     {
         public UserProfile()
         {
+            CreateMap<UserDTO, User>()
+                .PreserveReferences();
+
+            CreateMap<User, UserDTO>()
+                .PreserveReferences();
         }
     }
 }

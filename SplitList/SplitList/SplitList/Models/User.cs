@@ -19,6 +19,7 @@ namespace SplitList.Models
         private string _name;
         private ObservableCollection<Group> _groups;
         private string _id;
+        private int _modelId;
 
         public string Name
         {
@@ -39,6 +40,12 @@ namespace SplitList.Models
             get => _id;
             set => SetProperty(ref _id, value);
 
+        }
+
+        public int ModelId
+        {
+            get => _modelId;
+            set => SetProperty(ref _modelId, value);
         }
 
     }
