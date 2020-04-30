@@ -1,50 +1,57 @@
-﻿//using ApiFormat;
-//using ApiFormat.Group;
-//using ApiFormat.Pantry;
-//using AutoMapper;
-//using Microsoft.AspNetCore.Mvc;
-//using SplitListWebApi.Areas.Identity.Data;
-//using SplitListWebApi.Repositories.Implementation;
-//using SplitListWebApi.Utilities;
+﻿using ApiFormat;
+using ApiFormat.Group;
+using ApiFormat.Pantry;
+using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using SplitListWebApi.Areas.Identity.Data;
+using SplitListWebApi.Repositories.Implementation;
+using SplitListWebApi.Services;
+using SplitListWebApi.Services.Interfaces;
+using SplitListWebApi.Utilities;
+using System;
+using System.Threading.Tasks;
 
-//namespace SplitListWebApi.Controllers
-//{
-//    [ApiController]
-//    [Route("api/[controller]")]
-//    public class PantriesController : ControllerBase
-//    {
-//        private SplitListContext _context;
-//        private GenericRepository<PantryDTO, PantryModel> _repository;
+namespace SplitListWebApi.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class PantriesController : ControllerBase
+    {
+        private SplitListContext _context;
+        private IService<PantryDTO, int> pantryService;
+        
 
-//        public PantriesController(SplitListContext context, IMapper mapper)
-//        {
-//            _context = context;
-//            _repository = new GenericRepository<PantryDTO, PantryModel>(_context, mapper);
-//        }
+        public PantriesController(SplitListContext context, IMapper mapper)
+        {
+            _context = context;
+            pantryService = new PantryService(context, mapper);
+        }
 
-//        [HttpPost("Create")]
-//        public PantryDTO Create([FromBody] PantryDTO dto)
-//        {
-//            return dto.Add(_repository);
-//        }
+        [HttpGet("{id}")]
+        public PantryDTO GetById(int id)
+        {
+            return pantryService.GetById(id);
+        }
 
-//        [HttpGet("{id}")]
-//        public PantryDTO GetById(int id)
-//        {
-//            PantryDTO dto = new PantryDTO();
-//            return dto.GetById(_repository, id);
-//        }
+        [HttpDelete]
+        public IActionResult Delete([FromBody] PantryDTO dto)
+        {
+            try
+            {
+                pantryService.Delete(dto);
+                return Ok(dto);
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e);
+            }
+            
+        }
 
-//        [HttpDelete("Delete")]
-//        public void Delete([FromBody] PantryDTO dto)
-//        {
-//            dto.Delete(_repository);
-//        }
-
-//        [HttpPost("Save")]
-//        public PantryDTO Save(PantryDTO dto)
-//        {
-//            return dto.Save(_repository);
-//        }
-//    }
-//}
+        [HttpPut]
+        public PantryDTO Update(PantryDTO dto)
+        {
+            return pantryService.Update(dto);
+        }
+    }
+}

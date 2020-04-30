@@ -284,6 +284,115 @@ namespace SplitListWebApi.Tests
                 Assert.AreEqual(context.ShoppingLists.FirstOrDefault().Name, dbList.Name);
             }
         }
+
+        [Test]
+        public void DeleteItemInSLRemovesItem()
+        {
+            using (var context = new SplitListContext(options))
+            {
+                context.Database.EnsureCreated();
+                ShoppingListService slService = new ShoppingListService(context, mapper);
+                GroupService groupService = new GroupService(context, mapper);
+
+                GroupDTO groupDto = new GroupDTO()
+                {
+                    Name = "Group1",
+                    OwnerID = "1"
+                };
+
+                groupDto = groupService.Create(groupDto);
+
+                List<ItemDTO> items = new List<ItemDTO>()
+                {
+                    new ItemDTO()
+                    {
+                        Name = "Banana",
+                        Type = "Fruit",
+                        Amount = 5
+                    },
+                    new ItemDTO()
+                    {
+                        Name = "Apple",
+                        Type = "Fruit",
+                        Amount = 2
+                    }
+                };
+
+                ShoppingListDTO slDTO = new ShoppingListDTO()
+                {
+                    Name = "ShoppingListTest",
+                    Group = groupDto,
+                    Items = items
+                };
+
+                var slFromDb = slService.Create(slDTO);
+
+                slFromDb.Items.RemoveAt(0);
+                slFromDb = slService.Update(slFromDb);
+                ItemDTO newItem0 = slFromDb.Items[0];
+
+                Assert.AreEqual(1, context.ShoppingListItems.Count());
+                Assert.AreEqual(1, slFromDb.Items.Count);
+                Assert.AreEqual(2, context.Items.Count());
+                Assert.AreEqual(newItem0.Name, "Apple");
+            }
+        }
+
+        [Test]
+        public void AddExistingItemToSLUsesItemInDb()
+        {
+            using (var context = new SplitListContext(options))
+            {
+                context.Database.EnsureCreated();
+                GroupService groupService = new GroupService(context, mapper);
+                ShoppingListService slService= new ShoppingListService(context, mapper);
+                ItemService itemService = new ItemService(context, mapper);
+
+                GroupDTO groupDto = new GroupDTO()
+                {
+                    Name = "Group1",
+                    OwnerID = "1"
+                };
+
+                groupDto = groupService.Create(groupDto);
+
+                ItemDTO appleItem = itemService.Create(new ItemDTO()
+                {
+                    Name = "Apple",
+                    Amount = 2,
+                    Type = "Fruit"
+                });
+
+
+                List<ItemDTO> items = new List<ItemDTO>()
+                {
+                    new ItemDTO()
+                    {
+                        Name = "Banana",
+                        Type = "Fruit",
+                        Amount = 5
+                    }
+                };
+
+                ShoppingListDTO slDTO = new ShoppingListDTO()
+                {
+                    Name = "slTest",
+                    Group = groupDto,
+                    Items = items
+                };
+
+                var slFromDb = slService.Create(slDTO);
+
+                slFromDb.Items.Add(appleItem);
+                slFromDb = slService.Update(slFromDb);
+                ItemDTO appleItemFromDb = slFromDb.Items[1];
+
+                Assert.AreEqual(2, context.ShoppingListItems.Count());
+                Assert.AreEqual(2, slFromDb.Items.Count);
+                Assert.AreEqual(2, context.Items.Count());
+                Assert.AreEqual(appleItemFromDb.ModelId, appleItem.ModelId);
+            }
+        }
     }
 }
 

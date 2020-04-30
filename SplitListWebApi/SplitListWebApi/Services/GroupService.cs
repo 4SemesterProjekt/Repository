@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using ApiFormat;
 using ApiFormat.Group;
+using ApiFormat.Pantry;
 using ApiFormat.ShadowTables;
 using ApiFormat.User;
 using AutoMapper;
@@ -22,6 +23,7 @@ namespace SplitListWebApi.Services
         private IMapper _mapper;
         private GenericRepository<GroupModel> groupRepo;
         private UserGroupRepository _ugRepo;
+        private IService<PantryDTO, int> pantryService;
 
         public GroupService(SplitListContext context, IMapper mapper)
         {
@@ -29,6 +31,7 @@ namespace SplitListWebApi.Services
             _mapper = mapper;
             groupRepo = new GenericRepository<GroupModel>(_context);
             _ugRepo = new UserGroupRepository(_context);
+            pantryService = new PantryService(context, mapper);
         }
 
         public GroupDTO GetById(int id)
@@ -59,6 +62,11 @@ namespace SplitListWebApi.Services
             if (dbModel == null)
             {
                 dbModel = groupRepo.Create(model);
+                dbModel.PantryModel = _mapper.Map<PantryModel>(pantryService.Create(new PantryDTO()
+                {
+                    Group = _mapper.Map<GroupDTO>(dbModel),
+                    Name = "New Pantry"
+                }));
 
                 _ugRepo.CreateUserGroups(dbModel, dto.Users);
                 dbModel.UserGroups = groupRepo.GetBy(
@@ -93,6 +101,7 @@ namespace SplitListWebApi.Services
             //Update Properties (missing pantry & SL)
             dbModel.Name = dto.Name;
             dbModel.OwnerId = dto.OwnerID;
+            groupRepo.Update(dbModel);
 
             _ugRepo.DeleteUserGroups(dbModel.UserGroups);
             _ugRepo.CreateUserGroups(dbModel, dto.Users);

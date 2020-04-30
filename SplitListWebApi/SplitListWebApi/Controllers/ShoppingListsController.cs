@@ -1,108 +1,64 @@
-﻿//using System;
-//using ApiFormat;
-//using ApiFormat.Group;
-//using ApiFormat.ShoppingList;
-//using AutoMapper;
-//using Microsoft.AspNetCore.Authorization;
-//using Microsoft.AspNetCore.Mvc;
-//using SplitListWebApi.Areas.Identity.Data;
-//using SplitListWebApi.Repositories.Implementation;
-//using SplitListWebApi.Utilities;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Internal;
+using ApiFormat;
+using ApiFormat.ShoppingList;
+using SplitListWebApi.Areas.Identity.Data;
+using SplitListWebApi.Services.Interfaces;
+using SplitListWebApi.Services;
+using AutoMapper;
+using System;
 
-//namespace SplitListWebApi.Controllers
-//{
-//    [Route("api/[controller]")]
-//    [ApiController]
-//    public class ShoppingListsController : ControllerBase
-//    {
-//        private SplitListContext _context;
-//        private GenericRepository<ShoppingListDTO, ShoppingListModel> _repository;
+namespace SplitListWebApi.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ShoppingListsController : ControllerBase
+    {
+        private readonly SplitListContext _context;
+        private IService<ShoppingListDTO, int> service;
 
-//        public ShoppingListsController(SplitListContext context, IMapper mapper)
-//        {
-//            _context = context;
-//            _repository = new GenericRepository<ShoppingListDTO, ShoppingListModel>(_context, mapper);
-//        }
+        public ShoppingListsController(SplitListContext context, IMapper mapper)
+        {
+            _context = context;
+            service = new ShoppingListService(context, mapper);
+        }
 
-//        [HttpPost("Create")]
-//        public ShoppingListDTO Create([FromBody] ShoppingListDTO dto)
-//        {
-//            return dto.Add(_repository);
-//        }
+        // Returns ShoppingListDTO object for a specific shoppinglist ID
+        [HttpGet("{id}")]
+        public ShoppingListDTO GetShoppingListByID(int id)
+        {
+            return service.GetById(id);
+        }
 
-//        [HttpGet("{id}")]
-//        public ShoppingListDTO GetById(int id)
-//        {
-//            ShoppingListDTO dto = new ShoppingListDTO();
-//            return dto.GetById(_repository, id);
-//        }
+        // POST: api/ShoppingLists
+        [HttpPost]
+        public ShoppingListDTO Create(ShoppingListDTO dto)
+        {
+            return service.Create(dto);
+        }
 
-//        [HttpDelete("Delete")]
-//        public void Delete([FromBody] ShoppingListDTO dto)
-//        {
-//            dto.Delete(_repository);
-//        }
+        [HttpPut]
+        public ShoppingListDTO Update(ShoppingListDTO dto)
+        {
+            return service.Update(dto);
+        }
 
-//        [HttpPost("Save")]
-//        public ShoppingListDTO Save(ShoppingListDTO dto)
-//        {
-//            return dto.Save(_repository);
-//        }
-//    }
-//}
-
-////using System.Collections.Generic;
-////using System.Linq;
-////using System.Threading.Tasks;
-////using Microsoft.AspNetCore.Mvc;
-////using Microsoft.EntityFrameworkCore.Internal;
-////using SplitListWebApi.Repository;
-////using ApiFormat;
-////using ApiFormat.ShoppingList;
-////using SplitListWebApi.Areas.Identity.Data;
-
-////namespace SplitListWebApi.Controllers
-////{
-////    [Route("api/[controller]")]
-////    [ApiController]
-////    public class ShoppingListsController : ControllerBase
-////    {
-////        private readonly SplitListContext _context;
-////        private IShoppingListRepository repo;
-
-////        public ShoppingListsController(SplitListContext context)
-////        {
-////            _context = context;
-////            repo = new ShoppingListRepository(context);
-////        }
-
-////        // Returns all shopping lists for a specific group
-////        [HttpGet("group/{id}")]
-////        public List<ShoppingListDTO> GetShoppingListsByGroupID(int id)
-////        {
-////            return repo.GetShoppingListsByGroupID(id);
-////        }
-
-////        // Returns ShoppingListDTO object for a specific shoppinglist ID
-////        [HttpGet("{id}")]
-////        public ShoppingListDTO GetShoppingListByID(int id)
-////        {
-////            return repo.GetShoppingListByID(id);
-////        }
-
-////        // POST: api/ShoppingLists
-////        // Updates/Creates shoppinglist from parameter.
-////        [HttpPost]
-////        public ShoppingListDTO PostShoppingList(ShoppingListDTO shoppingList)
-////        {
-////            return repo.UpdateShoppingList(shoppingList);
-////        }
-
-////        // DELETE: api/ShoppingLists
-////        [HttpDelete]
-////        public void DeleteShoppingList(ShoppingListDTO list)
-////        {
-////            repo.DeleteShoppingList(list);
-////        }
-////    }
-////}
+        // DELETE: api/ShoppingLists
+        [HttpDelete]
+        public IActionResult DeleteShoppingList(ShoppingListDTO dto)
+        {
+            try
+            {
+                service.Delete(dto);
+                return Ok(dto);
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+    }
+}

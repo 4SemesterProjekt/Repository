@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ApiFormat;
 using ApiFormat.Group;
+using ApiFormat.ShoppingList;
 using ApiFormat.User;
 using AutoMapper;
 using Microsoft.Data.Sqlite;
@@ -306,6 +307,88 @@ namespace SplitListWebApi.Tests
                 Assert.AreEqual("Jordkim", groupFromDB.Users[0].Name);
             }
         }
+
+        [Test]
+        public void CreateGroupCreatesBelongingPantry()
+        {
+            using (var context = new SplitListContext(options))
+            {
+                context.Database.EnsureCreated();
+                GroupService service = new GroupService(context, mapper);
+
+                GroupDTO group = new GroupDTO()
+                {
+                    Name = "TestGroup",
+                    OwnerID = "45"
+                };
+
+                GroupDTO dbGroupDto = service.Create(group);
+
+                Assert.AreEqual(dbGroupDto.Pantry.Name, "New Pantry");
+                Assert.AreEqual(1, context.Pantries.Count());
+            }
+        }
+
+        [Test]
+        public void CreateSLInGroupUpdatesGroupSL()
+        {
+            using (var context = new SplitListContext(options))
+            {
+                context.Database.EnsureCreated();
+                GroupService service = new GroupService(context, mapper);
+                ShoppingListService slService = new ShoppingListService(context, mapper);
+
+                GroupDTO group = new GroupDTO()
+                {
+                    Name = "TestGroup",
+                    OwnerID = "45"
+                };
+
+                GroupDTO dbGroupDto = service.Create(group);
+
+                ShoppingListDTO slInDb = slService.Create(new ShoppingListDTO()
+                {
+                    Name = "TestGroup's List",
+                    Group = dbGroupDto
+                });
+
+                dbGroupDto = service.GetById(dbGroupDto.ModelId);
+
+                Assert.AreEqual(dbGroupDto.ShoppingLists.Count, 1);
+            }
+        }
+
+        [Test]
+        public void DeleteSLInGroupUpdatesGroupSL()
+        {
+            using (var context = new SplitListContext(options))
+            {
+                context.Database.EnsureCreated();
+                GroupService service = new GroupService(context, mapper);
+                ShoppingListService slService = new ShoppingListService(context, mapper);
+
+                GroupDTO group = new GroupDTO()
+                {
+                    Name = "TestGroup",
+                    OwnerID = "45"
+                };
+
+                GroupDTO dbGroupDto = service.Create(group);
+
+                ShoppingListDTO slInDb = slService.Create(new ShoppingListDTO()
+                {
+                    Name = "TestGroup's List",
+                    Group = dbGroupDto
+                });
+
+                slService.Delete(slInDb);
+                dbGroupDto = service.GetById(dbGroupDto.ModelId);
+
+                Assert.IsEmpty(dbGroupDto.ShoppingLists);
+
+            }
+        }
+
     }
 }
 

@@ -106,6 +106,7 @@ namespace SplitListWebApi.Services
                 return _mapper.Map<ShoppingListDTO>(_shoppingListRepository.Create(model));
 
             dbModel.Name = dto.Name;
+            _shoppingListRepository.Update(dbModel);
 
             if (dto.Items != null)
             {

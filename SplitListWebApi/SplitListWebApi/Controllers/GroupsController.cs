@@ -3,6 +3,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using SplitListWebApi.Areas.Identity.Data;
 using SplitListWebApi.Services;
+using System;
 
 namespace SplitListWebApi.Controllers
 {
@@ -34,9 +35,17 @@ namespace SplitListWebApi.Controllers
         }
 
         [HttpDelete]
-        public void Delete(GroupDTO dto)
+        public IActionResult Delete(GroupDTO dto)
         {
-            _service.Delete(dto);
+            try
+            {
+                _service.Delete(dto);
+                return Ok(dto);
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e);
+            }
         }
 
         [HttpPut]

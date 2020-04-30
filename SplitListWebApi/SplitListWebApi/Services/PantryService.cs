@@ -109,6 +109,7 @@ namespace SplitListWebApi.Services
                 return _mapper.Map<PantryDTO>(_pantryRepository.Create(model));
 
             dbModel.Name = dto.Name;
+            _pantryRepository.Update(dbModel);
 
             if (dto.Items != null)
             {

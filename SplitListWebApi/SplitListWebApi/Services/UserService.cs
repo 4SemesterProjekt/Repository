@@ -38,7 +38,11 @@ namespace SplitListWebApi.Services
 
         public UserDTO Create(UserDTO dto)
         {
-            throw new NotImplementedException();
+            throw new Exception
+                (
+                "Tried to create user through UserController but" +
+                " should have been AccountController. Check if URL is correct."
+                );
         }
 
         public UserDTO Update(UserDTO dto)
@@ -54,7 +58,7 @@ namespace SplitListWebApi.Services
             _ugRepo.DeleteUserGroups(dbModel.UserGroups);
             _ugRepo.CreateUserGroups(_mapper.Map<List<GroupModel>>(dto.Groups), dbModel);
 
-            // Opdater navn
+            dbModel.UserName = dto.Name;
 
             dbModel = _userRepo.GetBy(
                 selector: userModel => userModel,
