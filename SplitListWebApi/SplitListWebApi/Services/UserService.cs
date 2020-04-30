@@ -12,7 +12,6 @@ using SplitListWebApi.Services.Interfaces;
 
 namespace SplitListWebApi.Services
 {
-    //TODO: GetBy parameters should be saved one place (function pointer).
     public class UserService : IService<UserDTO, string>
     {
         private SplitListContext _context;
@@ -52,27 +51,39 @@ namespace SplitListWebApi.Services
                 selector: source => source,
                 predicate: source => source.Id == model.Id,
                 include: source => source.Include(um => um.UserGroups)
-                    .ThenInclude(ug => ug.GroupModel));
+                    .ThenInclude(ug => ug.GroupModel),
+                disableTracking: false);
             if(dbModel == null) throw new NullReferenceException("User not found in database.");
 
             _ugRepo.DeleteUserGroups(dbModel.UserGroups);
             _ugRepo.CreateUserGroups(_mapper.Map<List<GroupModel>>(dto.Groups), dbModel);
 
-            dbModel.UserName = dto.Name;
+            dbModel.Name = dto.Name;
+            _userRepo.Update(dbModel);
 
             dbModel = _userRepo.GetBy(
                 selector: userModel => userModel,
                 predicate: userModel => userModel.Id == model.Id,
                 include: source => source.Include(um => um.UserGroups)
-                    .ThenInclude(ug => ug.GroupModel),
-                disableTracking: false);
+                    .ThenInclude(ug => ug.GroupModel));
 
             return _mapper.Map<UserDTO>(dbModel);
         }
 
-        public void Delete(UserDTO entity)
+        public void Delete(UserDTO dto)
         {
-            throw new System.NotImplementedException();
+            var model = _mapper.Map<UserModel>(dto);
+            var dbModel = _userRepo.GetBy(
+                selector: source => source,
+                predicate: source => source.Id == model.Id,
+                include: source =>
+                    source.Include(groupModel => groupModel.UserGroups)
+                        .ThenInclude(ug => ug.UserModel),
+                disableTracking: false);
+            if (dbModel == null) throw new NullReferenceException("GroupDTO wasn't found in the database when trying to delete.");
+
+            _ugRepo.DeleteUserGroups(dbModel.UserGroups);
+            _userRepo.Delete(dbModel);
         }
     }
 }

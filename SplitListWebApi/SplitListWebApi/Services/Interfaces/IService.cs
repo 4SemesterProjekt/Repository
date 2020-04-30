@@ -9,6 +9,6 @@ namespace SplitListWebApi.Services.Interfaces
         TSource GetById(T id);
         TSource Create(TSource dto);
         TSource Update(TSource dto);
-        void Delete(TSource entity);
+        void Delete(TSource dto);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ApiFormat;
 using ApiFormat.Group;
@@ -105,8 +106,7 @@ namespace SplitListWebApi.Services
                         .Include(pm => pm.GroupModel),
                 disableTracking: false);
 
-            if (dbModel == null)
-                return _mapper.Map<PantryDTO>(_pantryRepository.Create(model));
+            if (dbModel == null) throw new ArgumentException("PantryModel to update wasn't found in the database.");
 
             dbModel.Name = dto.Name;
             _pantryRepository.Update(dbModel);

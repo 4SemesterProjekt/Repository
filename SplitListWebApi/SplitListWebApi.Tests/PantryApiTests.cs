@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ApiFormat;
@@ -17,6 +18,7 @@ using SplitListWebApi.Repositories.Implementation;
 using SplitListWebApi.Services;
 using SplitListWebApi.Services.Interfaces;
 using SplitListWebApi.Utilities;
+using ArgumentException = System.ArgumentException;
 
 namespace SplitListWebApi.Tests
 {
@@ -395,6 +397,32 @@ namespace SplitListWebApi.Tests
             }
         }
 
+        [Test]
+        public void UpdateOnNonExistingPantryThrowsException()
+        {
+            using (var context = new SplitListContext(options))
+            {
+                context.Database.EnsureCreated();
+                GroupService groupService = new GroupService(context, mapper);
+                PantryService pantryService = new PantryService(context, mapper);
+
+                GroupDTO groupDto = new GroupDTO()
+                {
+                    Name = "Group1",
+                    OwnerID = "1"
+                };
+
+                groupDto = groupService.Create(groupDto);
+
+                PantryDTO pantryDTO = new PantryDTO()
+                {
+                    Name = "PantryTest",
+                    Group = groupDto
+                };
+
+                Assert.Throws(typeof(ArgumentException), () => pantryService.Update(pantryDTO));
+            }
+        }
     }
 }
 

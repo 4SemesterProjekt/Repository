@@ -49,9 +49,16 @@ namespace SplitListWebApi.Controllers
         }
 
         [HttpPut]
-        public GroupDTO Update(GroupDTO dto)
+        public ActionResult<GroupDTO> Update(GroupDTO dto)
         {
-            return _service.Update(dto);
+            try
+            {
+                return _service.Update(dto);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
         }
     }
 }

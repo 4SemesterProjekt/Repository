@@ -49,9 +49,16 @@ namespace SplitListWebApi.Controllers
         }
 
         [HttpPut]
-        public PantryDTO Update(PantryDTO dto)
+        public ActionResult<PantryDTO> Update(PantryDTO dto)
         {
-            return pantryService.Update(dto);
+            try
+            {
+                return pantryService.Update(dto);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
         }
     }
 }
