@@ -21,11 +21,10 @@ namespace SplitList.Models
             IsVisible = false;
             IsChecked = false;
         }
-        public Item(string name, int amount, string category = "unknown")
+        public Item(string name, int amount)
         {
             Name = name;
             Amount = (amount > 0 ? amount : 1);
-            Category = category;
             IsVisible = false;
             IsChecked = false;
         }
@@ -33,10 +32,33 @@ namespace SplitList.Models
         #region Properties
         public int ItemId { get; set; }
         private string _name;
-        private string _category;
+        private string _type;
         private int _amount;
+
         private bool _isVisible;
         private bool _isChecked;
+
+        
+        public string Name
+        {
+            get => _name;
+            set => SetProperty(ref _name, value);
+
+        }
+
+        public string Type
+        {
+            get => _type;
+            set => SetProperty(ref _type, value);
+
+        }
+
+        public int Amount
+        {
+            get => _amount;
+            set => SetProperty(ref _amount, value);
+
+        }
 
         public bool IsVisible
         {
@@ -49,26 +71,6 @@ namespace SplitList.Models
         {
             get => _isChecked;
             set => SetProperty(ref _isChecked, value);
-        }
-        public string Name
-        {
-            get => _name;
-            set => SetProperty(ref _name, value);
-
-        }
-
-        public string Category
-        {
-            get => _category;
-            set => SetProperty(ref _category, value);
-
-        }
-
-        public int Amount
-        {
-            get => _amount;
-            set => SetProperty(ref _amount, value);
-
         }
         #endregion
 

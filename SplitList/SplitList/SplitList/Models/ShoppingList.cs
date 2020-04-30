@@ -34,12 +34,27 @@ namespace SplitList.Models
         }
 
         public int ShoppingListId { get; set; }
-        public int GroupId { get; set; }
         private string _name;
+        private Group _group;
+
+        public int GroupId { get; set; }
         public string Name
         {
             get => _name;
             set => SetProperty(ref _name, value);
+        }
+
+        public Group Group
+        {
+            get => _group;
+            set => SetProperty(ref _group, value);
+        }
+        private ObservableCollection<Item> _items;
+
+        public ObservableCollection<Item> Items
+        {
+            get => _items;
+            set => SetProperty(ref _items, value);
         }
 
         private bool _isVisible;
@@ -56,14 +71,5 @@ namespace SplitList.Models
             get => _isChecked;
             set => SetProperty(ref _isChecked, value);
         }
-
-        private ObservableCollection<Item> _items;
-
-        public ObservableCollection<Item> Items
-        {
-            get => _items;
-            set => SetProperty(ref _items, value);
-        }
-
     }
 }
