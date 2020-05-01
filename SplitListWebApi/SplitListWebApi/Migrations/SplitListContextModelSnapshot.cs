@@ -83,6 +83,12 @@ namespace SplitListWebApi.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Introduction")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Method")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -124,7 +130,7 @@ namespace SplitListWebApi.Migrations
 
                     b.HasIndex("RecipeModelID");
 
-                    b.ToTable("RecipeItem");
+                    b.ToTable("RecipeItems");
                 });
 
             modelBuilder.Entity("ApiFormat.ShadowTables.ShoppingListItem", b =>
