@@ -1,4 +1,9 @@
-﻿using NUnit.Framework;
+﻿using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using NUnit.Framework;
+using ClientLibAPI;
+using ApiFormat.Group;
 
 namespace ClientLibAPI.Tests
 {
@@ -14,7 +19,16 @@ namespace ClientLibAPI.Tests
         [Test]
         public void GetGroupByIdReturnsGroupFromId()
         {
+            var group = SerializerGroup.CreateGroup(new GroupDTO()
+            {
+                Name = "Group Test",
+                OwnerID = "123"
+            }).Result;
 
+            var groupGet = SerializerGroup.GetGroupById(group.ModelId).Result;
+            var result = SerializerGroup.DeleteGroup(group).Result;
+            Assert.AreEqual(group.ModelId, groupGet.ModelId);
+            Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
         }
 
         [Test]

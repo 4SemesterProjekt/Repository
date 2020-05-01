@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Net;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using ApiFormat;
 using ApiFormat.ShoppingList;
 using Newtonsoft.Json;
 
@@ -58,7 +53,7 @@ namespace ClientLibAPI
             }
         }
 
-        // DELETE: api/ShoppingLists/5
+        // DELETE: api/ShoppingLists
         // If Id exists in DB remove entity with that Id
         // if Id does not exist, do nothing
         public static async Task<HttpResponseMessage> DeleteShoppingList(ShoppingListDTO shoppingList)

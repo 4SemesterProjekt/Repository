@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
 using Newtonsoft.Json;
-using ApiFormat;
 using ApiFormat.User;
 
 namespace ClientLibAPI
@@ -38,7 +35,7 @@ namespace ClientLibAPI
             }
         }
 
-        // DELETE: api/Users/5
+        // DELETE: api/Users
         // If Id exists in DB remove entity with that Id
         // if Id does not exist, do nothing
         public static async Task<HttpResponseMessage> DeleteUser(UserDTO user)

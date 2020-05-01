@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ApiFormat;
+﻿using System.Text;
 using System.Net.Http;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
@@ -54,7 +51,7 @@ namespace ClientLibAPI
             }
         }
 
-        // DELETE: api/Groups/5
+        // DELETE: api/Groups
         // If Id exists in DB remove entity with that Id
         // If Id does not exist, do nothing
         public static async Task<HttpResponseMessage> DeleteGroup(GroupDTO group)
