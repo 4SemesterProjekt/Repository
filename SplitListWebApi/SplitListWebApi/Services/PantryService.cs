@@ -133,7 +133,7 @@ namespace SplitListWebApi.Services
                     source.Include(pm => pm.PantryItems)
                         .ThenInclude(pi => pi.ItemModel),
                 disableTracking: false);
-            if (dbModel == null) return;
+            if (dbModel == null) throw new NullReferenceException("PantryDTO wasn't found in the database when trying to delete.");
 
             _pantryItemRepo.DeletePantryItems(dbModel.PantryItems);
             _pantryRepository.Delete(dbModel);

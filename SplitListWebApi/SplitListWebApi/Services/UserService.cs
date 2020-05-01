@@ -80,7 +80,7 @@ namespace SplitListWebApi.Services
                     source.Include(groupModel => groupModel.UserGroups)
                         .ThenInclude(ug => ug.UserModel),
                 disableTracking: false);
-            if (dbModel == null) throw new NullReferenceException("GroupDTO wasn't found in the database when trying to delete.");
+            if (dbModel == null) throw new NullReferenceException("UserDTO wasn't found in the database when trying to delete.");
 
             _ugRepo.DeleteUserGroups(dbModel.UserGroups);
             _userRepo.Delete(dbModel);

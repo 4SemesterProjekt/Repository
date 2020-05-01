@@ -38,7 +38,7 @@ namespace SplitListWebApi.Services
             var model = _mapper.Map<ItemModel>(dto);
             var dbModel = itemRepo.GetBy(
                 selector: source => source,
-                predicate: slm => slm.ModelId == model.ModelId,
+                predicate: slm => slm.Name == model.Name,
                 disableTracking: false);
 
             if (dbModel == null)

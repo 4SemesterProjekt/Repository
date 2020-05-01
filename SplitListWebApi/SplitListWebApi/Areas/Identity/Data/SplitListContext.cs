@@ -20,6 +20,7 @@ namespace SplitListWebApi.Areas.Identity.Data
         public DbSet<ShoppingListItem> ShoppingListItems { get; set; }
         public DbSet<ItemModel> Items { get; set; }
         public DbSet<RecipeModel> Recipes { get; set; }
+        public DbSet<RecipeItem> RecipeItems { get; set; }
         public DbSet<PantryItem> PantryItems { get; set; }
         public DbSet<UserGroup> UserGroups { get; set; }
         public SplitListContext()

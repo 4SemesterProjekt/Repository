@@ -9,6 +9,8 @@ namespace ApiFormat.Recipe
         [Key]
         public int ModelId { get; set; }
         public string Name { get; set; }
+        public string Introduction { get; set; }
+        public string Method { get; set; }
 
         public List<RecipeItem> RecipeItems { get; set; }
     }
