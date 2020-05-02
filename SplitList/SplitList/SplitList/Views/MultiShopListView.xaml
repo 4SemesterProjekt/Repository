@@ -42,14 +42,15 @@
                 
                     <ListView x:Name="ShoppingLists"
                               ItemsSource="{Binding Lists}"
-                              SelectedItem="{Binding CurrentList}"
+                              SelectionMode="None"
                               CachingStrategy="RecycleElement"
                               Grid.Row="2"
                               Grid.Column="0"
                               Grid.ColumnSpan="2">
                         <ListView.Behaviors>
                         <b:EventToCommandBehavior Command="{Binding ListTappedCommand}"
-                                                          EventName="ItemTapped"/>
+                                                          EventName="ItemTapped"
+                                                          EventArgsConverter="{StaticResource EventArgConverter}"/>
                         </ListView.Behaviors>
                         <ListView.ItemTemplate>
                             <DataTemplate>

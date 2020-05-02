@@ -35,15 +35,7 @@ namespace SplitList.ViewModels
             set => SetProperty(ref _lists, value);
         }
 
-        private ShoppingList _currentList;
 
-        public ShoppingList CurrentList
-        {
-            get => _currentList;
-            set => SetProperty(ref _currentList, value);
-        }
-
-        
         #endregion
 
         #region Commands
@@ -52,13 +44,14 @@ namespace SplitList.ViewModels
 
         public ICommand ListTappedCommand
         {
-            get => _listTappedCommand ?? (_listTappedCommand = new DelegateCommand(OpenShoppinglistExecute));
+            get => _listTappedCommand ?? (_listTappedCommand = new DelegateCommand<object>(OpenShoppinglistExecute));
         }
 
         //Inserts UI-layer on top of the previous one, to easily implement navigation
-        async void OpenShoppinglistExecute() 
+        async void OpenShoppinglistExecute(object sender) 
         {
-            await Navigation.PushAsync(new ShoppingListView(CurrentList.ShoppingListId, GroupId, UserId));
+            if(sender is ShoppingList shoppingList)
+                await Navigation.PushAsync(new ShoppingListView(shoppingList.ShoppingListId, GroupId, UserId));
         }
 
         private ICommand _addShoppingListCommand;

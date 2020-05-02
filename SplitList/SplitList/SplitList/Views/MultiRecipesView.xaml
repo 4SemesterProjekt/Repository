@@ -34,7 +34,7 @@
 
 				<ListView x:Name="MultiRecipes"
 						  ItemsSource="{Binding Recipes}"
-						  SelectedItem="{Binding CurrentRecipe}"
+						  SelectionMode="None"
 				          Grid.Row="2"
 				          Grid.Column="0"
 				          Grid.ColumnSpan="2">
@@ -59,7 +59,8 @@
 					<ListView.Behaviors>
 						<b:EventToCommandBehavior
 							EventName="ItemTapped"
-							Command="{Binding ItemTappedCommand}"/>
+							Command="{Binding ItemTappedCommand}"
+                            EventArgsConverter="{StaticResource EventArgConverter}"/>
 					</ListView.Behaviors>
 				</ListView>
 

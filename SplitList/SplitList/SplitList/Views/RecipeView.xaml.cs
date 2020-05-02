@@ -11,7 +11,7 @@ namespace SplitList.Views
         public RecipeView(Recipe recipe, int groupId, string userId)
         {
             InitializeComponent();
-            BindingContext = new RecipeViewModel(Navigation, this, groupId, userId);
+            BindingContext = new RecipeViewModel(recipe.Id, Navigation, this, groupId, userId);
         }
     }
 }

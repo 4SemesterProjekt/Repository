@@ -181,6 +181,7 @@ namespace SplitList.ViewModels
                         {
                             pantryItem.Amount += shoppingListItem.Amount;
                             isInPantry = true;
+                            break;
                         }
                     }
                     if(!isInPantry)

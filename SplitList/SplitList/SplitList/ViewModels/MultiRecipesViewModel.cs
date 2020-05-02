@@ -31,15 +31,7 @@ namespace SplitList.ViewModels
             get => _recipes; 
             set => SetProperty(ref _recipes, value);
         }
-
-        private Recipe _currenRecipe;
-
-        public Recipe CurrentRecipe
-        {
-            get => _currenRecipe;
-            set => SetProperty(ref _currenRecipe, value);
-        }
-
+        
 
         #endregion
 
@@ -49,12 +41,13 @@ namespace SplitList.ViewModels
 
         public ICommand ItemTappedCommand
         {
-            get => _itemTappedCommand ?? (_itemTappedCommand = new DelegateCommand(OpenRecipeExecute));
+            get => _itemTappedCommand ?? (_itemTappedCommand = new DelegateCommand<object>(OpenRecipeExecute));
         }
 
-        async void OpenRecipeExecute()
+        async void OpenRecipeExecute(object sender)
         {
-            await Navigation.PushAsync(new RecipeView(CurrentRecipe, GroupId, UserId));
+            if(sender is Recipe recipe)
+                await Navigation.PushAsync(new RecipeView(recipe, GroupId, UserId));
         }
 
 
