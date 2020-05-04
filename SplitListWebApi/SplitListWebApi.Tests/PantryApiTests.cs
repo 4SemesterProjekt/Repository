@@ -1,13 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using ApiFormat;
+using ApiFormat.Group;
+using ApiFormat.Item;
+using ApiFormat.Pantry;
+using ApiFormat.ShoppingList;
+using AutoMapper;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
+using SplitListWebApi.Areas.AutoMapper;
 using SplitListWebApi.Areas.Identity.Data;
-using SplitListWebApi.Areas.Identity.Data.Models;
-using SplitListWebApi.Models;
-using SplitListWebApi.Repository;
+using SplitListWebApi.Repositories.Implementation;
+using SplitListWebApi.Services;
+using SplitListWebApi.Services.Interfaces;
+using SplitListWebApi.Utilities;
+using ArgumentException = System.ArgumentException;
 
 namespace SplitListWebApi.Tests
 {
@@ -16,6 +27,7 @@ namespace SplitListWebApi.Tests
     {
         private DbContextOptions<SplitListContext> options;
         private SqliteConnection connection;
+        private IMapper mapper;
 
         [SetUp]
         public void Setup()
@@ -26,6 +38,15 @@ namespace SplitListWebApi.Tests
             options = new DbContextOptionsBuilder<SplitListContext>()
                 .UseSqlite(connection)
                 .Options;
+
+            var config = new MapperConfiguration(cfg => {
+                cfg.AddProfile<GroupProfile>();
+                cfg.AddProfile<PantryProfile>();
+                cfg.AddProfile<UserProfile>();
+                cfg.AddProfile<ShoppingListProfile>();
+                cfg.AddProfile<ItemProfile>();
+            });
+            mapper = config.CreateMapper();
         }
 
         [TearDown]
@@ -35,259 +56,373 @@ namespace SplitListWebApi.Tests
         }
 
         [Test]
-        public void UdatePantryAddsNewPantry()
+        public void GetFromDatabaseGetsSL()
         {
             using (var context = new SplitListContext(options))
             {
-                PantryRepository repo = new PantryRepository(context);
                 context.Database.EnsureCreated();
+                GroupService groupService = new GroupService(context, mapper);
+                PantryService pantryService = new PantryService(context, mapper);
 
-                Group group = new Group()
+                GroupDTO groupDto = new GroupDTO()
                 {
-                    GroupID = 1,
                     Name = "Group1",
-                    OwnerID = "1",
+                    OwnerID = "1"
                 };
-                context.Groups.Add(group);
-                context.SaveChanges();
 
-                repo.UpdatePantry(new PantryDTO()
+                groupDto = groupService.Create(groupDto);
+
+                PantryDTO pantryDTO = new PantryDTO()
                 {
-                    GroupID = 1,
-                    GroupName = "Group1",
-                    Name = "Pantry1"
-                });
+                    Name = "PantryTest",
+                    Group = groupDto
+                };
+
+                var pantryFromDb = pantryService.Create(pantryDTO);
 
                 Assert.AreEqual(1, context.Pantries.Count());
-                Assert.AreEqual(1, context.Pantries.FirstOrDefault().PantryID);
-                Assert.AreEqual("Group1", context.Pantries.FirstOrDefault().Group.Name);
+                Assert.AreEqual(pantryDTO.Name, pantryFromDb.Name);
+                Assert.AreEqual(pantryFromDb.GroupID, groupDto.ModelId);
             }
         }
 
         [Test]
-        public void UpdatePantryAddsItems()
+        public void PantryWithItemsCreatesPantryItemsItems()
         {
             using (var context = new SplitListContext(options))
             {
-                PantryRepository repo = new PantryRepository(context);
                 context.Database.EnsureCreated();
+                GroupService groupService = new GroupService(context, mapper);
+                PantryService pantryService = new PantryService(context, mapper);
 
-                Group group = new Group()
+                GroupDTO groupDto = new GroupDTO()
                 {
-                    GroupID = 1,
                     Name = "Group1",
-                    OwnerID = "1",
+                    OwnerID = "1"
                 };
-                context.Groups.Add(group);
-                context.SaveChanges();
 
-                PantryDTO pantry = new PantryDTO()
+                groupDto = groupService.Create(groupDto);
+
+                List<ItemDTO> items = new List<ItemDTO>()
                 {
-                    GroupID = 1,
-                    GroupName = "Group1",
-                    Name = "Pantry1",
-                    Items = new List<ItemDTO>()
+                    new ItemDTO()
                     {
-                        new ItemDTO()
-                        {
-                            Name = "Banana",
-                            Amount = 5,
-                            Type = "Fruit"
-                        },
-                        new ItemDTO()
-                        {
-                            Name = "Apple",
-                            Amount = 2,
-                            Type = "Fruit"
-                        }
+                        Name = "Banana",
+                        Type = "Fruit",
+                        Amount = 5
+                    },
+                    new ItemDTO()
+                    {
+                        Name = "Apple",
+                        Type = "Fruit",
+                        Amount = 2
                     }
                 };
 
-                repo.UpdatePantry(pantry);
-                
-                Assert.AreEqual(2, context.Pantries.FirstOrDefault().PantryItems.Count);
+                PantryDTO pantryDTO = new PantryDTO()
+                {
+                    Name = "PantryTest",
+                    Group = groupDto,
+                    Items = items
+                };
+
+                var pantryFromDb = pantryService.Create(pantryDTO);
+
+                Assert.AreEqual(2, context.PantryItems.Count());
+                Assert.AreEqual(pantryDTO.Items.Count, pantryFromDb.Items.Count);
+                Assert.AreEqual(2, context.Items.Count());
             }
         }
 
         [Test]
-        public void UpdatePantryRemovesItems()
+        public void UpdatePantryUpdatesItems()
         {
             using (var context = new SplitListContext(options))
             {
-                PantryRepository repo = new PantryRepository(context);
                 context.Database.EnsureCreated();
+                GroupService groupService = new GroupService(context, mapper);
+                PantryService pantryService = new PantryService(context, mapper);
 
-                Group group = new Group()
+                GroupDTO groupDto = new GroupDTO()
                 {
-                    GroupID = 1,
                     Name = "Group1",
-                    OwnerID = "1",
+                    OwnerID = "1"
                 };
-                context.Groups.Add(group);
-                context.SaveChanges();
 
-                PantryDTO pantry = new PantryDTO()
+                groupDto = groupService.Create(groupDto);
+
+                List<ItemDTO> items = new List<ItemDTO>()
                 {
-                    GroupID = 1,
-                    GroupName = "Group1",
-                    Name = "Pantry1",
-                    Items = new List<ItemDTO>()
+                    new ItemDTO()
                     {
-                        new ItemDTO()
-                        {
-                            Name = "Banana",
-                            Amount = 5,
-                            Type = "Fruit"
-                        },
-                        new ItemDTO()
-                        {
-                            Name = "Apple",
-                            Amount = 2,
-                            Type = "Fruit"
-                        }
+                        Name = "Banana",
+                        Type = "Fruit",
+                        Amount = 5
+                    },
+                    new ItemDTO()
+                    {
+                        Name = "Apple",
+                        Type = "Fruit",
+                        Amount = 2
                     }
                 };
 
-                repo.UpdatePantry(pantry);
+                PantryDTO pantryDTO = new PantryDTO()
+                {
+                    Name = "PantryTest",
+                    Group = groupDto,
+                    Items = items
+                };
 
-                Assert.AreEqual(2, context.Pantries.FirstOrDefault().PantryItems.Count);
+                var pantryFromDb = pantryService.Create(pantryDTO);
 
-                pantry.Items.RemoveAt(1);
+                ItemDTO extraItem = new ItemDTO()
+                {
+                    Name = "Pear",
+                    Type = "Fruit",
+                    Amount = 10
+                };
 
-                repo.UpdatePantry(pantry);
+                pantryFromDb.Items.Add(extraItem);
 
-                Assert.AreEqual(1, context.Pantries.FirstOrDefault().PantryItems.Count);
-                Assert.AreEqual("Banana", context.Pantries.FirstOrDefault().PantryItems.First().Item.Name);
+                pantryFromDb = pantryService.Update(pantryFromDb);
+
+                Assert.AreEqual(3, context.PantryItems.Count());
+                Assert.AreEqual(3, pantryFromDb.Items.Count);
+                Assert.AreEqual(3, context.Items.Count());
             }
         }
 
         [Test]
-        public void DeletePantryRemovesPantry()
+        public void UpdatePantryUpdatesItemProperties()
         {
             using (var context = new SplitListContext(options))
             {
-                PantryRepository repo = new PantryRepository(context);
                 context.Database.EnsureCreated();
+                GroupService groupService = new GroupService(context, mapper);
+                PantryService pantryService = new PantryService(context, mapper);
 
-                Group group = new Group()
+                GroupDTO groupDto = new GroupDTO()
                 {
-                    GroupID = 1,
                     Name = "Group1",
-                    OwnerID = "1",
-                };
-                context.Groups.Add(group);
-                context.SaveChanges();
-
-                PantryDTO pantry = new PantryDTO()
-                {
-                    GroupID = 1,
-                    GroupName = "Group1",
-                    Name = "Pantry1"
+                    OwnerID = "1"
                 };
 
-                repo.UpdatePantry(pantry);
+                groupDto = groupService.Create(groupDto);
 
-                Assert.AreEqual(1, context.Pantries.Count());
-
-                repo.DeletePantry(pantry);
-
-                Assert.AreEqual(0, context.Pantries.Count());
-            }
-        }
-
-        [Test]
-        public void DeletePantryRemovesFromPantryItems()
-        {
-            using (var context = new SplitListContext(options))
-            {
-                PantryRepository repo = new PantryRepository(context);
-                context.Database.EnsureCreated();
-
-                Group group = new Group()
+                List<ItemDTO> items = new List<ItemDTO>()
                 {
-                    GroupID = 1,
-                    Name = "Group1",
-                    OwnerID = "1",
-                };
-                context.Groups.Add(group);
-                context.SaveChanges();
-
-                PantryDTO pantry = new PantryDTO()
-                {
-                    GroupID = 1,
-                    GroupName = "Group1",
-                    Name = "Pantry1",
-                    Items = new List<ItemDTO>()
+                    new ItemDTO()
                     {
-                        new ItemDTO()
-                        {
-                            Name = "Banana",
-                            Amount = 5,
-                            Type = "Fruit"
-                        }
+                        Name = "Banana",
+                        Type = "Fruit",
+                        Amount = 5
+                    },
+                    new ItemDTO()
+                    {
+                        Name = "Apple",
+                        Type = "Fruit",
+                        Amount = 2
                     }
                 };
 
-                repo.UpdatePantry(pantry);
+                PantryDTO pantryDTO = new PantryDTO()
+                {
+                    Name = "PantryTest",
+                    Group = groupDto,
+                    Items = items
+                };
+
+                var pantryFromDb = pantryService.Create(pantryDTO);
+
+                ItemDTO cashew = new ItemDTO
+                {
+                    Name = "Cashew",
+                    Type = "Nut",
+                    Amount = 67
+                };
+
+                pantryFromDb.Items[0] = cashew;
+                pantryFromDb= pantryService.Update(pantryFromDb);
+                ItemDTO cashewFromDb = pantryFromDb.Items[0];
+
+                Assert.AreEqual(2, context.PantryItems.Count());
+                Assert.AreEqual(2, pantryFromDb.Items.Count);
+                Assert.AreEqual(3, context.Items.Count());
+                Assert.AreEqual(cashew.Name, cashewFromDb.Name);
+                Assert.AreEqual(cashew.Amount, cashewFromDb.Amount);
+                Assert.AreEqual(cashew.Type, cashewFromDb.Type);
+            }
+        }
+
+        [Test]
+        public void UpdatePantryUpdatesPorperties()
+        {
+            using (var context = new SplitListContext(options))
+            {
+                context.Database.EnsureCreated();
+                GroupService groupService = new GroupService(context, mapper);
+                PantryService pantryService = new PantryService(context, mapper);
+
+                GroupDTO groupDto = new GroupDTO()
+                {
+                    Name = "Group1",
+                    OwnerID = "1"
+                };
+
+                groupDto = groupService.Create(groupDto);
+
+                PantryDTO pantryDTO = new PantryDTO()
+                {
+                    Name = "PantryTest",
+                    Group = groupDto
+                };
+
+                PantryDTO pantryFromDb = pantryService.Create(pantryDTO);
+
+                pantryFromDb.Name = "ListTest";
+                pantryFromDb= pantryService.Update(pantryFromDb);
+
+                Assert.AreNotEqual(context.Pantries.FirstOrDefault().Name, pantryDTO.Name);
+                Assert.AreEqual(context.Pantries.FirstOrDefault().Name, pantryFromDb.Name);
+            }
+        }
+
+        [Test]
+        public void DeleteItemInPantryRemovesItem()
+        {
+            using (var context = new SplitListContext(options))
+            {
+                context.Database.EnsureCreated();
+                GroupService groupService = new GroupService(context, mapper);
+                PantryService pantryService = new PantryService(context, mapper);
+
+                GroupDTO groupDto = new GroupDTO()
+                {
+                    Name = "Group1",
+                    OwnerID = "1"
+                };
+
+                groupDto = groupService.Create(groupDto);
+
+                List<ItemDTO> items = new List<ItemDTO>()
+                {
+                    new ItemDTO()
+                    {
+                        Name = "Banana",
+                        Type = "Fruit",
+                        Amount = 5
+                    },
+                    new ItemDTO()
+                    {
+                        Name = "Apple",
+                        Type = "Fruit",
+                        Amount = 2
+                    }
+                };
+
+                PantryDTO pantryDTO = new PantryDTO()
+                {
+                    Name = "PantryTest",
+                    Group = groupDto,
+                    Items = items
+                };
+
+                var pantryFromDb = pantryService.Create(pantryDTO);
+
+                pantryFromDb.Items.RemoveAt(0);
+                pantryFromDb = pantryService.Update(pantryFromDb);
+                ItemDTO newItem0 = pantryFromDb.Items[0];
 
                 Assert.AreEqual(1, context.PantryItems.Count());
-
-                repo.DeletePantry(pantry);
-
-                Assert.AreEqual(0, context.PantryItems.Count());
-                Assert.AreEqual(0, context.Pantries.Count());
+                Assert.AreEqual(1, pantryFromDb.Items.Count);
+                Assert.AreEqual(2, context.Items.Count());
+                Assert.AreEqual(newItem0.Name, "Apple");
             }
         }
 
         [Test]
-        public void GetPantryFromGroupIDGetsPantry() 
+        public void AddExistingItemToPantryUsesItemInDb()
         {
             using (var context = new SplitListContext(options))
             {
-                PantryRepository repo = new PantryRepository(context);
                 context.Database.EnsureCreated();
+                GroupService groupService = new GroupService(context, mapper);
+                PantryService pantryService = new PantryService(context, mapper);
+                ItemService itemService = new ItemService(context, mapper);
 
-                Group group = new Group()
+                GroupDTO groupDto = new GroupDTO()
                 {
-                    GroupID = 1,
                     Name = "Group1",
-                    OwnerID = "1",
+                    OwnerID = "1"
                 };
-                context.Groups.Add(group);
-                context.SaveChanges();
 
-                PantryDTO pantry = new PantryDTO()
+                groupDto = groupService.Create(groupDto);
+
+                ItemDTO appleItem = itemService.Create(new ItemDTO()
                 {
-                    GroupID = 1,
-                    GroupName = "Group1",
-                    Name = "Pantry1",
-                    Items = new List<ItemDTO>()
+                    Name = "Apple",
+                    Amount = 2,
+                    Type = "Fruit"
+                });
+
+
+                List<ItemDTO> items = new List<ItemDTO>()
+                {
+                    new ItemDTO()
                     {
-                        new ItemDTO()
-                        {
-                            Name = "Banana",
-                            Amount = 5,
-                            Type = "Fruit"
-                        },
-                        new ItemDTO()
-                        {
-                            Name = "Apple",
-                            Amount = 2,
-                            Type = "Fruit"
-                        }
+                        Name = "Banana",
+                        Type = "Fruit",
+                        Amount = 5
                     }
                 };
 
-                repo.UpdatePantry(pantry);
-
-                PantryDTO pantryDTO = repo.GetPantryFromGroupID(1);
-                for (int i = 0; i < pantry.Items.Count; i++)
+                PantryDTO pantryDTO = new PantryDTO()
                 {
-                    Assert.AreEqual(pantry.Items[i].Name, pantryDTO.Items[i].Name);
-                    Assert.AreEqual(pantry.Items[i].Type, pantryDTO.Items[i].Type);
-                    Assert.AreEqual(pantry.Items[i].Amount, pantryDTO.Items[i].Amount);
-                }
+                    Name = "PantryTest",
+                    Group = groupDto,
+                    Items = items
+                };
+
+                var pantryFromDb = pantryService.Create(pantryDTO);
+
+                pantryFromDb.Items.Add(appleItem);
+                pantryFromDb = pantryService.Update(pantryFromDb);
+                ItemDTO appleItemFromDb = pantryFromDb.Items[1];
+
+                Assert.AreEqual(2, context.PantryItems.Count());
+                Assert.AreEqual(2, pantryFromDb.Items.Count);
+                Assert.AreEqual(2, context.Items.Count());
+                Assert.AreEqual(appleItemFromDb.ModelId, appleItem.ModelId);
+            }
+        }
+
+        [Test]
+        public void UpdateOnNonExistingPantryThrowsException()
+        {
+            using (var context = new SplitListContext(options))
+            {
+                context.Database.EnsureCreated();
+                GroupService groupService = new GroupService(context, mapper);
+                PantryService pantryService = new PantryService(context, mapper);
+
+                GroupDTO groupDto = new GroupDTO()
+                {
+                    Name = "Group1",
+                    OwnerID = "1"
+                };
+
+                groupDto = groupService.Create(groupDto);
+
+                PantryDTO pantryDTO = new PantryDTO()
+                {
+                    Name = "PantryTest",
+                    Group = groupDto
+                };
+
+                Assert.Throws(typeof(ArgumentException), () => pantryService.Update(pantryDTO));
             }
         }
     }
 }
+

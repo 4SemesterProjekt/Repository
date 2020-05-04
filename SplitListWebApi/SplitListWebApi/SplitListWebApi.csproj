@@ -27,22 +27,82 @@
     <Compile Remove="Migrations\20200330085334_AddedDbSetForPantryItems.Designer.cs" />
     <Compile Remove="Migrations\20200330094826_AddedDbSetForUserGroups.cs" />
     <Compile Remove="Migrations\20200330094826_AddedDbSetForUserGroups.Designer.cs" />
+    <Compile Remove="Migrations\20200406074734_InitialMigrationAfterRebase.cs" />
+    <Compile Remove="Migrations\20200406074734_InitialMigrationAfterRebase.Designer.cs" />
+    <Compile Remove="Migrations\20200409205406_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200409205406_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200409205447_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200409205447_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200409223118_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200409223118_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200410084214_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200410084214_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200414071836_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200414071836_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200414080946_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200414080946_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200414120835_ChangedId.cs" />
+    <Compile Remove="Migrations\20200414120835_ChangedId.Designer.cs" />
+    <Compile Remove="Migrations\20200414142059_ChangedPantryDTOToContainAGroupDTO.cs" />
+    <Compile Remove="Migrations\20200414142059_ChangedPantryDTOToContainAGroupDTO.Designer.cs" />
+    <Compile Remove="Migrations\20200414151414_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200414151414_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200414173729_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200414173729_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200415122008_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200415122008_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200415131313_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200415131313_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200415132046_AutoIncrement.cs" />
+    <Compile Remove="Migrations\20200415132046_AutoIncrement.Designer.cs" />
+    <Compile Remove="Migrations\20200415132151_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200415132151_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200415133751_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200415133751_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200416113255_ConfiguredUserGroup.cs" />
+    <Compile Remove="Migrations\20200416113255_ConfiguredUserGroup.Designer.cs" />
+    <Compile Remove="Migrations\20200421093209_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200421093209_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200421125749_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200421125749_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200421130646_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200421130646_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200421131316_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200421131316_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200421132521_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200421132521_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200421133254_ModifiedAutoIdentity.cs" />
+    <Compile Remove="Migrations\20200421133254_ModifiedAutoIdentity.Designer.cs" />
+    <Compile Remove="Migrations\20200421133348_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200421133348_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200421133658_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200421133658_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200430104028_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200430104028_InitialMigration.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="3.1.3" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.0-preview1.19508.20" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.2">
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.0-preview1.19506.1" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.3" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
   <ItemGroup>

@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ApiFormat;
+using ApiFormat.Group;
+using ApiFormat.User;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SplitListWebApi.Areas.Identity.Data;
-using SplitListWebApi.Models;
-using SplitListWebApi.Repository;
+using SplitListWebApi.Repositories.Implementation;
+using SplitListWebApi.Services;
+using SplitListWebApi.Services.Interfaces;
+using SplitListWebApi.Utilities;
 
 namespace SplitListWebApi.Controllers
 {
@@ -16,36 +21,48 @@ namespace SplitListWebApi.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly SplitListContext _context;
-        private UserRepository repo;
+        private SplitListContext _context;
+        private UserService _userService;
 
-        public UsersController(SplitListContext context)
+        public UsersController(SplitListContext context, IMapper mapper)
         {
             _context = context;
+            _userService = new UserService(_context, mapper);
         }
 
         //GET: User's Groups
-        [HttpGet("/{id}/groups")]
-        public List<GroupDTO> GetGroupsFromUser(string id)
+        [HttpGet("{id}")]
+        public UserDTO GetUserById(string id)
         {
-            return repo.GetUsersGroups(id);
+            return _userService.GetById(id);
         }
 
-        // POST: api/Users
-        [HttpPost]
-        public UserDTO UpdateUser(UserDTO user)
+        [HttpGet("Email/{email}")]
+        public UserDTO GetUserByEmail(string email)
         {
-            return repo.UpdateUser(user);
+            return _userService.GetByEmail(email);
         }
 
-        // DELETE: api/Users
+        //POST: Update User
+        [HttpPut]
+        public UserDTO Update([FromBody] UserDTO user)
+        {
+            return _userService.Update(user);
+        }
+
+        //DELETE: Delete User
         [HttpDelete]
-        public void DeleteUser(UserDTO user)
+        public ActionResult Delete([FromBody] UserDTO user)
         {
-            repo.DeleteUser(user);
+            try
+            {
+                _userService.Delete(user);
+                return Ok(user);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
         }
-
-        
-
     }
 }

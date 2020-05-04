@@ -1,18 +1,26 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using ApiFormat;
+using ApiFormat.Group;
+using ApiFormat.Item;
+using ApiFormat.Pantry;
+using ApiFormat.Recipe;
+using ApiFormat.ShadowTables;
+using ApiFormat.ShoppingList;
+using ApiFormat.User;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using SplitListWebApi.Areas.Identity.Data.Models;
-using SplitListWebApi.Models;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace SplitListWebApi.Areas.Identity.Data
 {
-   public partial class SplitListContext : IdentityDbContext<User>
+   public partial class SplitListContext : IdentityDbContext<UserModel>
     {
-        public DbSet<Group> Groups { get; set; }
-        public DbSet<Pantry> Pantries { get; set; }
-        public DbSet<ShoppingList> ShoppingLists { get; set; }
+        public DbSet<GroupModel> Groups { get; set; }
+        public DbSet<PantryModel> Pantries { get; set; }
+        public DbSet<ShoppingListModel> ShoppingLists { get; set; }
         public DbSet<ShoppingListItem> ShoppingListItems { get; set; }
-        public DbSet<Item> Items { get; set; }
-        public DbSet<Recipe> Recipes { get; set; }
+        public DbSet<ItemModel> Items { get; set; }
+        public DbSet<RecipeModel> Recipes { get; set; }
+        public DbSet<RecipeItem> RecipeItems { get; set; }
         public DbSet<PantryItem> PantryItems { get; set; }
         public DbSet<UserGroup> UserGroups { get; set; }
         public SplitListContext()
@@ -32,54 +40,58 @@ namespace SplitListWebApi.Areas.Identity.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<UserModel>().Property(p => p.ModelId).UseIdentityColumn()
+                .Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
+
             //Setup for User-Group Many-to-Many
-            modelBuilder.Entity<UserGroup>().HasKey(ug => new {ug.Id, ug.GroupID});
-            
-            modelBuilder.Entity<UserGroup>()
-                .HasOne(ug => ug.User)
-                .WithMany(u => u.UserGroups)
-                .HasForeignKey(ug => ug.Id);
+            modelBuilder.Entity<UserGroup>().HasKey(ug => new {ug.GroupModelModelID, ug.UserId });
 
             modelBuilder.Entity<UserGroup>()
-                .HasOne(ug => ug.Group)
+                .HasOne(ug => ug.UserModel)
+                .WithMany(u => u.UserGroups)
+                .HasForeignKey(ug =>  ug.UserId);
+
+            modelBuilder.Entity<UserGroup>()
+                .HasOne(ug => ug.GroupModel)
                 .WithMany(g => g.UserGroups)
-                .HasForeignKey(ug => ug.GroupID);
+                .HasForeignKey(ug => ug.GroupModelModelID);
 
             //Setup for ShoppingList-Item Many-to-Many
-            modelBuilder.Entity<ShoppingListItem>().HasKey(sli => new {sli.ShoppingListID, sli.ItemID});
+            modelBuilder.Entity<ShoppingListItem>().HasKey(sli => new {sli.ShoppingListModelID, sli.ItemModelID});
             modelBuilder.Entity<ShoppingListItem>()
-                .HasOne(sli => sli.ShoppingList)
+                .HasOne(sli => sli.ShoppingListModel)
                 .WithMany(sl => sl.ShoppingListItems)
-                .HasForeignKey(sli => sli.ShoppingListID);
+                .HasForeignKey(sli => sli.ShoppingListModelID);
 
             modelBuilder.Entity<ShoppingListItem>()
-                .HasOne(sli => sli.Item)
+                .HasOne(sli => sli.ItemModel)
                 .WithMany(i => i.ShoppingListItems)
-                .HasForeignKey(sli => sli.ItemID);
+                .HasForeignKey(sli => sli.ItemModelID);
             
             //Setup for Pantry-Item Many-to-Many
-            modelBuilder.Entity<PantryItem>().HasKey(pi => new {pi.PantryID, pi.ItemID});
+            modelBuilder.Entity<PantryItem>().HasKey(pi => new {pi.PantryModelID, pi.ItemModelID});
             modelBuilder.Entity<PantryItem>()
-                .HasOne(pi => pi.Pantry)
+                .HasOne(pi => pi.PantryModel)
                 .WithMany(p => p.PantryItems)
-                .HasForeignKey(pi => pi.PantryID);
+                .HasForeignKey(pi => pi.PantryModelID);
 
             modelBuilder.Entity<PantryItem>()
-                .HasOne(pi => pi.Item)
+                .HasOne(pi => pi.ItemModel)
                 .WithMany(i => i.PantryItems)
-                .HasForeignKey(pi => pi.ItemID);
+                .HasForeignKey(pi => pi.ItemModelID);
             
             //Setup for Item-Recipe Many-to-Many
-            modelBuilder.Entity<ItemRecipe>().HasKey(ir => new {ir.ItemID, ir.RecipeID});
-            modelBuilder.Entity<ItemRecipe>()
-                .HasOne(ir => ir.item)
-                .WithMany(i => i.ItemRecipes)
-                .HasForeignKey(ir => ir.ItemID);
+            modelBuilder.Entity<RecipeItem>().HasKey(ir => new {ir.ItemModelID, ir.RecipeModelID});
+            modelBuilder.Entity<RecipeItem>()
+                .HasOne(ir => ir.ItemModel)
+                .WithMany(i => i.RecipeItems)
+                .HasForeignKey(ir => ir.ItemModelID);
 
-            modelBuilder.Entity<ItemRecipe>()
-                .HasOne(ir => ir.Recipe)
-                .WithMany(r => r.ItemRecipes)
-                .HasForeignKey(ir => ir.RecipeID);
+            modelBuilder.Entity<RecipeItem>()
+                .HasOne(ir => ir.RecipeModel)
+                .WithMany(r => r.RecipeItems)
+                .HasForeignKey(ir => ir.RecipeModelID);
             OnModelCreatingPartial(modelBuilder);
         }
 

@@ -3,10 +3,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Internal;
-using SplitListWebApi.Models;
-using SplitListWebApi.Repository;
 using ApiFormat;
+using ApiFormat.ShoppingList;
 using SplitListWebApi.Areas.Identity.Data;
+using SplitListWebApi.Services.Interfaces;
+using SplitListWebApi.Services;
+using AutoMapper;
+using System;
 
 namespace SplitListWebApi.Controllers
 {
@@ -15,41 +18,47 @@ namespace SplitListWebApi.Controllers
     public class ShoppingListsController : ControllerBase
     {
         private readonly SplitListContext _context;
-        private IShoppingListRepository repo;
+        private ShoppingListService service;
 
-        public ShoppingListsController(SplitListContext context)
+        public ShoppingListsController(SplitListContext context, IMapper mapper)
         {
             _context = context;
-            repo = new ShoppingListRepository(context);
-        }
-
-        // Returns all shopping lists for a specific group
-        [HttpGet("group/{id}")]
-        public List<ShoppingListDTO> GetShoppingListsByGroupID(int id)
-        {
-            return repo.GetShoppingListsByGroupID(id);
+            service = new ShoppingListService(context, mapper);
         }
 
         // Returns ShoppingListDTO object for a specific shoppinglist ID
         [HttpGet("{id}")]
         public ShoppingListDTO GetShoppingListByID(int id)
         {
-            return repo.GetShoppingListByID(id);
+            return service.GetById(id);
         }
 
         // POST: api/ShoppingLists
-        // Updates/Creates shoppinglist from parameter.
         [HttpPost]
-        public ShoppingListDTO PostShoppingList(ShoppingListDTO shoppingList)
+        public ShoppingListDTO Create(ShoppingListDTO dto)
         {
-            return repo.UpdateShoppingList(shoppingList);
+            return service.Create(dto);
+        }
+
+        [HttpPut]
+        public ShoppingListDTO Update(ShoppingListDTO dto)
+        {
+            return service.Update(dto);
         }
 
         // DELETE: api/ShoppingLists
         [HttpDelete]
-        public void DeleteShoppingList(ShoppingListDTO list)
+        public IActionResult DeleteShoppingList(ShoppingListDTO dto)
         {
-            repo.DeleteShoppingList(list);
+            try
+            {
+                service.Delete(dto);
+                return Ok(dto);
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e);
+            }
         }
     }
 }
