@@ -9,7 +9,13 @@
              mc:Ignorable="d"
              x:Class="SplitList.Views.MultiRecipesView"
              Title="Recipes">
-  <ContentPage.Content>
+    <ContentPage.Behaviors>
+        <b:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding OnAppearingCommand}"/>
+    </ContentPage.Behaviors>
+
+    <ContentPage.Content>
       <StackLayout>
 			<Grid>
 				<Grid.ColumnDefinitions>
