@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using ApiFormat;
 using ApiFormat.Group;
 using ApiFormat.User;
@@ -12,7 +13,7 @@ using SplitListWebApi.Services.Interfaces;
 
 namespace SplitListWebApi.Services
 {
-    public class UserService : IService<UserDTO, string>
+    public class UserService : IService<UserDTO, UserModel>
     {
         private SplitListContext _context;
         private IMapper _mapper;
@@ -26,22 +27,24 @@ namespace SplitListWebApi.Services
             _ugRepo = new UserGroupRepository(context);
         }
 
-        public UserDTO GetById(string id)
+        public List<UserDTO> GetAll()
         {
-            return _mapper.Map<UserDTO>(_userRepo.GetBy(selector: model => model,
-                predicate: model => model.Id == id,
-                include: source => source.Include(um => um.UserGroups)
-                    .ThenInclude(ug => ug.GroupModel))
-                .FirstOrDefault());
+            throw new NotImplementedException();
         }
 
-        public UserDTO GetByEmail(string email)
+        public UserDTO GetBy(Expression<Func<UserModel, bool>> predicate)
         {
-            return _mapper.Map<UserDTO>(_userRepo.GetBy(selector: model => model,
-                    predicate: model => model.Email == email,
-                    include: source => source.Include(um => um.UserGroups)
-                        .ThenInclude(ug => ug.GroupModel))
-                .FirstOrDefault());
+            return _mapper.Map<UserDTO>(GetModels(predicate).FirstOrDefault());
+        }
+
+        private IEnumerable<UserModel> GetModels(Expression<Func<UserModel, bool>> predicate, bool disableTracking = true)
+        {
+            return _userRepo.GetBy(
+                selector: source => source,
+                predicate: predicate,
+                include: source => source.Include(um => um.UserGroups)
+                    .ThenInclude(ug => ug.GroupModel),
+                disableTracking: disableTracking);
         }
 
         public UserDTO Create(UserDTO dto)
@@ -56,13 +59,7 @@ namespace SplitListWebApi.Services
         public UserDTO Update(UserDTO dto)
         {
             var model = _mapper.Map<UserModel>(dto);
-            var dbModel = _userRepo.GetBy(
-                selector: source => source,
-                predicate: source => source.Id == model.Id,
-                include: source => source.Include(um => um.UserGroups)
-                    .ThenInclude(ug => ug.GroupModel),
-                disableTracking: false)
-                .FirstOrDefault();
+            var dbModel = GetModels(source => source.Id == model.Id, false).FirstOrDefault();
             if(dbModel == null) throw new NullReferenceException("User not found in database.");
 
             _ugRepo.DeleteUserGroups(dbModel.UserGroups);
@@ -71,12 +68,7 @@ namespace SplitListWebApi.Services
             dbModel.Name = dto.Name;
             _userRepo.Update(dbModel);
 
-            dbModel = _userRepo.GetBy(
-                selector: userModel => userModel,
-                predicate: userModel => userModel.Id == model.Id,
-                include: source => source.Include(um => um.UserGroups)
-                    .ThenInclude(ug => ug.GroupModel))
-                .FirstOrDefault();
+            dbModel = GetModels(source => source.Id == model.Id).FirstOrDefault();
 
             return _mapper.Map<UserDTO>(dbModel);
         }
@@ -84,14 +76,7 @@ namespace SplitListWebApi.Services
         public void Delete(UserDTO dto)
         {
             var model = _mapper.Map<UserModel>(dto);
-            var dbModel = _userRepo.GetBy(
-                selector: source => source,
-                predicate: source => source.Id == model.Id,
-                include: source =>
-                    source.Include(groupModel => groupModel.UserGroups)
-                        .ThenInclude(ug => ug.UserModel),
-                disableTracking: false)
-                .FirstOrDefault();
+            var dbModel = GetModels(source => source.Id == model.Id, false).FirstOrDefault();
             if (dbModel == null) throw new NullReferenceException("UserDTO wasn't found in the database when trying to delete.");
 
             _ugRepo.DeleteUserGroups(dbModel.UserGroups);

@@ -5,13 +5,14 @@ using SplitListWebApi.Repositories.Implementation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using ApiFormat.Item;
 using SplitListWebApi.Services.Interfaces;
 
 namespace SplitListWebApi.Services
 {
-    public class ItemService : IService<ItemDTO, int>
+    public class ItemService : IService<ItemDTO, ItemModel>
 
     {
         private SplitListContext _context;
@@ -25,23 +26,28 @@ namespace SplitListWebApi.Services
             itemRepo = new GenericRepository<ItemModel>(_context);
         }
 
-        public ItemDTO GetById(int id)
+        public IEnumerable<ItemModel> GetModels(Expression<Func<ItemModel, bool>> predicate, bool disableTracking = true)
         {
-            return _mapper.Map<ItemDTO>(itemRepo.GetBy(
+            return itemRepo.GetBy(
                 selector: source => source,
-                predicate: model => model.ModelId == id,
-                disableTracking: false)
-                .FirstOrDefault());
+                predicate: predicate,
+                disableTracking: disableTracking);
+        }
+
+        public List<ItemDTO> GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public ItemDTO GetBy(Expression<Func<ItemModel, bool>> predicate)
+        {
+            return _mapper.Map<ItemDTO>(GetModels(predicate).FirstOrDefault());
         }
 
         public ItemDTO Create(ItemDTO dto)
         {
             var model = _mapper.Map<ItemModel>(dto);
-            var dbModel = itemRepo.GetBy(
-                selector: source => source,
-                predicate: slm => slm.Name == model.Name,
-                disableTracking: false)
-                .FirstOrDefault();
+            var dbModel = GetModels(source => source.Name == model.Name, false).FirstOrDefault();
 
             if (dbModel == null)
             {
@@ -57,11 +63,7 @@ namespace SplitListWebApi.Services
         public ItemDTO Update(ItemDTO dto)
         {
             var model = _mapper.Map<ItemModel>(dto);
-            var dbModel = itemRepo.GetBy(
-                selector: source => source,
-                predicate: slm => slm.ModelId == model.ModelId,
-                disableTracking: false)
-                .FirstOrDefault();
+            var dbModel = GetModels(source => source.Name == model.Name, false).FirstOrDefault();
 
             if (dbModel == null)
             {
@@ -81,19 +83,11 @@ namespace SplitListWebApi.Services
         public void Delete(ItemDTO dto)
         {
             var model = _mapper.Map<ItemModel>(dto);
-            var dbModel = itemRepo.GetBy(
-                selector: source => source,
-                predicate: gm => gm.ModelId == model.ModelId,
-                disableTracking: false)
-                .FirstOrDefault();
+            var dbModel = GetModels(source => source.Name == model.Name, false).FirstOrDefault();
 
             if (dbModel == null) throw new NullReferenceException("ItemDTO wasn't found in the database when trying to delete.");
 
             itemRepo.Delete(dbModel);
         }
-
-
-
-
     }
 }

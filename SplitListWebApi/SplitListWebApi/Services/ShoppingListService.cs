@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using ApiFormat;
 using ApiFormat.Group;
 using ApiFormat.Item;
@@ -13,14 +14,14 @@ using SplitListWebApi.Services.Interfaces;
 
 namespace SplitListWebApi.Services
 {
-    public class ShoppingListService : IService<ShoppingListDTO, int>
+    public class ShoppingListService : IService<ShoppingListDTO, ShoppingListModel>
     {
         private SplitListContext _context;
         private readonly IMapper _mapper;
         private readonly GenericRepository<ShoppingListModel> _shoppingListRepository;
         private readonly GenericRepository<GroupModel> _groupRepository;
         private readonly ShoppingListItemRepository _shoppingListItemRepo;
-        private readonly IService<ItemDTO, int> _itemService;
+        private readonly IService<ItemDTO, ItemModel> _itemService;
         public ShoppingListService(SplitListContext context, IMapper mapper)
         {
             _context = context;
@@ -32,29 +33,34 @@ namespace SplitListWebApi.Services
         }
 
 
-        public ShoppingListDTO GetById(int id)
+        public List<ShoppingListDTO> GetAll()
         {
-            return _mapper.Map<ShoppingListDTO>(_shoppingListRepository.GetBy(
+            throw new NotImplementedException();
+        }
+
+        public ShoppingListDTO GetBy(Expression<Func<ShoppingListModel, bool>> predicate)
+        {
+            return _mapper.Map<ShoppingListDTO>(GetModels(predicate).FirstOrDefault());
+        }
+
+        private IEnumerable<ShoppingListModel> GetModels(Expression<Func<ShoppingListModel, bool>> predicate,
+            bool disableTracking = true)
+        {
+            return _shoppingListRepository.GetBy(
                 selector: source => source,
-                predicate: slm => slm.ModelId == id,
+                predicate: predicate,
                 include: source =>
                     source.Include(slm => slm.ShoppingListItems)
-                        .ThenInclude(sli => sli.ItemModel))
-                .FirstOrDefault());
+                        .ThenInclude(sli => sli.ItemModel)
+                        .Include(slm => slm.GroupModel),
+                disableTracking: disableTracking);
         }
 
         public ShoppingListDTO Create(ShoppingListDTO dto)
         {
             var model = _mapper.Map<ShoppingListModel>(dto);
-            var dbModel = _shoppingListRepository.GetBy(
-                selector: source => source,
-                predicate: slm => slm.ModelId == model.ModelId,
-                include: source =>
-                    source.Include(slm => slm.ShoppingListItems)
-                            .ThenInclude(sli => sli.ItemModel)
-                        .Include(slm => slm.GroupModel),
-                disableTracking: false)
-                .FirstOrDefault();
+            var dbModel = GetModels(source => source.ModelId == model.ModelId, false).FirstOrDefault();
+
             if (dbModel != null) return _mapper.Map<ShoppingListDTO>(dbModel);
 
             if (dto.Group.ModelId != 0)
@@ -80,15 +86,7 @@ namespace SplitListWebApi.Services
 
             var tempModel = dbModel;
 
-            dbModel = _shoppingListRepository.GetBy(
-                selector: source => source,
-                predicate: slm => slm.ModelId == tempModel.ModelId,
-                include: source =>
-                    source.Include(slm => slm.ShoppingListItems)
-                        .ThenInclude(sli => sli.ItemModel)
-                        .Include(slm => slm.GroupModel),
-                disableTracking: false)
-                .FirstOrDefault();
+            dbModel = GetModels(source => source.ModelId == model.ModelId).FirstOrDefault();
 
             return _mapper.Map<ShoppingListDTO>(dbModel);
         }
@@ -96,15 +94,7 @@ namespace SplitListWebApi.Services
         public ShoppingListDTO Update(ShoppingListDTO dto)
         {
             var model = _mapper.Map<ShoppingListModel>(dto);
-            var dbModel = _shoppingListRepository.GetBy(
-                selector: source => source,
-                predicate: slm => slm.ModelId == model.ModelId,
-                include: source =>
-                    source.Include(slm => slm.ShoppingListItems)
-                        .ThenInclude(sli => sli.ItemModel)
-                        .Include(slm => slm.GroupModel),
-                disableTracking: false)
-                .FirstOrDefault();
+            var dbModel = GetModels(source => source.ModelId == model.ModelId, false).FirstOrDefault();
 
             if (dbModel == null)
                 return _mapper.Map<ShoppingListDTO>(_shoppingListRepository.Create(model));
@@ -127,14 +117,7 @@ namespace SplitListWebApi.Services
         public void Delete(ShoppingListDTO dto)
         {
             var model = _mapper.Map<ShoppingListDTO>(dto);
-            var dbModel = _shoppingListRepository.GetBy(
-                selector: source => source,
-                predicate: slm => slm.ModelId == model.ModelId,
-                include: source =>
-                    source.Include(slm => slm.ShoppingListItems)
-                        .ThenInclude(sli => sli.ItemModel),
-                disableTracking: false)
-                .FirstOrDefault();
+            var dbModel = GetModels(source => source.ModelId == model.ModelId, false).FirstOrDefault();
             if (dbModel == null) throw new NullReferenceException("ShoppingListDTO wasn't found in the database when trying to delete.");
 
             _shoppingListItemRepo.DeleteShoppingListItems(dbModel.ShoppingListItems);

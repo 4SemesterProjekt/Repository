@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SplitListWebApi.Areas.Identity.Data;
 using SplitListWebApi.Services;
+using SplitListWebApi.Services.Interfaces;
 
 namespace SplitListWebApi.Controllers
 {
@@ -15,7 +16,7 @@ namespace SplitListWebApi.Controllers
     [ApiController]
     public class RecipesController : ControllerBase
     {
-        private readonly RecipeService _recipeService;
+        private readonly IService<RecipeDTO, RecipeModel> _recipeService;
         public RecipesController(SplitListContext context, IMapper mapper)
         {
             _recipeService = new RecipeService(context, mapper);

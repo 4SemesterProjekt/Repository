@@ -18,7 +18,7 @@ namespace SplitListWebApi.Controllers
     public class PantriesController : ControllerBase
     {
         private SplitListContext _context;
-        private PantryService pantryService;
+        private IService<PantryDTO, PantryModel> pantryService;
         
 
         public PantriesController(SplitListContext context, IMapper mapper)
@@ -30,7 +30,7 @@ namespace SplitListWebApi.Controllers
         [HttpGet("{id}")]
         public PantryDTO GetById(int id)
         {
-            return pantryService.GetById(id);
+            return pantryService.GetBy(source => source.ModelId == id);
         }
 
         [HttpDelete]

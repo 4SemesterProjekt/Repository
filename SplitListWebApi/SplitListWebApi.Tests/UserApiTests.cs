@@ -121,7 +121,7 @@ namespace SplitListWebApi.Tests
                 };
 
                 _groupService.Create(groupDto);
-                dto = _userService.GetById(model.Id);
+                dto = _userService.GetBy(source => source.ModelId == model.ModelId);
 
                 Assert.That(dto.Groups.FirstOrDefault().Name, Is.EqualTo(groupDto.Name));
                 Assert.That(db.UserGroups.Count(), Is.EqualTo(1));
@@ -179,7 +179,7 @@ namespace SplitListWebApi.Tests
                 UserModel model = mapper.Map<UserModel>(dto);
                 _userRepo.Create(model);
 
-                var userFromDb =_userService.GetByEmail(dto.Email);
+                var userFromDb =_userService.GetBy(source => source.Email == dto.Email);
 
                 Assert.That(userFromDb.Name, Is.EqualTo(dto.Name));
             }

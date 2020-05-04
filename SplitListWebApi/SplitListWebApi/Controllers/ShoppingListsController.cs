@@ -18,7 +18,7 @@ namespace SplitListWebApi.Controllers
     public class ShoppingListsController : ControllerBase
     {
         private readonly SplitListContext _context;
-        private ShoppingListService service;
+        private IService<ShoppingListDTO, ShoppingListModel> service;
 
         public ShoppingListsController(SplitListContext context, IMapper mapper)
         {
@@ -30,7 +30,7 @@ namespace SplitListWebApi.Controllers
         [HttpGet("{id}")]
         public ShoppingListDTO GetShoppingListByID(int id)
         {
-            return service.GetById(id);
+            return service.GetBy(source => source.ModelId == id);
         }
 
         // POST: api/ShoppingLists
