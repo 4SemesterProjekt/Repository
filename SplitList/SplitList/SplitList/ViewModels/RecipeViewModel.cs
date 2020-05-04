@@ -75,7 +75,7 @@ namespace SplitList.ViewModels
                 {
                     options[i] = shoppingLists[i].Name;
                 }
-                ½
+                
                 // DisplayMessage to user to select which shoppinglist to add ingredients to
                 string action;
                 action = await Page.DisplayActionSheet("Choose shoppinglist", "Cancel", null, options);

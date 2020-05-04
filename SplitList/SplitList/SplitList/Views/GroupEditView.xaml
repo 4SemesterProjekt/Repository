@@ -4,6 +4,7 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:b="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
+             xmlns:utility="clr-namespace:SplitList.Utility;assembly=SplitList"
              mc:Ignorable="d"
              x:Class="SplitList.Views.GroupEditView">
     <ContentPage.Behaviors>
@@ -55,18 +56,43 @@
                     <DataTemplate>
                         <ViewCell>
                             <Grid>
-                            <Label 
-                                Text="{Binding Name}"
-                                FontSize="16"
-                                TextColor="Gray"
-                                VerticalOptions="Center"
-                                HorizontalOptions="Start"/>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="90*"/>
+                                    <ColumnDefinition Width="10*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label
+                                    Text="{Binding Name}"
+                                    FontSize="16"
+                                    TextColor="Gray"
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="Start"
+                                    Grid.Column="0"/>
                             <ImageButton
-                                BindingContext="{Binding }"/>
+                                Grid.Column="1"
+                                Source="{utility:ImageResource SplitList.EmbeddedResources.deleteGray.png }"
+                                Command="{Binding UserRemoveCommand}"
+                                BackgroundColor="Transparent"
+                                BorderColor="Transparent"
+                                WidthRequest="20"
+                                VerticalOptions="Center"/>
                             </Grid>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
+                <ListView.Footer>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="90*"/>
+                            <ColumnDefinition Width="10*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button
+                            Text="Add person" 
+                            VerticalOptions="Center"
+                            Margin="5,10,0,0"
+                            Grid.Column="0"
+                            Command="{Binding AddUserCommand}"/>
+                    </Grid>
+                </ListView.Footer>
             </ListView>
 
         </Grid>

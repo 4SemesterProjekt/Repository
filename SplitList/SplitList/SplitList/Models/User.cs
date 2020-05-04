@@ -20,6 +20,7 @@ namespace SplitList.Models
         private ObservableCollection<Group> _groups;
         private string _id;
         private int _modelId;
+        public string Email { get; set; }
 
         public string Name
         {

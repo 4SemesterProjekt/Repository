@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 using System.Windows.Input;
+using Prism.Commands;
 using Prism.Mvvm;
 
 namespace SplitList.Models
@@ -51,6 +52,9 @@ namespace SplitList.Models
         public Pantry Pantry { get; set; }
         public ObservableCollection<ShoppingList> ShoppingLists { get; set; }
 
+        private ICommand _userRemoveCommand;
+
+        public ICommand UserRemoveCommand => _userRemoveCommand ?? (_userRemoveCommand = new DelegateCommand(UserRemoveExecute));
         public void UserRemoveExecute()
         {
             UserRemoveEvent?.Invoke(this, EventArgs.Empty);
