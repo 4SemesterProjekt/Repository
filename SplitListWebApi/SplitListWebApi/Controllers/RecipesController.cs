@@ -16,7 +16,7 @@ namespace SplitListWebApi.Controllers
     [ApiController]
     public class RecipesController : ControllerBase
     {
-        private readonly IService<RecipeDTO, RecipeModel> _recipeService;
+        private readonly IPublicService<RecipeDTO, RecipeModel> _recipeService;
         public RecipesController(SplitListContext context, IMapper mapper)
         {
             _recipeService = new RecipeService(context, mapper);

@@ -18,13 +18,13 @@ using SQLitePCL;
 
 namespace SplitListWebApi.Services
 {
-    public class GroupService : IService<GroupDTO, GroupModel>
+    public class GroupService : IPublicService<GroupDTO, GroupModel>, IModelService<GroupDTO, GroupModel>
     {
         private SplitListContext _context;
         private IMapper _mapper;
         private GenericRepository<GroupModel> groupRepo;
         private UserGroupRepository _ugRepo;
-        private IService<PantryDTO, PantryModel> pantryService;
+        private IPublicService<PantryDTO, PantryModel> pantryService;
 
         public GroupService(SplitListContext context, IMapper mapper)
         {
@@ -35,6 +35,7 @@ namespace SplitListWebApi.Services
             pantryService = new PantryService(context, mapper);
         }
 
+
         public IEnumerable<GroupModel> GetModels(Expression<Func<GroupModel, bool>> predicate, bool disableTracking = true)
         {
             return groupRepo.GetBy(
@@ -42,7 +43,7 @@ namespace SplitListWebApi.Services
                 predicate: predicate,
                 include: source => source
                     .Include(gm => gm.UserGroups)
-                        .ThenInclude(ug => ug.UserModel)
+                    .ThenInclude(ug => ug.UserModel)
                     .Include(gm => gm.ShoppingLists)
                     .Include(gm => gm.PantryModel),
                 disableTracking: disableTracking);

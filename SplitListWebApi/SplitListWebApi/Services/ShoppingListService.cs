@@ -14,14 +14,14 @@ using SplitListWebApi.Services.Interfaces;
 
 namespace SplitListWebApi.Services
 {
-    public class ShoppingListService : IService<ShoppingListDTO, ShoppingListModel>
+    public class ShoppingListService : IPublicService<ShoppingListDTO, ShoppingListModel>, IModelService<ShoppingListDTO, ShoppingListModel>
     {
         private SplitListContext _context;
         private readonly IMapper _mapper;
         private readonly GenericRepository<ShoppingListModel> _shoppingListRepository;
         private readonly GenericRepository<GroupModel> _groupRepository;
         private readonly ShoppingListItemRepository _shoppingListItemRepo;
-        private readonly IService<ItemDTO, ItemModel> _itemService;
+        private readonly IPublicService<ItemDTO, ItemModel> _itemService;
         public ShoppingListService(SplitListContext context, IMapper mapper)
         {
             _context = context;
@@ -43,7 +43,7 @@ namespace SplitListWebApi.Services
             return _mapper.Map<ShoppingListDTO>(GetModels(predicate).FirstOrDefault());
         }
 
-        private IEnumerable<ShoppingListModel> GetModels(Expression<Func<ShoppingListModel, bool>> predicate,
+        public IEnumerable<ShoppingListModel> GetModels(Expression<Func<ShoppingListModel, bool>> predicate,
             bool disableTracking = true)
         {
             return _shoppingListRepository.GetBy(

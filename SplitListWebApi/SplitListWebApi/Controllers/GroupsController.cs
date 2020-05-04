@@ -16,7 +16,7 @@ namespace SplitListWebApi.Controllers
     {
         private SplitListContext _context;
         private IMapper _mapper;
-        private IService<GroupDTO, GroupModel> _service;
+        private IPublicService<GroupDTO, GroupModel> _service;
 
         public GroupsController(SplitListContext context, IMapper mapper)
         {

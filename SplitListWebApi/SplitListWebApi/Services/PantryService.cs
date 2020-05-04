@@ -15,14 +15,14 @@ using SplitListWebApi.Services.Interfaces;
 
 namespace SplitListWebApi.Services
 {
-    public class PantryService : IService<PantryDTO, PantryModel>
+    public class PantryService : IPublicService<PantryDTO, PantryModel>, IModelService<PantryDTO, PantryModel>
     {
         private SplitListContext _context;
         private readonly IMapper _mapper;
         private readonly GenericRepository<PantryModel> _pantryRepository;
         private readonly GenericRepository<GroupModel> _groupRepository;
         private readonly PantryItemRepository _pantryItemRepo;
-        private readonly IService<ItemDTO, ItemModel> _itemService;
+        private readonly IPublicService<ItemDTO, ItemModel> _itemService;
         public PantryService(SplitListContext context, IMapper mapper)
         {
             _context = context;

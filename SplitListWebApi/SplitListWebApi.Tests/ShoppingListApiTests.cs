@@ -196,9 +196,9 @@ namespace SplitListWebApi.Tests
             using (var context = new SplitListContext(options))
             {
                 context.Database.EnsureCreated();
-                IService<ShoppingListDTO, ShoppingListModel> slService = new ShoppingListService(context, mapper);
-                IService<GroupDTO, GroupModel> groupService = new GroupService(context, mapper);
-                IService<ItemDTO, ItemModel> itemService = new ItemService(context, mapper);
+                IPublicService<ShoppingListDTO, ShoppingListModel> slService = new ShoppingListService(context, mapper);
+                IPublicService<GroupDTO, GroupModel> groupService = new GroupService(context, mapper);
+                IPublicService<ItemDTO, ItemModel> itemService = new ItemService(context, mapper);
 
                 GroupDTO groupDto = new GroupDTO()
                 {

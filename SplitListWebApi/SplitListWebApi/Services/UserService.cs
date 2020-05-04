@@ -13,7 +13,7 @@ using SplitListWebApi.Services.Interfaces;
 
 namespace SplitListWebApi.Services
 {
-    public class UserService : IService<UserDTO, UserModel>
+    public class UserService : IPublicService<UserDTO, UserModel>, IModelService<UserDTO, UserModel>
     {
         private SplitListContext _context;
         private IMapper _mapper;
@@ -37,7 +37,7 @@ namespace SplitListWebApi.Services
             return _mapper.Map<UserDTO>(GetModels(predicate).FirstOrDefault());
         }
 
-        private IEnumerable<UserModel> GetModels(Expression<Func<UserModel, bool>> predicate, bool disableTracking = true)
+        public IEnumerable<UserModel> GetModels(Expression<Func<UserModel, bool>> predicate, bool disableTracking = true)
         {
             return _userRepo.GetBy(
                 selector: source => source,

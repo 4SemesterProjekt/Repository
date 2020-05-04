@@ -22,7 +22,7 @@ namespace SplitListWebApi.Controllers
     public class UsersController : ControllerBase
     {
         private SplitListContext _context;
-        private IService<UserDTO, UserModel> _userService;
+        private IPublicService<UserDTO, UserModel> _userService;
 
         public UsersController(SplitListContext context, IMapper mapper)
         {

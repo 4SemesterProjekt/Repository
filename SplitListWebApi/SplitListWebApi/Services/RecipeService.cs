@@ -14,12 +14,12 @@ using SplitListWebApi.Services.Interfaces;
 
 namespace SplitListWebApi.Services
 {
-    public class RecipeService : IService<RecipeDTO, RecipeModel>
+    public class RecipeService : IPublicService<RecipeDTO, RecipeModel>, IModelService<RecipeDTO, RecipeModel>
     {
         private IMapper _mapper;
         private GenericRepository<RecipeModel> _recipeRepository;
         private RecipeItemRepository _repiRepo;
-        private IService<ItemDTO, ItemModel> _itemService;
+        private IPublicService<ItemDTO, ItemModel> _itemService;
 
         public RecipeService(SplitListContext context, IMapper mapper)
         {
@@ -39,7 +39,7 @@ namespace SplitListWebApi.Services
             return _mapper.Map<RecipeDTO>(GetModels(predicate).FirstOrDefault());
         }
 
-        private IEnumerable<RecipeModel> GetModels(Expression<Func<RecipeModel, bool>> predicate, bool disableTracking = true)
+        public IEnumerable<RecipeModel> GetModels(Expression<Func<RecipeModel, bool>> predicate, bool disableTracking = true)
         {
             return _recipeRepository.GetBy(
                 selector: source => source,

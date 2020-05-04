@@ -12,7 +12,7 @@ using SplitListWebApi.Services.Interfaces;
 
 namespace SplitListWebApi.Services
 {
-    public class ItemService : IService<ItemDTO, ItemModel>
+    public class ItemService : IPublicService<ItemDTO, ItemModel>, IModelService<ItemDTO, ItemModel>
 
     {
         private SplitListContext _context;
