@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SplitListWebApi.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class FinalMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -83,7 +83,9 @@ namespace SplitListWebApi.Migrations
                 {
                     ModelId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: true),
+                    Introduction = table.Column<string>(nullable: true),
+                    Method = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -261,7 +263,7 @@ namespace SplitListWebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RecipeItem",
+                name: "RecipeItems",
                 columns: table => new
                 {
                     ItemModelID = table.Column<int>(nullable: false),
@@ -270,15 +272,15 @@ namespace SplitListWebApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RecipeItem", x => new { x.ItemModelID, x.RecipeModelID });
+                    table.PrimaryKey("PK_RecipeItems", x => new { x.ItemModelID, x.RecipeModelID });
                     table.ForeignKey(
-                        name: "FK_RecipeItem_Items_ItemModelID",
+                        name: "FK_RecipeItems_Items_ItemModelID",
                         column: x => x.ItemModelID,
                         principalTable: "Items",
                         principalColumn: "ModelId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_RecipeItem_Recipes_RecipeModelID",
+                        name: "FK_RecipeItems_Recipes_RecipeModelID",
                         column: x => x.RecipeModelID,
                         principalTable: "Recipes",
                         principalColumn: "ModelId",
@@ -386,8 +388,8 @@ namespace SplitListWebApi.Migrations
                 column: "ItemModelID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RecipeItem_RecipeModelID",
-                table: "RecipeItem",
+                name: "IX_RecipeItems_RecipeModelID",
+                table: "RecipeItems",
                 column: "RecipeModelID");
 
             migrationBuilder.CreateIndex(
@@ -427,7 +429,7 @@ namespace SplitListWebApi.Migrations
                 name: "PantryItems");
 
             migrationBuilder.DropTable(
-                name: "RecipeItem");
+                name: "RecipeItems");
 
             migrationBuilder.DropTable(
                 name: "ShoppingListItems");

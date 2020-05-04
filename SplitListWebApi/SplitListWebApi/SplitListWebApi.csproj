@@ -77,6 +77,8 @@
     <Compile Remove="Migrations\20200421133348_InitialMigration.Designer.cs" />
     <Compile Remove="Migrations\20200421133658_InitialMigration.cs" />
     <Compile Remove="Migrations\20200421133658_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200430104028_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200430104028_InitialMigration.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

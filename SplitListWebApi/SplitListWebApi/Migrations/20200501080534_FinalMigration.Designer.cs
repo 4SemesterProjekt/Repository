@@ -10,8 +10,8 @@ using SplitListWebApi.Areas.Identity.Data;
 namespace SplitListWebApi.Migrations
 {
     [DbContext(typeof(SplitListContext))]
-    [Migration("20200430104028_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20200501080534_FinalMigration")]
+    partial class FinalMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -85,6 +85,12 @@ namespace SplitListWebApi.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Introduction")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Method")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -126,7 +132,7 @@ namespace SplitListWebApi.Migrations
 
                     b.HasIndex("RecipeModelID");
 
-                    b.ToTable("RecipeItem");
+                    b.ToTable("RecipeItems");
                 });
 
             modelBuilder.Entity("ApiFormat.ShadowTables.ShoppingListItem", b =>
