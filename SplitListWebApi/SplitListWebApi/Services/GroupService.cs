@@ -45,7 +45,8 @@ namespace SplitListWebApi.Services
                             .ThenInclude(ug => ug.UserModel)
                         .Include(gm => gm.ShoppingLists)
                         .Include(gm => gm.PantryModel),
-                disableTracking: false));
+                disableTracking: false)
+                .FirstOrDefault());
         }
 
         public GroupDTO Create(GroupDTO dto)
@@ -57,7 +58,8 @@ namespace SplitListWebApi.Services
                 include: source =>
                     source.Include(groupModel => groupModel.UserGroups)
                         .ThenInclude(ug => ug.UserModel),
-                disableTracking: false);
+                disableTracking: false)
+                .FirstOrDefault();
 
             if (dbModel == null)
             {
@@ -75,7 +77,9 @@ namespace SplitListWebApi.Services
                     include: source =>
                         source.Include(groupModel => groupModel.UserGroups)
                             .ThenInclude(ug => ug.UserModel),
-                    disableTracking: false).UserGroups;
+                    disableTracking: false)
+                    .FirstOrDefault()
+                    ?.UserGroups;
 
                 return _mapper.Map<GroupDTO>(dbModel);
             }
@@ -92,7 +96,8 @@ namespace SplitListWebApi.Services
                 include: source =>
                     source.Include(groupModel => groupModel.UserGroups)
                         .ThenInclude(ug => ug.UserModel),
-                disableTracking: false);
+                disableTracking: false)
+                .FirstOrDefault();
 
             if (dbModel == null)
                 return _mapper.Map<GroupDTO>(groupRepo.Create(model));
@@ -117,7 +122,8 @@ namespace SplitListWebApi.Services
                 include: source =>
                     source.Include(groupModel => groupModel.UserGroups)
                         .ThenInclude(ug => ug.UserModel),
-                disableTracking: false);
+                disableTracking: false)
+                .FirstOrDefault();
             if (dbModel == null) throw new NullReferenceException("GroupDTO wasn't found in the database when trying to delete.");
 
             _ugRepo.DeleteUserGroups(dbModel.UserGroups);

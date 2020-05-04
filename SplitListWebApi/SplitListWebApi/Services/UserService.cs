@@ -31,8 +31,17 @@ namespace SplitListWebApi.Services
             return _mapper.Map<UserDTO>(_userRepo.GetBy(selector: model => model,
                 predicate: model => model.Id == id,
                 include: source => source.Include(um => um.UserGroups)
-                    .ThenInclude(ug => ug.GroupModel)
-            ));
+                    .ThenInclude(ug => ug.GroupModel))
+                .FirstOrDefault());
+        }
+
+        public UserDTO GetByEmail(string email)
+        {
+            return _mapper.Map<UserDTO>(_userRepo.GetBy(selector: model => model,
+                    predicate: model => model.Email == email,
+                    include: source => source.Include(um => um.UserGroups)
+                        .ThenInclude(ug => ug.GroupModel))
+                .FirstOrDefault());
         }
 
         public UserDTO Create(UserDTO dto)
@@ -52,7 +61,8 @@ namespace SplitListWebApi.Services
                 predicate: source => source.Id == model.Id,
                 include: source => source.Include(um => um.UserGroups)
                     .ThenInclude(ug => ug.GroupModel),
-                disableTracking: false);
+                disableTracking: false)
+                .FirstOrDefault();
             if(dbModel == null) throw new NullReferenceException("User not found in database.");
 
             _ugRepo.DeleteUserGroups(dbModel.UserGroups);
@@ -65,7 +75,8 @@ namespace SplitListWebApi.Services
                 selector: userModel => userModel,
                 predicate: userModel => userModel.Id == model.Id,
                 include: source => source.Include(um => um.UserGroups)
-                    .ThenInclude(ug => ug.GroupModel));
+                    .ThenInclude(ug => ug.GroupModel))
+                .FirstOrDefault();
 
             return _mapper.Map<UserDTO>(dbModel);
         }
@@ -79,7 +90,8 @@ namespace SplitListWebApi.Services
                 include: source =>
                     source.Include(groupModel => groupModel.UserGroups)
                         .ThenInclude(ug => ug.UserModel),
-                disableTracking: false);
+                disableTracking: false)
+                .FirstOrDefault();
             if (dbModel == null) throw new NullReferenceException("UserDTO wasn't found in the database when trying to delete.");
 
             _ugRepo.DeleteUserGroups(dbModel.UserGroups);

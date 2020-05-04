@@ -217,7 +217,7 @@ namespace SplitListWebApi.Tests
         }
 
         [Test]
-        public void GetByIdsOnServiceGetsRecipes()
+        public void GetAllOnServiceGetsAllRecipes()
         {
             using (var context = new SplitListContext(options))
             {
@@ -279,7 +279,7 @@ namespace SplitListWebApi.Tests
 
                 var recipe2FromDb = recipeService.Create(recipe2Dto);
 
-                var recipes = recipeService.GetByIds(new[] {recipe1FromDb.ModelId, recipe2FromDb.ModelId});
+                var recipes = recipeService.GetAll();
 
                 Assert.AreEqual(recipes[0].Introduction, recipe1FromDb.Introduction);
                 Assert.AreEqual(recipes[1].Introduction, recipe2FromDb.Introduction);

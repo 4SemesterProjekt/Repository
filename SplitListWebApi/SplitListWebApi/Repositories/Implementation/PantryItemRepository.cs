@@ -16,7 +16,6 @@ namespace SplitListWebApi.Repositories.Implementation
     public class PantryItemRepository
     {
         private SplitListContext _context;
-        private IService<ItemDTO, int> itemService;
         public PantryItemRepository(SplitListContext context) => _context = context;
 
         public void CreatePantryItems(List<ItemDTO> itemDTOs, PantryModel pantryModel)

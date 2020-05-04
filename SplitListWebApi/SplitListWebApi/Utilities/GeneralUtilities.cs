@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using ApiFormat;
@@ -32,7 +33,7 @@ namespace SplitListWebApi.Utilities
             }
         }
 
-        public static TResult GetFromDatabase<TResult, TEntity>(
+        public static List<TResult> GetFromDatabase<TResult, TEntity>(
             SplitListContext db,
             Expression<Func<TEntity, TResult>> selector,
             Expression<Func<TEntity, bool>> predicate = null,
@@ -60,10 +61,10 @@ namespace SplitListWebApi.Utilities
 
             if (orderBy != null)
             {
-                return orderBy(query).Select(selector).FirstOrDefault();
+                return orderBy(query).Select(selector).ToList();
             }
 
-            return query.Select(selector).FirstOrDefault();
+            return query.Select(selector).ToList();
         }
     }
 }

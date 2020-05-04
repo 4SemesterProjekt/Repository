@@ -23,16 +23,9 @@ namespace SplitListWebApi.Controllers
 
         // GET: api/Recipes
         [HttpGet]
-        public List<RecipeDTO> Get([FromBody] int[] ids)
+        public List<RecipeDTO> GetAll()
         {
-            return _recipeService.GetByIds(ids);
-        }
-
-        // GET: api/Recipes/5
-        [HttpGet("{id}")]
-        public RecipeDTO Get(int id)
-        {
-            return _recipeService.GetById(id);
+            return _recipeService.GetAll();
         }
 
         // POST: api/Recipes

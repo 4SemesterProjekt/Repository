@@ -161,5 +161,28 @@ namespace SplitListWebApi.Tests
                 Assert.IsEmpty(db.UserGroups);
             }
         }
+
+        [Test]
+        public void GetUserByEmailGetsUser()
+        {
+            using (var db = new SplitListContext(options))
+            {
+                UserService _userService = new UserService(db, mapper);
+                GenericRepository<UserModel> _userRepo = new GenericRepository<UserModel>(db);
+                db.Database.EnsureCreated();
+                UserDTO dto = new UserDTO()
+                {
+                    Name = "Karl Jørgen",
+                    Id = "1",
+                    Email = "karl@joergensen.com"
+                };
+                UserModel model = mapper.Map<UserModel>(dto);
+                _userRepo.Create(model);
+
+                var userFromDb =_userService.GetByEmail(dto.Email);
+
+                Assert.That(userFromDb.Name, Is.EqualTo(dto.Name));
+            }
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ApiFormat.Group;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 
 namespace ApiFormat.User
 {
@@ -9,5 +10,6 @@ namespace ApiFormat.User
         public int ModelId { get; set; }
         public string Id { get; set; }
         public string Name { get; set; }
+        public string Email { get; set; }
     }
 }

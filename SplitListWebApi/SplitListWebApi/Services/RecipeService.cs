@@ -4,6 +4,7 @@ using System.Linq;
 using ApiFormat.Item;
 using ApiFormat.Recipe;
 using AutoMapper;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using SplitListWebApi.Areas.Identity.Data;
 using SplitListWebApi.Repositories.Implementation;
@@ -26,21 +27,14 @@ namespace SplitListWebApi.Services
             _repiRepo = new RecipeItemRepository(context);
         }
 
-        public RecipeDTO GetById(int id)
+        public List<RecipeDTO> GetAll()
         {
-            return _mapper.Map<RecipeDTO>(_recipeRepository.GetBy(
+            return _mapper.Map<List<RecipeDTO>>(_recipeRepository.GetBy(
                 selector: source => source,
-                predicate: rm => rm.ModelId == id,
+                predicate: source => true,
                 include: source => source
                     .Include(rm => rm.RecipeItems)
-                        .ThenInclude(ri => ri.ItemModel)));
-        }
-
-        public List<RecipeDTO> GetByIds(int[] ids)
-        {
-            return ids.Select(id => GetById(id))
-                .Where(dto => dto != null)
-                .ToList();
+                    .ThenInclude(ri => ri.ItemModel)));
         }
 
         public RecipeDTO Create(RecipeDTO dto)
@@ -52,7 +46,8 @@ namespace SplitListWebApi.Services
                 include: source => source
                     .Include(rm => rm.RecipeItems)
                         .ThenInclude(ri => ri.ItemModel),
-                disableTracking: false);
+                disableTracking: false)
+                .FirstOrDefault();
 
             if (dbModel != null) return _mapper.Map<RecipeDTO>(dbModel);
 
@@ -75,7 +70,8 @@ namespace SplitListWebApi.Services
                 predicate: rm => rm.ModelId == tempModel.ModelId,
                 include: source => source
                     .Include(rm => rm.RecipeItems)
-                        .ThenInclude(ri => ri.ItemModel));
+                        .ThenInclude(ri => ri.ItemModel))
+                .FirstOrDefault();
 
             return _mapper.Map<RecipeDTO>(dbModel);
         }
@@ -89,7 +85,8 @@ namespace SplitListWebApi.Services
                 include: source => source
                     .Include(rm => rm.RecipeItems)
                     .ThenInclude(ri => ri.ItemModel),
-                disableTracking: false);
+                disableTracking: false)
+                .FirstOrDefault();
 
             if (dbModel == null)
                 return _mapper.Map<RecipeDTO>(_recipeRepository.Create(model));
@@ -120,7 +117,8 @@ namespace SplitListWebApi.Services
                 include: source => source
                     .Include(rm => rm.RecipeItems)
                     .ThenInclude(ri => ri.ItemModel),
-                disableTracking: false);
+                disableTracking: false)
+                .FirstOrDefault();
 
             if (dbModel == null) throw new NullReferenceException("RecipeDTO wasn't found in the database when trying to delete.");
 

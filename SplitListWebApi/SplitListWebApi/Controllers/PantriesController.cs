@@ -18,7 +18,7 @@ namespace SplitListWebApi.Controllers
     public class PantriesController : ControllerBase
     {
         private SplitListContext _context;
-        private IService<PantryDTO, int> pantryService;
+        private PantryService pantryService;
         
 
         public PantriesController(SplitListContext context, IMapper mapper)

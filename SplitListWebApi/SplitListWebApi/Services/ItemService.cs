@@ -30,7 +30,8 @@ namespace SplitListWebApi.Services
             return _mapper.Map<ItemDTO>(itemRepo.GetBy(
                 selector: source => source,
                 predicate: model => model.ModelId == id,
-                disableTracking: false));
+                disableTracking: false)
+                .FirstOrDefault());
         }
 
         public ItemDTO Create(ItemDTO dto)
@@ -39,7 +40,8 @@ namespace SplitListWebApi.Services
             var dbModel = itemRepo.GetBy(
                 selector: source => source,
                 predicate: slm => slm.Name == model.Name,
-                disableTracking: false);
+                disableTracking: false)
+                .FirstOrDefault();
 
             if (dbModel == null)
             {
@@ -58,7 +60,8 @@ namespace SplitListWebApi.Services
             var dbModel = itemRepo.GetBy(
                 selector: source => source,
                 predicate: slm => slm.ModelId == model.ModelId,
-                disableTracking: false);
+                disableTracking: false)
+                .FirstOrDefault();
 
             if (dbModel == null)
             {
@@ -81,7 +84,8 @@ namespace SplitListWebApi.Services
             var dbModel = itemRepo.GetBy(
                 selector: source => source,
                 predicate: gm => gm.ModelId == model.ModelId,
-                disableTracking: false);
+                disableTracking: false)
+                .FirstOrDefault();
 
             if (dbModel == null) throw new NullReferenceException("ItemDTO wasn't found in the database when trying to delete.");
 

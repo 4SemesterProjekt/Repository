@@ -42,7 +42,8 @@ namespace SplitListWebApi.Services
                     source.Include(pm => pm.PantryItems)
                             .ThenInclude(pi => pi.ItemModel)
                         .Include(pm => pm.GroupModel),
-                disableTracking: false));
+                disableTracking: false)
+                .FirstOrDefault());
         }
 
         public PantryDTO Create(PantryDTO dto)
@@ -55,7 +56,8 @@ namespace SplitListWebApi.Services
                     source.Include(pm => pm.PantryItems)
                             .ThenInclude(pi => pi.ItemModel)
                         .Include(pm => pm.GroupModel),
-                disableTracking: false);
+                disableTracking: false)
+                .FirstOrDefault();
 
             if (dbModel == null)
             {
@@ -64,8 +66,8 @@ namespace SplitListWebApi.Services
                     model.GroupModel = _groupRepository.GetBy(
                         selector: source => source,
                         predicate: gm => gm.ModelId == dto.Group.ModelId,
-                        disableTracking: false
-                    );
+                        disableTracking: false)
+                        .FirstOrDefault();
                 }
 
                 dbModel = _pantryRepository.Create(model);
@@ -87,7 +89,8 @@ namespace SplitListWebApi.Services
                         source.Include(pm => pm.PantryItems)
                             .ThenInclude(pi => pi.ItemModel)
                             .Include(pm => pm.GroupModel),
-                    disableTracking: false);
+                    disableTracking: false)
+                    .FirstOrDefault();
 
                 return _mapper.Map<PantryDTO>(dbModel);
             }
@@ -104,7 +107,8 @@ namespace SplitListWebApi.Services
                     source.Include(pm => pm.PantryItems)
                         .ThenInclude(pi => pi.ItemModel)
                         .Include(pm => pm.GroupModel),
-                disableTracking: false);
+                disableTracking: false)
+                .FirstOrDefault();
 
             if (dbModel == null) throw new ArgumentException("PantryModel to update wasn't found in the database.");
 
@@ -132,7 +136,8 @@ namespace SplitListWebApi.Services
                 include: source =>
                     source.Include(pm => pm.PantryItems)
                         .ThenInclude(pi => pi.ItemModel),
-                disableTracking: false);
+                disableTracking: false)
+                .FirstOrDefault();
             if (dbModel == null) throw new NullReferenceException("PantryDTO wasn't found in the database when trying to delete.");
 
             _pantryItemRepo.DeletePantryItems(dbModel.PantryItems);

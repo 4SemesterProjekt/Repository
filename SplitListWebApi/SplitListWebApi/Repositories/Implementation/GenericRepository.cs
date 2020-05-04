@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -22,7 +23,7 @@ namespace SplitListWebApi.Repositories.Implementation
             _dbContext = dbContext;
         }
 
-        public TModel GetBy(
+        public List<TModel> GetBy(
             Expression<Func<TModel, TModel>> selector,
             Expression<Func<TModel, bool>> predicate = null,
             Func<IQueryable<TModel>, IOrderedQueryable<TModel>> orderBy = null,
