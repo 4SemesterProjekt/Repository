@@ -11,6 +11,9 @@
         <b:EventToCommandBehavior
             EventName="Appearing"
             Command="{Binding OnAppearingCommand}"/>
+        <b:EventToCommandBehavior
+            EventName="Disappearing"
+            Command="{Binding OnDisappearingCommand}"/>
     </ContentPage.Behaviors>
     <ContentPage.Content>
         <Grid>

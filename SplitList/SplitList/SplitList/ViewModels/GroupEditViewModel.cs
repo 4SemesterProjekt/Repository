@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 using System.Windows.Input;
+using ApiFormat.Group;
 using ClientLibAPI;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -32,6 +33,11 @@ namespace SplitList.ViewModels
         {
             var result = await SerializerGroup.GetGroupById(GroupId);
             Group = mapper.Map<Group>(result);
+        }
+
+        public override async void OnDisappearingExecute()
+        {
+            var returnedGroup = await SerializerGroup.UpdateGroup(mapper.Map<GroupDTO>(Group));
         }
 
         public async void HandleUserRemoveEvent(object source, EventArgs e)
