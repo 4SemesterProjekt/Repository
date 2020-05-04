@@ -7,7 +7,8 @@
              xmlns:b="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
              xmlns:utility="clr-namespace:SplitList.Utility;assembly=SplitList"
              mc:Ignorable="d"
-             x:Class="SplitList.Views.MultiShopListView">
+             x:Class="SplitList.Views.MultiShopListView"
+             Title="Shoppinglists">
     <ContentPage.Behaviors>
         <b:EventToCommandBehavior
             EventName="Appearing"

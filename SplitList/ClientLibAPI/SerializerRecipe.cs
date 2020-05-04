@@ -11,20 +11,13 @@ namespace ClientLibAPI
     {
         const string URL = "https://splitlistwebapi.azurewebsites.net/api/Recipes/";
 
-        // GET: api/Recipes/5, api/Recipes/6, api/Recipes/7
-        // Returns a list of RecipeDTOs based on a number of RecipeIds
-        public static async Task<List<RecipeDTO>> GetRecipesByIds(params int[] recipeIds)
+        // GET: api/Recipes
+        // Returns all recipes in the database as a list of RecipeDTOs
+        public static async Task<List<RecipeDTO>> GetRecipes()
         {
-            var recipeContext = JsonConvert.SerializeObject(recipeIds, Formatting.None);
-            using (var request = new HttpRequestMessage(HttpMethod.Get, URL))
-            {
-                var httpContext = new StringContent(recipeContext, Encoding.UTF8, "application/json");
-                request.Content = httpContext;
-
-                var response = await MSerializer.Client.SendAsync(request);
-                var recipes = JsonConvert.DeserializeObject<List<RecipeDTO>>(await response.Content.ReadAsStringAsync());
-                return recipes;
-            }
+            var recipeString = await MSerializer.Client.GetStringAsync($"{URL}");
+            var recipe = JsonConvert.DeserializeObject<List<RecipeDTO>>(recipeString);
+            return recipe;
         }
 
         // POST: api/Recipes

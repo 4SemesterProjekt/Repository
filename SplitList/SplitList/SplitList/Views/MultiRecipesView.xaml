@@ -7,8 +7,15 @@
              xmlns:b="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
              xmlns:utility="clr-namespace:SplitList.Utility;assembly=SplitList"
              mc:Ignorable="d"
-             x:Class="SplitList.Views.MultiRecipesView">
-  <ContentPage.Content>
+             x:Class="SplitList.Views.MultiRecipesView"
+             Title="Recipes">
+    <ContentPage.Behaviors>
+        <b:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding OnAppearingCommand}"/>
+    </ContentPage.Behaviors>
+
+    <ContentPage.Content>
       <StackLayout>
 			<Grid>
 				<Grid.ColumnDefinitions>

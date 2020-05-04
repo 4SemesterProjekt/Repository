@@ -24,6 +24,7 @@ namespace SplitList.ViewModels
                 cfg =>
                 {
                     cfg.AddProfile<GroupProfile>();
+                    cfg.AddProfile<RecipeProfile>();
                     cfg.AddProfile<ItemProfile>();
                     cfg.AddProfile<PantryProfile>();
                     cfg.AddProfile<ShoppingListProfile>();
