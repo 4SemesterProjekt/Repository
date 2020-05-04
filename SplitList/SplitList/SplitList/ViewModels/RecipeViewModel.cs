@@ -53,7 +53,7 @@ namespace SplitList.ViewModels
                 bool isInPantry = false;
                 foreach (var pantryItem in pantry.Items)
                 {
-                    if (pantryItem.Name.ToLower() == ingredient.Name.ToLower())
+                    if (pantryItem.Name.ToLower() == ingredient.Name.ToLower() && pantryItem.Amount >= ingredient.Amount)
                         isInPantry = true;
                 }
                 if(!isInPantry)
@@ -131,7 +131,7 @@ namespace SplitList.ViewModels
                 bool isInPantry = false;
                 foreach (var pantryItem in pantry.Items)
                 {
-                    if (pantryItem.Name.ToLower() == ingredient.Name.ToLower())
+                    if (pantryItem.Name.ToLower() == ingredient.Name.ToLower() && pantryItem.Amount >= ingredient.Amount)
                     {
                         isInPantry = true;
                         break;
@@ -144,10 +144,19 @@ namespace SplitList.ViewModels
             if (notInPantry.Count == 0)
             {
                 // Remove ingredients from pantry
-                for (int i = pantry.Items.Count - 1; i >= 0; i--)
+                foreach (var recipeIngredient in Recipe.Ingredients)
                 {
-                    if (Recipe.Ingredients[i].Name.ToLower() == pantry.Items[i].Name.ToLower())
-                        pantry.Items.Remove(pantry.Items[i]);
+                    for (int i = pantry.Items.Count - 1; i >= 0; i--)
+                    {
+                        if (recipeIngredient.Name.ToLower() == pantry.Items[i].Name.ToLower())
+                        {
+                            pantry.Items[i].Amount -= recipeIngredient.Amount;
+                            if (pantry.Items[i].Amount <= 0)
+                            {
+                                pantry.Items.Remove(pantry.Items[i]);
+                            }
+                        }
+                    }
                 }
                 //Post Pantry to Database
                 var returnedPantry = await SerializerPantry.UpdatePantry(mapper.Map<PantryDTO>(pantry));
