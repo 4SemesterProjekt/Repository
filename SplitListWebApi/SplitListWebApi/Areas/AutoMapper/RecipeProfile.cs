@@ -17,7 +17,7 @@ namespace SplitListWebApi.Areas.AutoMapper
             
             CreateMap<RecipeModel, RecipeDTO>()
                 .PreserveReferences()
-                .ForMember(dto => dto.Items, opt => opt.MapFrom(model => model.RecipeItems.Select(ri => ri.ItemModel)));
+                .ForMember(dto => dto.Items, opt => opt.MapFrom(model => model.RecipeItems));
         }
     }
 }
