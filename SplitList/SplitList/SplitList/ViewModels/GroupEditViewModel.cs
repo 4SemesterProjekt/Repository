@@ -103,11 +103,7 @@ namespace SplitList.ViewModels
                             break;
                     }
                 }
-                
-
-                
             }
-            
         }
     }
 }
