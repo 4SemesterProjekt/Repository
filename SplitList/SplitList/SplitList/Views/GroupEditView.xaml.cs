@@ -7,10 +7,10 @@ namespace SplitList.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class GroupEditView : ContentPage
     {
-        public GroupEditView(int groupId)
+        public GroupEditView(int groupId, string userId)
         {
             InitializeComponent();
-            BindingContext = new GroupEditViewModel(groupId);
+            BindingContext = new GroupEditViewModel(Navigation, this, groupId, userId);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace SplitList.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class UserView : ContentPage
     {
-        public UserView(User user, int groupId, string userId)
+        public UserView(int groupId, string userId)
         {
             InitializeComponent();
             BindingContext = new UserViewModel(Navigation, this, groupId, userId);

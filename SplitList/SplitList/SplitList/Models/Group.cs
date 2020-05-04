@@ -9,6 +9,7 @@ namespace SplitList.Models
 {
     public class Group : BindableBase
     {
+        public event EventHandler UserRemoveEvent;
         public Group()
         {
             Users = new ObservableCollection<User>();
@@ -49,5 +50,10 @@ namespace SplitList.Models
 
         public Pantry Pantry { get; set; }
         public ObservableCollection<ShoppingList> ShoppingLists { get; set; }
+
+        public void UserRemoveExecute()
+        {
+            UserRemoveEvent?.Invoke(this, EventArgs.Empty);
+        }
     }
 }

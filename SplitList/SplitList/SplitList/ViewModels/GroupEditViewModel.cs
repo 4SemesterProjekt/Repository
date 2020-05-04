@@ -6,17 +6,18 @@ using ClientLibAPI;
 using Prism.Commands;
 using Prism.Mvvm;
 using SplitList.Models;
+using Xamarin.Forms;
 
 namespace SplitList.ViewModels
 {
-    public class GroupEditViewModel : BindableBase
+    public class GroupEditViewModel : BaseViewModel
     {
-        public GroupEditViewModel(int groupId)
-        {
-            _groupId = groupId;
-        }
 
-        private int _groupId;
+        public GroupEditViewModel(INavigation nav, Page page, int groupId, string userId) : base(nav, page, groupId, userId)
+        {
+            Group = new Group();
+            Group.UserRemoveEvent += HandleUserRemoveEvent;
+        }
 
         private Group _group;
 
@@ -26,17 +27,17 @@ namespace SplitList.ViewModels
             set => SetProperty(ref _group, value);
         }
 
-        private ICommand _onAppearing;
-
-        public ICommand OnAppearing
+        public override async void OnAppearingExecute()
         {
-            get => _onAppearing ?? (_onAppearing = new DelegateCommand(OnAppearingExecute));
+            var result = await SerializerGroup.GetGroupById(GroupId);
+            Group = mapper.Map<Group>(result);
         }
 
-        public async void OnAppearingExecute()
+        void HandleUserRemoveEvent(object source, EventArgs e)
         {
-            var result = await SerializerGroup.GetGroupById(Group.GroupId);
-            //Group = GroupMapper.GroupDtoToGroup(result);
+
         }
+
+        
     }
 }

@@ -10,6 +10,11 @@
              xmlns:models="clr-namespace:SplitList.Models;assembly=SplitList"
              mc:Ignorable="d"
              x:Class="SplitList.Views.UserView">
+    <ContentPage.Behaviors>
+        <b:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding OnAppearingCommand}"/>
+    </ContentPage.Behaviors>
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>
@@ -27,7 +32,7 @@
                    Grid.Row="0"
                    Margin="5"/>
             <ContentView HeightRequest="1" BackgroundColor="Gray" Grid.Row="1"/>
-            <ListView ItemsSource="{Binding User.Groups}" Grid.Row="2" SelectionMode="None">
+            <ListView ItemsSource="{Binding Groups}" Grid.Row="2" SelectionMode="None">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>

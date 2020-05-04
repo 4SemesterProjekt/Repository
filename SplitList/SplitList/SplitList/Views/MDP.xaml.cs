@@ -13,6 +13,7 @@ namespace SplitList.Views
         {
             InitializeComponent();
             _groupId = groupId;
+            _userId = userId;
             Master = new MenuView();
             Detail = new NavigationPage(new MultiShopListView(groupId, userId));
             MenuView.NavListView.ItemSelected += OnItemSelected;
@@ -45,8 +46,8 @@ namespace SplitList.Views
                     Detail = new NavigationPage(new MultiRecipesView(_groupId, _userId));
 
                 // Go to UserView
-                //if (item.TargetType == typeof(Views.UserView))
-                    //Detail = new NavigationPage(new UserView(_groupId, _userId));
+                if (item.TargetType == typeof(Views.UserView))
+                    Detail = new NavigationPage(new UserView(_groupId, _userId));
 
                     // Go to LoginView
                 if (item.TargetType == typeof(Views.LoginView))

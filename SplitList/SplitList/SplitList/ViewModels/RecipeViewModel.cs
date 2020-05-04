@@ -90,7 +90,7 @@ namespace SplitList.ViewModels
                     }
                 }
                 // add items to shoppinglist
-                foreach (var ingredient in Recipe.Ingredients)
+                foreach (var ingredient in notInPantry)
                 {
                     bool isInShoppingList = false;
                     foreach (var shoppingListItem in shoppingList.Items)
@@ -124,7 +124,7 @@ namespace SplitList.ViewModels
 
             // Search Pantry for ingredients
             List<Item> notInPantry = new List<Item>();
-            bool allIsInPantry = false;
+
             foreach (var ingredient in Recipe.Ingredients)
             {
                 bool isInPantry = false;
@@ -157,49 +157,47 @@ namespace SplitList.ViewModels
                 // Prompt do you want to add them to a shoppinglist
                 var result =await Page.DisplayAlert("Not all items found in pantry", "Do you want to add them to a shoppinglist?",
                     "Yes", "No");
-                if (result)
+                if (!result) return;
+                // Get shoppinglist by group id
+                ObservableCollection<ShoppingList> shoppingLists = @group.ShoppingLists;
+                string[] options = new string[shoppingLists.Count];
+                for (int i = 0; i < shoppingLists.Count; i++)
                 {
-                    // Get shoppinglist by group id
-                    ObservableCollection<ShoppingList> shoppingLists = group.ShoppingLists;
-                    string[] options = new string[shoppingLists.Count];
-                    for (int i = 0; i < shoppingLists.Count; i++)
+                    options[i] = shoppingLists[i].Name;
+                }
+
+                // DisplayMessage to user to select which shoppinglist to add ingredients to
+                string action;
+                action = await Page.DisplayActionSheet("Choose shoppinglist", "Cancel", null, options);
+
+                // Get shoppinglist by id
+                var shoppingList = new ShoppingList();
+                for (int i = 0; i < shoppingLists.Count; i++)
+                {
+                    if (shoppingLists[i].Name.ToLower() == action.ToLower())
                     {
-                        options[i] = shoppingLists[i].Name;
+                        shoppingList = mapper.Map<ShoppingList>(await SerializerShoppingList.GetShoppingListById(shoppingLists[i].ShoppingListId));
+                        break;
                     }
-
-                    // DisplayMessage to user to select which shoppinglist to add ingredients to
-                    string action;
-                    action = await Page.DisplayActionSheet("Choose shoppinglist", "Cancel", null, options);
-
-                    // Get shoppinglist by id
-                    var shoppingList = new ShoppingList();
-                    for (int i = 0; i < shoppingLists.Count; i++)
+                }
+                // add items to shoppinglist
+                foreach (var ingredient in notInPantry)
+                {
+                    bool isInShoppingList = false;
+                    foreach (var shoppingListItem in shoppingList.Items)
                     {
-                        if (shoppingLists[i].Name.ToLower() == action.ToLower())
+                        if (ingredient.Name.ToLower() == shoppingListItem.Name.ToLower())
                         {
-                            shoppingList = mapper.Map<ShoppingList>(await SerializerShoppingList.GetShoppingListById(shoppingLists[i].ShoppingListId));
+                            shoppingListItem.Amount += ingredient.Amount;
+                            isInShoppingList = true;
                             break;
                         }
                     }
-                    // add items to shoppinglist
-                    foreach (var ingredient in Recipe.Ingredients)
-                    {
-                        bool isInShoppingList = false;
-                        foreach (var shoppingListItem in shoppingList.Items)
-                        {
-                            if (ingredient.Name.ToLower() == shoppingListItem.Name.ToLower())
-                            {
-                                shoppingListItem.Amount += ingredient.Amount;
-                                isInShoppingList = true;
-                                break;
-                            }
-                        }
-                        if (!isInShoppingList)
-                            shoppingList.Items.Add(ingredient);
-                    }
-                    // post shopping by id
-                    var returnedShoppingList = await SerializerShoppingList.UpdateShoppingList(mapper.Map<ShoppingListDTO>(shoppingList));
+                    if (!isInShoppingList)
+                        shoppingList.Items.Add(ingredient);
                 }
+                // post shopping by id
+                var returnedShoppingList = await SerializerShoppingList.UpdateShoppingList(mapper.Map<ShoppingListDTO>(shoppingList));
             }
         }
 
