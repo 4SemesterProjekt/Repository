@@ -12,11 +12,20 @@ namespace ClientLibAPI
 
         // GET: api/Users/5
         // Return a UserDTO based on UserId
-        public static async Task<UserDTO> GetUserById(string userId) 
+        public static async Task<UserDTO> GetUserById(string userId)
         {
-            var response = await MSerializer.Client.GetStringAsync($"{URL}{userId}");
-            var user = JsonConvert.DeserializeObject<UserDTO>(response);
-            return user;
+            var userByIdString = await MSerializer.Client.GetStringAsync($"{URL}{userId}");
+            var userByUserId = JsonConvert.DeserializeObject<UserDTO>(userByIdString);
+            return userByUserId;
+        }
+
+        // GET: api/Users/email/john@doe.com
+        // Return a UserDTO based on UserEmail
+        public static async Task<UserDTO> GetUserByEmail(string userEmail)
+        {
+            var userByEmailString = await MSerializer.Client.GetStringAsync($"{URL}email/{userEmail}");
+            var userByUserEmail = JsonConvert.DeserializeObject<UserDTO>(userByEmailString);
+            return userByUserEmail;
         }
 
         // PUT: api/Users
