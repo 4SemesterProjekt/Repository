@@ -14,12 +14,14 @@ namespace SplitList.AutoMapper
             CreateMap<RecipeDTO, Recipe>()
                 .PreserveReferences()
                 .ForMember(r => r.Id, opt => opt.MapFrom(rDto => rDto.ModelId))
-                .ForMember(r => r.Ingredients, opt => opt.MapFrom(rDto => rDto.Items));
+                .ForMember(r => r.Ingredients, opt => opt.MapFrom(rDto => rDto.Items))
+                .ForMember(r => r.Instructions, opt => opt.MapFrom(rDto => rDto.Method));
 
             CreateMap<Recipe, RecipeDTO>()
                 .PreserveReferences()
                 .ForMember(rDto => rDto.ModelId, opt => opt.MapFrom(r => r.Id))
-                .ForMember(rDto => rDto.Items, opt => opt.MapFrom(r => r.Ingredients));
+                .ForMember(rDto => rDto.Items, opt => opt.MapFrom(r => r.Ingredients))
+                .ForMember(rDto => rDto.Method, opt => opt.MapFrom(r => r.Instructions));
         }
     }
 }
