@@ -51,13 +51,19 @@ namespace SplitList.ViewModels
             foreach (var ingredient in Recipe.Ingredients)
             {
                 bool isInPantry = false;
+                int missingAmount = ingredient.Amount;
                 foreach (var pantryItem in pantry.Items)
                 {
                     if (pantryItem.Name.ToLower() == ingredient.Name.ToLower() && pantryItem.Amount >= ingredient.Amount)
                         isInPantry = true;
+                    else if (pantryItem.Name.ToLower() == ingredient.Name.ToLower() && pantryItem.Amount < ingredient.Amount)
+                        missingAmount = ingredient.Amount - pantryItem.Amount;
                 }
-                if(!isInPantry)
+                if (!isInPantry)
+                {
+                    ingredient.Amount = missingAmount;
                     notInPantry.Add(ingredient);
+                }
             }
             
             // if all ingredients are in pantry
@@ -129,6 +135,7 @@ namespace SplitList.ViewModels
             foreach (var ingredient in Recipe.Ingredients)
             {
                 bool isInPantry = false;
+                int missingAmount = ingredient.Amount;
                 foreach (var pantryItem in pantry.Items)
                 {
                     if (pantryItem.Name.ToLower() == ingredient.Name.ToLower() && pantryItem.Amount >= ingredient.Amount)
@@ -136,9 +143,16 @@ namespace SplitList.ViewModels
                         isInPantry = true;
                         break;
                     }
+                    else if (pantryItem.Name.ToLower() == ingredient.Name.ToLower() && pantryItem.Amount < ingredient.Amount)
+                    {
+                        missingAmount = ingredient.Amount - pantryItem.Amount;
+                    }
                 }
                 if (!isInPantry)
+                {
+                    ingredient.Amount = missingAmount;
                     notInPantry.Add(ingredient);
+                }
             }
             // if all ingredients are in pantry 
             if (notInPantry.Count == 0)
