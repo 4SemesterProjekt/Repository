@@ -18,7 +18,6 @@ namespace SplitList.ViewModels
         public GroupEditViewModel(INavigation nav, Page page, int groupId, string userId) : base(nav, page, groupId, userId)
         {
             Group = new Group();
-            Group.UserRemoveEvent += HandleUserRemoveEvent;
         }
 
         private Group _group;
@@ -33,6 +32,10 @@ namespace SplitList.ViewModels
         {
             var result = await SerializerGroup.GetGroupById(GroupId);
             Group = mapper.Map<Group>(result);
+            foreach (var groupUser in Group.Users)
+            {
+                groupUser.RemoveUserEvent += HandleUserRemoveEvent;
+            }
         }
 
         public override async void OnDisappearingExecute()
@@ -56,7 +59,6 @@ namespace SplitList.ViewModels
                     }
                 }
             }
-
         }
 
         private ICommand _addUserCommand;

@@ -31,6 +31,5 @@ namespace SplitList.Test
             AppResult[] results = app.Query(view => view.Marked("LoginBtn"));
             Assert.IsTrue(results.Any());
         }
-
     }
 }

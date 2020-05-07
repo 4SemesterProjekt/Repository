@@ -10,7 +10,7 @@ namespace SplitList.Models
 {
     public class Group : BindableBase
     {
-        public event EventHandler UserRemoveEvent;
+        public event EventHandler LeaveGroupEvent;
         public Group()
         {
             Users = new ObservableCollection<User>();
@@ -52,12 +52,12 @@ namespace SplitList.Models
         public Pantry Pantry { get; set; }
         public ObservableCollection<ShoppingList> ShoppingLists { get; set; }
 
-        private ICommand _userRemoveCommand;
+        private ICommand _leaveGroupCommand;
 
-        public ICommand UserRemoveCommand => _userRemoveCommand ?? (_userRemoveCommand = new DelegateCommand(UserRemoveExecute));
-        public void UserRemoveExecute()
+        public ICommand LeaveGroupCommand => _leaveGroupCommand ?? (_leaveGroupCommand = new DelegateCommand(LeaveGroupExecute));
+        public void LeaveGroupExecute()
         {
-            UserRemoveEvent?.Invoke(this, EventArgs.Empty);
+            LeaveGroupEvent?.Invoke(this, EventArgs.Empty);
         }
     }
 }

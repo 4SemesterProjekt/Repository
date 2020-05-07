@@ -11,6 +11,7 @@ namespace SplitList.Models
 {
     public class User : BindableBase
     {
+        public event EventHandler RemoveUserEvent;
         public User()
         {
             Groups = new ObservableCollection<Group>();
@@ -49,5 +50,13 @@ namespace SplitList.Models
             set => SetProperty(ref _modelId, value);
         }
 
+        private ICommand _userRemoveCommand;
+
+        public ICommand UserRemoveCommand => _userRemoveCommand ?? (_userRemoveCommand = new DelegateCommand(RemoveUserExecute));
+
+        public void RemoveUserExecute()
+        {
+            RemoveUserEvent?.Invoke(this , EventArgs.Empty);
+        }
     }
 }
