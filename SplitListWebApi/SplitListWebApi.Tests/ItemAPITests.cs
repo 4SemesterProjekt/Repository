@@ -58,7 +58,7 @@ namespace SplitListWebApi.Tests
             using (var context = new SplitListContext(options))
             {
                 context.Database.EnsureCreated();
-                IService<ItemDTO, int> service = new ItemService(context, mapper);
+                IPublicService<ItemDTO, ItemModel> service = new ItemService(context, mapper);
 
                 ItemDTO item = new ItemDTO()
                 {
@@ -80,7 +80,7 @@ namespace SplitListWebApi.Tests
             using (var context = new SplitListContext(options))
             {
                 context.Database.EnsureCreated();
-                IService<ItemDTO, int> service = new ItemService(context, mapper);
+                IPublicService<ItemDTO, ItemModel> service = new ItemService(context, mapper);
 
                 List<ItemDTO> items = new List<ItemDTO>()
                 {

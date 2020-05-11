@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using ApiFormat;
 using ApiFormat.Group;
@@ -17,13 +18,13 @@ using SQLitePCL;
 
 namespace SplitListWebApi.Services
 {
-    public class GroupService : IService<GroupDTO, int>
+    public class GroupService : IPublicService<GroupDTO, GroupModel>, IModelService<GroupDTO, GroupModel>
     {
         private SplitListContext _context;
         private IMapper _mapper;
         private GenericRepository<GroupModel> groupRepo;
         private UserGroupRepository _ugRepo;
-        private IService<PantryDTO, int> pantryService;
+        private IPublicService<PantryDTO, PantryModel> pantryService;
 
         public GroupService(SplitListContext context, IMapper mapper)
         {
@@ -34,31 +35,34 @@ namespace SplitListWebApi.Services
             pantryService = new PantryService(context, mapper);
         }
 
-        public GroupDTO GetById(int id)
+
+        public IEnumerable<GroupModel> GetModels(Expression<Func<GroupModel, bool>> predicate, bool disableTracking = true)
         {
-            return _mapper.Map<GroupDTO>(groupRepo.GetBy(
+            return groupRepo.GetBy(
                 selector: source => source,
-                predicate: model => model.ModelId == id,
-                include: source =>
-                    source
-                        .Include(gm => gm.UserGroups)
-                            .ThenInclude(ug => ug.UserModel)
-                        .Include(gm => gm.ShoppingLists)
-                        .Include(gm => gm.PantryModel),
-                disableTracking: false)
-                .FirstOrDefault());
+                predicate: predicate,
+                include: source => source
+                    .Include(gm => gm.UserGroups)
+                    .ThenInclude(ug => ug.UserModel)
+                    .Include(gm => gm.ShoppingLists)
+                    .Include(gm => gm.PantryModel),
+                disableTracking: disableTracking);
+        }
+
+        public List<GroupDTO> GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public GroupDTO GetBy(Expression<Func<GroupModel, bool>> predicate)
+        {
+            return _mapper.Map<GroupDTO>(GetModels(predicate).FirstOrDefault());
         }
 
         public GroupDTO Create(GroupDTO dto)
         {
             var model = _mapper.Map<GroupModel>(dto);
-            var dbModel = groupRepo.GetBy(
-                selector: source => source,
-                predicate: gm => gm.ModelId == model.ModelId,
-                include: source =>
-                    source.Include(groupModel => groupModel.UserGroups)
-                        .ThenInclude(ug => ug.UserModel),
-                disableTracking: false)
+            var dbModel = GetModels(source => source.ModelId == model.ModelId, false)
                 .FirstOrDefault();
 
             if (dbModel == null)
@@ -71,13 +75,7 @@ namespace SplitListWebApi.Services
                 }));
 
                 _ugRepo.CreateUserGroups(dbModel, dto.Users);
-                dbModel.UserGroups = groupRepo.GetBy(
-                    selector: source => source,
-                    predicate: gm => gm.ModelId == dbModel.ModelId,
-                    include: source =>
-                        source.Include(groupModel => groupModel.UserGroups)
-                            .ThenInclude(ug => ug.UserModel),
-                    disableTracking: false)
+                dbModel.UserGroups = GetModels(source => source.ModelId == model.ModelId, false)
                     .FirstOrDefault()
                     ?.UserGroups;
 
@@ -90,13 +88,7 @@ namespace SplitListWebApi.Services
         public GroupDTO Update(GroupDTO dto)
         {
             var model = _mapper.Map<GroupModel>(dto);
-            var dbModel = groupRepo.GetBy(
-                selector: m => m,
-                predicate: gm => gm.ModelId == model.ModelId,
-                include: source =>
-                    source.Include(groupModel => groupModel.UserGroups)
-                        .ThenInclude(ug => ug.UserModel),
-                disableTracking: false)
+            var dbModel = GetModels(source => source.ModelId == model.ModelId, false)
                 .FirstOrDefault();
 
             if (dbModel == null)
@@ -116,13 +108,7 @@ namespace SplitListWebApi.Services
         public void Delete(GroupDTO dto)
         {
             var model = _mapper.Map<GroupModel>(dto);
-            var dbModel = groupRepo.GetBy(
-                selector: source => source,
-                predicate: gm => gm.ModelId == model.ModelId,
-                include: source =>
-                    source.Include(groupModel => groupModel.UserGroups)
-                        .ThenInclude(ug => ug.UserModel),
-                disableTracking: false)
+            var dbModel = GetModels(source => source.ModelId == model.ModelId, false)
                 .FirstOrDefault();
             if (dbModel == null) throw new NullReferenceException("GroupDTO wasn't found in the database when trying to delete.");
 

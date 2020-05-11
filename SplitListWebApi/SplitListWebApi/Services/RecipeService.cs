@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using ApiFormat;
 using ApiFormat.Item;
 using ApiFormat.Recipe;
 using AutoMapper;
@@ -12,12 +14,12 @@ using SplitListWebApi.Services.Interfaces;
 
 namespace SplitListWebApi.Services
 {
-    public class RecipeService : IService<RecipeDTO, int>
+    public class RecipeService : IPublicService<RecipeDTO, RecipeModel>, IModelService<RecipeDTO, RecipeModel>
     {
         private IMapper _mapper;
         private GenericRepository<RecipeModel> _recipeRepository;
         private RecipeItemRepository _repiRepo;
-        private IService<ItemDTO, int> _itemService;
+        private IPublicService<ItemDTO, ItemModel> _itemService;
 
         public RecipeService(SplitListContext context, IMapper mapper)
         {
@@ -29,25 +31,29 @@ namespace SplitListWebApi.Services
 
         public List<RecipeDTO> GetAll()
         {
-            return _mapper.Map<List<RecipeDTO>>(_recipeRepository.GetBy(
+            return _mapper.Map<List<RecipeDTO>>(GetModels(source => true));
+        }
+
+        public RecipeDTO GetBy(Expression<Func<RecipeModel, bool>> predicate)
+        {
+            return _mapper.Map<RecipeDTO>(GetModels(predicate).FirstOrDefault());
+        }
+
+        public IEnumerable<RecipeModel> GetModels(Expression<Func<RecipeModel, bool>> predicate, bool disableTracking = true)
+        {
+            return _recipeRepository.GetBy(
                 selector: source => source,
-                predicate: source => true,
+                predicate: predicate,
                 include: source => source
                     .Include(rm => rm.RecipeItems)
-                    .ThenInclude(ri => ri.ItemModel)));
+                    .ThenInclude(ri => ri.ItemModel),
+                disableTracking: disableTracking);
         }
 
         public RecipeDTO Create(RecipeDTO dto)
         {
             var model = _mapper.Map<RecipeModel>(dto);
-            var dbModel = _recipeRepository.GetBy(
-                selector: source => source,
-                predicate: rm => rm.ModelId == model.ModelId,
-                include: source => source
-                    .Include(rm => rm.RecipeItems)
-                        .ThenInclude(ri => ri.ItemModel),
-                disableTracking: false)
-                .FirstOrDefault();
+            var dbModel = GetModels(source => source.ModelId == model.ModelId, false).FirstOrDefault();
 
             if (dbModel != null) return _mapper.Map<RecipeDTO>(dbModel);
 
@@ -65,13 +71,7 @@ namespace SplitListWebApi.Services
 
             var tempModel = dbModel;
 
-            dbModel = _recipeRepository.GetBy(
-                selector: source => source,
-                predicate: rm => rm.ModelId == tempModel.ModelId,
-                include: source => source
-                    .Include(rm => rm.RecipeItems)
-                        .ThenInclude(ri => ri.ItemModel))
-                .FirstOrDefault();
+            dbModel = GetModels(source => source.ModelId == model.ModelId).FirstOrDefault();
 
             return _mapper.Map<RecipeDTO>(dbModel);
         }
@@ -79,14 +79,7 @@ namespace SplitListWebApi.Services
         public RecipeDTO Update(RecipeDTO dto)
         {
             var model = _mapper.Map<RecipeModel>(dto);
-            var dbModel = _recipeRepository.GetBy(
-                selector: source => source,
-                predicate: rm => rm.ModelId == model.ModelId,
-                include: source => source
-                    .Include(rm => rm.RecipeItems)
-                    .ThenInclude(ri => ri.ItemModel),
-                disableTracking: false)
-                .FirstOrDefault();
+            var dbModel = GetModels(source => source.ModelId == model.ModelId, false).FirstOrDefault();
 
             if (dbModel == null)
                 return _mapper.Map<RecipeDTO>(_recipeRepository.Create(model));
@@ -111,14 +104,7 @@ namespace SplitListWebApi.Services
         public void Delete(RecipeDTO dto)
         {
             var model = _mapper.Map<RecipeModel>(dto);
-            var dbModel = _recipeRepository.GetBy(
-                selector: source => source,
-                predicate: rm => rm.ModelId == model.ModelId,
-                include: source => source
-                    .Include(rm => rm.RecipeItems)
-                    .ThenInclude(ri => ri.ItemModel),
-                disableTracking: false)
-                .FirstOrDefault();
+            var dbModel = GetModels(source => source.ModelId == model.ModelId, false).FirstOrDefault();
 
             if (dbModel == null) throw new NullReferenceException("RecipeDTO wasn't found in the database when trying to delete.");
 

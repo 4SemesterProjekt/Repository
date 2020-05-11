@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using ApiFormat;
 using ApiFormat.Group;
 using ApiFormat.Item;
@@ -14,14 +15,14 @@ using SplitListWebApi.Services.Interfaces;
 
 namespace SplitListWebApi.Services
 {
-    public class PantryService : IService<PantryDTO, int>
+    public class PantryService : IPublicService<PantryDTO, PantryModel>, IModelService<PantryDTO, PantryModel>
     {
         private SplitListContext _context;
         private readonly IMapper _mapper;
         private readonly GenericRepository<PantryModel> _pantryRepository;
         private readonly GenericRepository<GroupModel> _groupRepository;
         private readonly PantryItemRepository _pantryItemRepo;
-        private readonly IService<ItemDTO, int> _itemService;
+        private readonly IPublicService<ItemDTO, ItemModel> _itemService;
         public PantryService(SplitListContext context, IMapper mapper)
         {
             _context = context;
@@ -32,32 +33,32 @@ namespace SplitListWebApi.Services
             _itemService = new ItemService(context, mapper);
         }
 
-
-        public PantryDTO GetById(int id)
+        public IEnumerable<PantryModel> GetModels(Expression<Func<PantryModel, bool>> predicate, bool disableTracking = true)
         {
-            return _mapper.Map<PantryDTO>(_pantryRepository.GetBy(
+            return _pantryRepository.GetBy(
                 selector: source => source,
-                predicate: pm => pm.ModelId == id,
+                predicate: predicate,
                 include: source =>
                     source.Include(pm => pm.PantryItems)
-                            .ThenInclude(pi => pi.ItemModel)
+                        .ThenInclude(pi => pi.ItemModel)
                         .Include(pm => pm.GroupModel),
-                disableTracking: false)
-                .FirstOrDefault());
+                disableTracking: disableTracking);
+        }
+
+        public List<PantryDTO> GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public PantryDTO GetBy(Expression<Func<PantryModel, bool>> predicate)
+        {
+            return _mapper.Map<PantryDTO>(GetModels(predicate).FirstOrDefault());
         }
 
         public PantryDTO Create(PantryDTO dto)
         {
             var model = _mapper.Map<PantryModel>(dto);
-            var dbModel = _pantryRepository.GetBy(
-                selector: source => source,
-                predicate: pm => pm.ModelId == model.ModelId,
-                include: source =>
-                    source.Include(pm => pm.PantryItems)
-                            .ThenInclude(pi => pi.ItemModel)
-                        .Include(pm => pm.GroupModel),
-                disableTracking: false)
-                .FirstOrDefault();
+            var dbModel = GetModels(pm => pm.ModelId == model.ModelId, false).FirstOrDefault();
 
             if (dbModel == null)
             {
@@ -82,15 +83,7 @@ namespace SplitListWebApi.Services
                     _pantryItemRepo.CreatePantryItems(dto.Items, dbModel);
                 }
 
-                dbModel = _pantryRepository.GetBy(
-                    selector: source => source,
-                    predicate: pm => pm.ModelId == model.ModelId,
-                    include: source =>
-                        source.Include(pm => pm.PantryItems)
-                            .ThenInclude(pi => pi.ItemModel)
-                            .Include(pm => pm.GroupModel),
-                    disableTracking: false)
-                    .FirstOrDefault();
+                dbModel = GetModels(pm => pm.ModelId == model.ModelId, false).FirstOrDefault();
 
                 return _mapper.Map<PantryDTO>(dbModel);
             }
@@ -100,15 +93,7 @@ namespace SplitListWebApi.Services
         public PantryDTO Update(PantryDTO dto)
         {
             var model = _mapper.Map<PantryModel>(dto);
-            var dbModel = _pantryRepository.GetBy(
-                selector: source => source,
-                predicate: pm => pm.ModelId == model.ModelId,
-                include: source =>
-                    source.Include(pm => pm.PantryItems)
-                        .ThenInclude(pi => pi.ItemModel)
-                        .Include(pm => pm.GroupModel),
-                disableTracking: false)
-                .FirstOrDefault();
+            var dbModel = GetModels(pm => pm.ModelId == model.ModelId, false).FirstOrDefault();
 
             if (dbModel == null) throw new ArgumentException("PantryModel to update wasn't found in the database.");
 
@@ -130,14 +115,7 @@ namespace SplitListWebApi.Services
         public void Delete(PantryDTO dto)
         {
             var model = _mapper.Map<PantryDTO>(dto);
-            var dbModel = _pantryRepository.GetBy(
-                selector: source => source,
-                predicate: pm => pm.ModelId == model.ModelId,
-                include: source =>
-                    source.Include(pm => pm.PantryItems)
-                        .ThenInclude(pi => pi.ItemModel),
-                disableTracking: false)
-                .FirstOrDefault();
+            var dbModel = GetModels(pm => pm.ModelId == model.ModelId, false).FirstOrDefault();
             if (dbModel == null) throw new NullReferenceException("PantryDTO wasn't found in the database when trying to delete.");
 
             _pantryItemRepo.DeletePantryItems(dbModel.PantryItems);

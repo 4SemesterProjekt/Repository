@@ -5,6 +5,7 @@ using SplitListWebApi.Areas.Identity.Data;
 using SplitListWebApi.Services;
 using System;
 using System.Text.RegularExpressions;
+using ApiFormat;
 using SplitListWebApi.Services.Interfaces;
 
 namespace SplitListWebApi.Controllers
@@ -15,7 +16,7 @@ namespace SplitListWebApi.Controllers
     {
         private SplitListContext _context;
         private IMapper _mapper;
-        private GroupService _service;
+        private IPublicService<GroupDTO, GroupModel> _service;
 
         public GroupsController(SplitListContext context, IMapper mapper)
         {
@@ -27,7 +28,7 @@ namespace SplitListWebApi.Controllers
         [HttpGet("{id}")]
         public GroupDTO Get(int id)
         {
-            return _service.GetById(id);
+            return _service.GetBy(source => source.ModelId == id);
         }
 
         [HttpPost]

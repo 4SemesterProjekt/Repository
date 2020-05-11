@@ -352,9 +352,10 @@ namespace SplitListWebApi.Tests
                     Group = dbGroupDto
                 });
 
-                dbGroupDto = service.GetById(dbGroupDto.ModelId);
+                var dto = dbGroupDto;
+                dbGroupDto = service.GetBy(source => source.ModelId == dto.ModelId);
 
-                Assert.AreEqual(dbGroupDto.ShoppingLists.Count, 1);
+                Assert.AreEqual(1, dbGroupDto.ShoppingLists.Count);
             }
         }
 
@@ -382,7 +383,9 @@ namespace SplitListWebApi.Tests
                 });
 
                 slService.Delete(slInDb);
-                dbGroupDto = service.GetById(dbGroupDto.ModelId);
+
+                var dto = dbGroupDto;
+                dbGroupDto = service.GetBy(source => source.ModelId == dto.ModelId);
 
                 Assert.IsEmpty(dbGroupDto.ShoppingLists);
 

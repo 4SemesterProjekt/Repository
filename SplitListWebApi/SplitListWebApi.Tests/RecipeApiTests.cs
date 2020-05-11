@@ -304,5 +304,37 @@ namespace SplitListWebApi.Tests
                 Assert.Throws(typeof(NullReferenceException), () => recipeService.Delete(recipeDto));
             }
         }
+
+        [Test]
+        public void CreateRecipeCreatesItemWithAmount()
+        {
+            using (var context = new SplitListContext(options))
+            {
+                context.Database.EnsureCreated();
+                RecipeService recipeService = new RecipeService(context, mapper);
+
+                ItemDTO item1 = new ItemDTO()
+                {
+                    Amount = 3,
+                    Name = "Banana",
+                    Type = "Fruit"
+                };
+
+                RecipeDTO recipeDto = new RecipeDTO()
+                {
+                    Name = "The Best Recipe",
+                    Introduction = "It's the best",
+                    Method = "Get Gut",
+                    Items = new List<ItemDTO>()
+                    {
+                        item1
+                    }
+                };
+
+                var createdRecipe = recipeService.Create(recipeDto);
+
+                Assert.AreEqual(item1.Amount, createdRecipe.Items[0].Amount);
+            }
+        }
     }
 }

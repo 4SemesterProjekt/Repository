@@ -22,7 +22,7 @@ namespace SplitListWebApi.Controllers
     public class UsersController : ControllerBase
     {
         private SplitListContext _context;
-        private UserService _userService;
+        private IPublicService<UserDTO, UserModel> _userService;
 
         public UsersController(SplitListContext context, IMapper mapper)
         {
@@ -34,13 +34,13 @@ namespace SplitListWebApi.Controllers
         [HttpGet("{id}")]
         public UserDTO GetUserById(string id)
         {
-            return _userService.GetById(id);
+            return _userService.GetBy(source => source.Id == id);
         }
 
         [HttpGet("Email/{email}")]
         public UserDTO GetUserByEmail(string email)
         {
-            return _userService.GetByEmail(email);
+            return _userService.GetBy(source => source.Email == email);
         }
 
         //POST: Update User
