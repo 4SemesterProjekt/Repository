@@ -1,0 +1,112 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Services\**" />
+    <EmbeddedResource Remove="Services\**" />
+    <None Remove="Services\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="EmbeddedResources\addtolist.png" />
+    <None Remove="EmbeddedResources\checklist.png" />
+    <None Remove="EmbeddedResources\cook.png" />
+    <None Remove="EmbeddedResources\delete.svg" />
+    <None Remove="EmbeddedResources\deleteGray.png" />
+    <None Remove="EmbeddedResources\deleteWhite.png" />
+    <None Remove="EmbeddedResources\exit.png" />
+    <None Remove="EmbeddedResources\fridge.png" />
+    <None Remove="EmbeddedResources\minus.png" />
+    <None Remove="EmbeddedResources\plus.png" />
+    <None Remove="EmbeddedResources\recipe.png" />
+    <None Remove="EmbeddedResources\supermarket.png" />
+    <None Remove="EmbeddedResources\user.png" />
+    <None Remove="EmbeddedResources\user.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="EmbeddedResources\addtolist.png" />
+    <EmbeddedResource Include="EmbeddedResources\checklist.png" />
+    <EmbeddedResource Include="EmbeddedResources\cook.png" />
+    <EmbeddedResource Include="EmbeddedResources\deleteGray.png" />
+    <EmbeddedResource Include="EmbeddedResources\deleteWhite.png" />
+    <EmbeddedResource Include="EmbeddedResources\exit.png" />
+    <EmbeddedResource Include="EmbeddedResources\fridge.png" />
+    <EmbeddedResource Include="EmbeddedResources\minus.png" />
+    <EmbeddedResource Include="EmbeddedResources\plus.png" />
+    <EmbeddedResource Include="EmbeddedResources\recipe.png" />
+    <EmbeddedResource Include="EmbeddedResources\supermarket.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="3.1.3" />
+    <PackageReference Include="Prism.Core" Version="7.2.0.1422" />
+    <PackageReference Include="Prism.Forms" Version="7.2.0.1422" />
+    <PackageReference Include="System.Runtime" Version="4.3.1" />
+    <PackageReference Include="Xamarin.Forms" Version="4.5.0.617" />  
+    <PackageReference Include="Xamarin.Essentials" Version="1.5.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ApiFormat">
+      <HintPath>..\..\..\DLLs\ApiFormat\ApiFormat.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Android.Support.Design">
+      <HintPath>..\..\..\..\..\..\..\..\..\..\Microsoft\Xamarin\NuGet\xamarin.android.support.design\28.0.0.3\lib\monoandroid90\Xamarin.Android.Support.Design.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="EmbeddedResources\user.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\ClientLibAPI\ClientLibAPI.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Views\GroupEditView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\GroupSelectView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\LoginView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\MDP.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\MenuView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\MultiRecipesView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\MultiShopListView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\PantryView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\RecipeView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\ShoppingListView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\UserView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>
