@@ -7,11 +7,15 @@
              xmlns:b="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
              xmlns:utility="clr-namespace:SplitList.Utility;assembly=SplitList"
              mc:Ignorable="d"
-             x:Class="SplitList.Views.MultiShopListView">
-
+             x:Class="SplitList.Views.MultiShopListView"
+             Title="Shoppinglists">
+    <ContentPage.Behaviors>
+        <b:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding OnAppearingCommand}"/>
+    </ContentPage.Behaviors>
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Delete"
-                     Command="{Binding DeleteShoppingListCommand}"
+        <ToolbarItem Command="{Binding DeleteShoppingListCommand}"
                      IconImageSource="{utility:ImageResource SplitList.EmbeddedResources.deleteWhite.png}"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
@@ -39,14 +43,15 @@
                 
                     <ListView x:Name="ShoppingLists"
                               ItemsSource="{Binding Lists}"
-                              SelectedItem="{Binding CurrentList}"
+                              SelectionMode="None"
                               CachingStrategy="RecycleElement"
                               Grid.Row="2"
                               Grid.Column="0"
                               Grid.ColumnSpan="2">
                         <ListView.Behaviors>
                         <b:EventToCommandBehavior Command="{Binding ListTappedCommand}"
-                                                          EventName="ItemTapped"/>
+                                                          EventName="ItemTapped"
+                                                          EventArgsConverter="{StaticResource EventArgConverter}"/>
                         </ListView.Behaviors>
                         <ListView.ItemTemplate>
                             <DataTemplate>

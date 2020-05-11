@@ -1,47 +1,64 @@
-﻿using System.Collections.Generic;
-using ApiFormat;
+﻿using ApiFormat;
+using ApiFormat.Group;
+using ApiFormat.Pantry;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using SplitListWebApi.Areas.Identity.Data;
-using SplitListWebApi.Models;
-using SplitListWebApi.Repository;
+using SplitListWebApi.Repositories.Implementation;
+using SplitListWebApi.Services;
+using SplitListWebApi.Services.Interfaces;
+using SplitListWebApi.Utilities;
+using System;
+using System.Threading.Tasks;
 
 namespace SplitListWebApi.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class PantriesController : ControllerBase
     {
-        private readonly SplitListContext _context;
-        private IPantryRepository repo;
+        private SplitListContext _context;
+        private PantryService pantryService;
+        
 
-        public PantriesController(SplitListContext context)
+        public PantriesController(SplitListContext context, IMapper mapper)
         {
             _context = context;
-            repo = new PantryRepository(context);
+            pantryService = new PantryService(context, mapper);
         }
 
-        // GET: api/Pantries/group/5
-        // Returns pantry for a specific group
-        [HttpGet("group/{id}")]
-        public PantryDTO GetPantryByGroupID(int id)
+        [HttpGet("{id}")]
+        public PantryDTO GetById(int id)
         {
-            return repo.GetPantryFromGroupID(id);
+            return pantryService.GetById(id);
         }
 
-        // POST: api/Pantries
-        // Updates/Creates pantry from parameter
-        [HttpPost]
-        public PantryDTO PostPantry(PantryDTO pantryDto)
-        {
-            return repo.UpdatePantry(pantryDto);
-        }
-
-        // DELETE: api/Pantries
-        // Deletes pantry from parameter
         [HttpDelete]
-        public void DeletePantry(PantryDTO pantryDto)
+        public IActionResult Delete([FromBody] PantryDTO dto)
         {
-            repo.DeletePantry(pantryDto);
+            try
+            {
+                pantryService.Delete(dto);
+                return Ok(dto);
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e);
+            }
+            
+        }
+
+        [HttpPut]
+        public ActionResult<PantryDTO> Update(PantryDTO dto)
+        {
+            try
+            {
+                return pantryService.Update(dto);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
         }
     }
 }

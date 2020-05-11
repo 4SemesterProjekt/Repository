@@ -2,14 +2,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ApiFormat;
+using ApiFormat.Group;
+using ApiFormat.Item;
+using ApiFormat.ShoppingList;
+using AutoMapper;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
+using SplitListWebApi.Areas.AutoMapper;
 using SplitListWebApi.Areas.Identity.Data;
-using SplitListWebApi.Areas.Identity.Data.Models;
-using SplitListWebApi.Models;
-using SplitListWebApi.Repository;
+using SplitListWebApi.Repositories.Implementation;
+using SplitListWebApi.Services;
+using SplitListWebApi.Services.Interfaces;
+using SplitListWebApi.Utilities;
 
 namespace SplitListWebApi.Tests
 {
@@ -18,16 +24,26 @@ namespace SplitListWebApi.Tests
     {
         private DbContextOptions<SplitListContext> options;
         private SqliteConnection connection;
+        private IMapper mapper;
 
         [SetUp]
         public void Setup()
         {
-           connection = new SqliteConnection("DataSource=:memory:");
-           connection.Open();
+            connection = new SqliteConnection("DataSource=:memory:");
+            connection.Open();
 
             options = new DbContextOptionsBuilder<SplitListContext>()
                 .UseSqlite(connection)
                 .Options;
+
+            var config = new MapperConfiguration(cfg => {
+                cfg.AddProfile<GroupProfile>();
+                cfg.AddProfile<PantryProfile>();
+                cfg.AddProfile<UserProfile>();
+                cfg.AddProfile<ShoppingListProfile>();
+                cfg.AddProfile<ItemProfile>();
+            });
+            mapper = config.CreateMapper();
         }
 
         [TearDown]
@@ -37,536 +53,346 @@ namespace SplitListWebApi.Tests
         }
 
         [Test]
-        public void DeleteShoppingList()
+        public void GetFromDatabaseGetsSL()
         {
             using (var context = new SplitListContext(options))
             {
                 context.Database.EnsureCreated();
-            }
+                ShoppingListService slService = new ShoppingListService(context, mapper);
+                GroupService groupService = new GroupService(context, mapper);
 
-            using (var context = new SplitListContext(options))
-            {
-
-                Group jørgensGruppe = new Group()
-                {
-                    GroupID = 1,
-                    Name = "JordkimsGruppe",
-                    OwnerID = "1"
-                };
-                context.Groups.Add(jørgensGruppe);
-
-                ShoppingListDTO list = new ShoppingListDTO()
-                {
-                    shoppingListGroupID = jørgensGruppe.GroupID,
-                    shoppingListGroupName = "JordkimsGruppe",
-                    shoppingListName = "JørgensListe",
-                    shoppingListID = 1
-                };
-
-                context.SaveChanges();
-                
-                ShoppingListRepository repo = new ShoppingListRepository(context);
-                repo.LoadToModel(list);
-
-                Assert.AreEqual(1, context.ShoppingLists.Count());
-
-                repo.DeleteShoppingList(list);
-
-                Assert.AreEqual(0, context.ShoppingLists.Count());
-            }
-        }
-
-        [TestCase(2)]
-        [TestCase(5)]
-        [TestCase(7)]
-        public void GetAllShoppingLists(int amount)
-        {
-            using (var context = new SplitListContext(options))
-            {
-                context.Database.EnsureCreated();
-                Assert.AreEqual(0, context.ShoppingLists.Count());
-
-                context.Groups.Add(new Group()
-                {
-                    GroupID = 1,
-                    Name = "Group1",
-                    OwnerID = "1",
-                    ShoppingLists = null,
-                    UserGroups = null
-                });
-                context.SaveChanges();
-            }
-
-            using (var context = new SplitListContext(options))
-            {
-                ShoppingListRepository repo = new ShoppingListRepository(context);
-                for (var i = 0; i < amount; ++i)
-                {
-                    repo.LoadToModel(new ShoppingListDTO()
-                    {
-                        shoppingListName = $"ShoppingList #{i}",
-                        shoppingListGroupID = 1,
-                        shoppingListGroupName = "Group1",
-                    });
-                }
-
-
-                Assert.AreEqual(amount, context.ShoppingLists.Count());
-
-            }
-        }
-
-        [TestCase(3)]
-        [TestCase(6)]
-        [TestCase(8)]
-        public void GetShoppingListsFromGroupID(int amount)
-        {
-            using (var context = new SplitListContext(options))
-            {
-                context.Database.EnsureCreated();
-            }
-
-            using (var context = new SplitListContext(options))
-            {
-                
-                Group jørgensGruppe = new Group()
-                {
-                    GroupID = 1,
-                    Name = "JordkimsGruppe",
-                    OwnerID = "1",
-                    ShoppingLists = null,
-                    UserGroups = null
-                };
-                context.Groups.Add(jørgensGruppe);
-
-                ShoppingListRepository repo = new ShoppingListRepository(context);
-
-                for (int i = 0; i < amount; i++)
-                {
-                    ShoppingListDTO list = new ShoppingListDTO()
-                    {
-                        shoppingListGroupID = jørgensGruppe.GroupID,
-                        shoppingListGroupName = "JordkimsGruppe",
-                        shoppingListName = $"JørgensListe{i + 1}",
-                        shoppingListID = i + 1
-                    };
-                    repo.UpdateShoppingList(list);
-                }
-
-                List<ShoppingListDTO> shoppingLists = repo.GetShoppingListsByGroupID(jørgensGruppe.GroupID);
-                Assert.AreEqual(amount, shoppingLists.Count);
-
-                context.SaveChanges();
-            }
-        }
-
-        [Test]
-        public void GetShoppingListByID() 
-        {
-            using (var context = new SplitListContext(options))
-            {
-                context.Database.EnsureCreated();
-            }
-
-            using (var context = new SplitListContext(options))
-            {
-
-                Group jørgensGruppe = new Group()
-                {
-                    GroupID = 1,
-                    Name = "JordkimsGruppe",
-                    OwnerID = "1"
-                };
-                context.Groups.Add(jørgensGruppe);
-
-                ShoppingListDTO list = new ShoppingListDTO()
-                {
-                    shoppingListGroupID = jørgensGruppe.GroupID,
-                    shoppingListGroupName = "JordkimsGruppe",
-                    shoppingListName = "JørgensListe",
-                    shoppingListID = 1,
-                    Items = new List<ItemDTO> {
-                        new ItemDTO()
-                        {
-                            Name = "Banan",
-                            Type = "Fruit",
-                            Amount = 2,
-                            ItemID = 1
-                        }
-                    }
-                };
-
-                context.SaveChanges();
-
-                ShoppingListRepository repo = new ShoppingListRepository(context);
-                repo.UpdateShoppingList(list);
-
-                ShoppingListDTO dtoList = repo.GetShoppingListByID(1);
-                Assert.AreEqual(dtoList.shoppingListName, list.shoppingListName);
-                Assert.AreEqual(dtoList.shoppingListGroupName, list.shoppingListGroupName);
-                Assert.AreEqual(dtoList.shoppingListGroupID, list.shoppingListGroupID);
-                Assert.AreEqual(dtoList.shoppingListID, list.shoppingListID);
-
-                Assert.AreEqual(dtoList.Items.Count, list.Items.Count);
-
-                for (var i = 0; i < dtoList.Items.Count; ++i)
-                {
-                    Assert.AreEqual(dtoList.Items[i].Name, list.Items[i].Name);
-                    Assert.AreEqual(dtoList.Items[i].Amount, list.Items[i].Amount);
-                    Assert.AreEqual(dtoList.Items[i].Type, list.Items[i].Type);
-                    Assert.AreEqual(dtoList.Items[i].ItemID, list.Items[i].ItemID);
-                }
-            }
-        }
-
-        [Test]
-        public void LoadToModelAddsToDB()
-        {
-            using (var context = new SplitListContext(options))
-            {
-                context.Database.EnsureCreated();
-
-                Group jørgensGruppe = new Group()
-                {
-                    GroupID = 1,
-                    Name = "JordkimsGruppe",
-                    OwnerID = "1"
-                };
-            
-                context.Groups.Add(jørgensGruppe);
-                context.SaveChanges(); 
-
-                ShoppingListDTO formatList = new ShoppingListDTO()
-                {
-                     shoppingListGroupID = jørgensGruppe.GroupID,
-                     shoppingListGroupName = "JordkimsGruppe",
-                     shoppingListName = "JørgensListe"
-                };
-
-
-                ShoppingListRepository repo = new ShoppingListRepository(context);
-                ShoppingList modelList = repo.LoadToModel(formatList);
-                ShoppingList actualList = context.ShoppingLists.FirstOrDefault();
-                Assert.AreEqual(modelList.Name, actualList.Name);
-                Assert.AreEqual(modelList.GroupID, actualList.GroupID);
-                Assert.AreEqual(modelList.ShoppingListID, actualList.ShoppingListID);
-            }
-        }
-
-        [Test]
-        public void LoadToModelFindsListFromDB()
-        {
-            using (var context = new SplitListContext(options))
-            {
-                context.Database.EnsureCreated();
-                ShoppingListRepository repo = new ShoppingListRepository(context);
-
-                Group jørgensGruppe = new Group()
-                {
-                    GroupID = 1,
-                    Name = "JordkimsGruppe",
-                    OwnerID = "1",
-                };
-
-                context.Groups.Add(jørgensGruppe);
-                context.SaveChanges();
-
-                ShoppingListDTO jørgensShoppingList = new ShoppingListDTO()
-                {
-                    shoppingListID = 1,
-                    shoppingListGroupID = 1,
-                    shoppingListName = "ShoppingList1"
-                };
-
-                repo.LoadToModel(jørgensShoppingList); // Adds new shoppinglist to database from DTO
-                repo.LoadToModel(jørgensShoppingList); // Finds the existing shoppinglist and doesn't add a new one to the database
-
-                Assert.AreEqual(1, context.ShoppingLists.Count());
-
-            }
-        }
-
-        [TestCase(2)]
-        [TestCase(7)]
-        [TestCase(3)]
-        public void UpdateShoppingListAddsWhenNoListFoundToUpdate(int amount) 
-        {
-            using (var context = new SplitListContext(options))
-            {
-                context.Database.EnsureCreated();
-            }
-
-            using (var context = new SplitListContext(options))
-            {
-                context.Groups.Add(new Group()
+                GroupDTO groupDto = new GroupDTO()
                 {
                     Name = "Group1",
                     OwnerID = "1"
-                });
-                context.SaveChanges();
-            }
+                };
 
-            using (var context = new SplitListContext(options))
-            {
-                ShoppingListRepository repo = new ShoppingListRepository(context);
-                for (var i = 0; i < amount; ++i)
+                groupDto = groupService.Create(groupDto);
+
+                ShoppingListDTO slDto = new ShoppingListDTO()
                 {
-                    ShoppingListDTO dto = repo.UpdateShoppingList(new ShoppingListDTO()
-                    {
-                        shoppingListName = $"ShoppingList{i + 1}",
-                        shoppingListGroupID = 1,
-                        shoppingListGroupName = "Group1"
-                    });
-                    Assert.AreEqual(dto.shoppingListID, i+1);
-                }
-                Assert.AreEqual(amount, context.ShoppingLists.Count());
+                    Name = "ShoppingList1",
+                    Group = groupDto
+                };
+
+                var slFromDb = slService.Create(slDto);
+
+                Assert.AreEqual(1, context.ShoppingLists.Count());
+                Assert.AreEqual(slFromDb.Name, slDto.Name);
+                Assert.AreEqual(slFromDb.GroupID, groupDto.ModelId);
             }
         }
 
         [Test]
-        public void UpdateShoppingListUpdatesShoppingListWhenFound()
+        public void SLWithItemsCreatesShoppingListItems()
         {
             using (var context = new SplitListContext(options))
             {
                 context.Database.EnsureCreated();
-            }
+                ShoppingListService slService = new ShoppingListService(context, mapper);
+                GroupService groupService = new GroupService(context, mapper);
 
-            using (var context = new SplitListContext(options))
-            {
-                context.Groups.Add(new Group()
+                GroupDTO groupDto = new GroupDTO()
                 {
                     Name = "Group1",
                     OwnerID = "1"
-                });
-                context.SaveChanges();
-            }
+                };
 
-            ShoppingListDTO list = new ShoppingListDTO()
-            {
-                shoppingListName = "ShoppingList1",
-                shoppingListGroupID = 1,
-                shoppingListGroupName = "Group1"
-            };
+                groupDto = groupService.Create(groupDto);
 
-            using (var context = new SplitListContext(options))
-            {
-                ShoppingListRepository repo = new ShoppingListRepository(context);
-                repo.UpdateShoppingList(list);
-                Assert.AreEqual("ShoppingList1", context.ShoppingLists.FirstOrDefault().Name);
-                Assert.AreEqual(1, context.ShoppingLists.Count());
-
-                repo.UpdateShoppingList(new ShoppingListDTO()
-                {
-                    shoppingListGroupID = 1,
-                    shoppingListName = "ShoppingList7",
-                    shoppingListGroupName = "Group1",
-                    shoppingListID = 1
-                });
-
-                Assert.AreEqual(1, context.ShoppingLists.Count());
-                Assert.AreEqual("ShoppingList7", context.ShoppingLists.FirstOrDefault().Name);
-            }
-        }
-
-        [Test]
-        public void UpdateShoppingListAddsItems()
-        {
-            using (var context = new SplitListContext(options))
-            {
-                context.Database.EnsureCreated();
-            }
-
-            using (var context = new SplitListContext(options))
-            {
-                context.Groups.Add(new Group()
-                {
-                    Name = "Group1",
-                    OwnerID = "1"
-                });
-                context.SaveChanges();
-            }
-
-            ShoppingListDTO list = new ShoppingListDTO()
-            {
-                shoppingListName = "ShoppingList1",
-                shoppingListGroupID = 1,
-                shoppingListGroupName = "Group1",
-                Items = new List<ItemDTO>()
+                List<ItemDTO> items = new List<ItemDTO>()
                 {
                     new ItemDTO()
                     {
-                        Amount = 1,
-                        ItemID = 0,
+                        Name = "Banana",
                         Type = "Fruit",
-                        Name = "Banana"
+                        Amount = 5
                     },
                     new ItemDTO()
                     {
-                        Amount = 1,
-                        ItemID = 0,
+                        Name = "Apple",
                         Type = "Fruit",
-                        Name = "Apple"
+                        Amount = 2
                     }
-                }
-            };
+                };
 
-            using (var context = new SplitListContext(options))
-            {
-                ShoppingListRepository repo = new ShoppingListRepository(context);
-                repo.UpdateShoppingList(list);
-                Assert.AreEqual("ShoppingList1", context.ShoppingLists.FirstOrDefault().Name);
-                Assert.AreEqual(1, context.ShoppingLists.Count());
+                ShoppingListDTO slDto = new ShoppingListDTO()
+                {
+                    Name = "ShoppingList1",
+                    Group = groupDto,
+                    Items = items
+                };
+
+                var slFromDb = slService.Create(slDto);
+
                 Assert.AreEqual(2, context.ShoppingListItems.Count());
-
-                ShoppingListDTO modifiedList = new ShoppingListDTO()
-                {
-                    shoppingListGroupID = 1,
-                    shoppingListName = "ShoppingList1",
-                    shoppingListGroupName = "Group1",
-                    shoppingListID = 1,
-                    Items = new List<ItemDTO>()
-                    {
-                        new ItemDTO()
-                        {
-                            Amount = 3,
-                            Type = "Fruit",
-                            Name = "Banana"
-                        },
-                        new ItemDTO()
-                        {
-                            Amount = 5,
-                            Type = "Fruit",
-                            Name = "Apple"
-                        }
-                    }
-                };
-
-                repo.UpdateShoppingList(modifiedList);
-
-                ShoppingListDTO dblistDTO = repo.GetShoppingListByID(1);
-
-                foreach (ItemDTO item in dblistDTO.Items)
-                {
-                    foreach (ItemDTO itemdto in modifiedList.Items)
-                    {
-                        if (item.ItemID == itemdto.ItemID)
-                        {
-                            Assert.AreEqual(item.Amount, itemdto.Amount);
-                        }
-                    }
-                }
+                Assert.AreEqual(slDto.Items.Count, slFromDb.Items.Count);
+                Assert.AreEqual(2, context.Items.Count());
             }
         }
 
         [Test]
-        public void UpdateShoppingListUpdatesNameOfItems()
+        public void UpdateSLUpdatesItems()
         {
             using (var context = new SplitListContext(options))
             {
                 context.Database.EnsureCreated();
-            }
+                ShoppingListService slService = new ShoppingListService(context, mapper);
+                GroupService groupService = new GroupService(context, mapper);
 
-            using (var context = new SplitListContext(options))
-            {
-                context.Groups.Add(new Group()
+                GroupDTO groupDto = new GroupDTO()
                 {
                     Name = "Group1",
                     OwnerID = "1"
-                });
-                context.SaveChanges();
-
-
-                ShoppingListDTO list = new ShoppingListDTO()
-                {
-                    shoppingListName = "ShoppingList1",
-                    shoppingListGroupID = 1,
-                    shoppingListGroupName = "Group1",
-                    Items = new List<ItemDTO>()
-                    {
-                        new ItemDTO()
-                        {
-                            Amount = 1,
-                            Type = "Fruit",
-                            Name = "Banana"
-                        },
-                        new ItemDTO()
-                        {
-                            Amount = 4,
-                            Type = "Fruit",
-                            Name = "Apple"
-                        }
-                    }
                 };
 
-                ShoppingListRepository repo = new ShoppingListRepository(context);
-                repo.UpdateShoppingList(list);
+                groupDto = groupService.Create(groupDto);
 
-                list.Items[1].Name = "Gifler";
-                repo.UpdateShoppingList(list);
-
-                ShoppingListDTO dblistDTO = repo.GetShoppingListByID(1);
-                Assert.AreEqual("Gifler", dblistDTO.Items[1].Name);
-
-
-
-            }
-        }
-
-
-        [Test]
-        public void UpdateShoppingListDeletesItems()
-        {
-            using (var context = new SplitListContext(options))
-            {
-                context.Database.EnsureCreated();
-            }
-
-            using (var context = new SplitListContext(options))
-            {
-                context.Groups.Add(new Group()
-                {
-                    Name = "Group1",
-                    OwnerID = "1"
-                });
-                context.SaveChanges();
-            }
-
-            ShoppingListDTO list = new ShoppingListDTO()
-            {
-                shoppingListName = "ShoppingList1",
-                shoppingListGroupID = 1,
-                shoppingListGroupName = "Group1",
-                shoppingListID = 1,
-                Items = new List<ItemDTO>()
+                List<ItemDTO> items = new List<ItemDTO>()
                 {
                     new ItemDTO()
                     {
-                        Amount = 1,
+                        Name = "Banana",
                         Type = "Fruit",
-                        Name = "Banana"
+                        Amount = 5
                     },
                     new ItemDTO()
                     {
-                        Amount = 1,
+                        Name = "Apple",
                         Type = "Fruit",
-                        Name = "Apple"
+                        Amount = 2
                     }
-                }
-            };
+                };
 
+                ShoppingListDTO slDto = new ShoppingListDTO()
+                {
+                    Name = "ShoppingList1",
+                    Group = groupDto,
+                    Items = items
+                };
+
+                var slFromDb = slService.Create(slDto);
+
+                ItemDTO extraItem = new ItemDTO()
+                {
+                    Name = "Pear",
+                    Type = "Fruit",
+                    Amount = 10
+                };
+
+                slFromDb.Items.Add(extraItem);
+
+                slFromDb = slService.Update(slFromDb);
+
+                Assert.AreEqual(3, context.ShoppingListItems.Count());
+                Assert.AreEqual(3, slFromDb.Items.Count);
+                Assert.AreEqual(3, context.Items.Count());
+            }
+        }
+
+        [Test]
+        public void UpdateSLUpdatesItemProperties()
+        {
             using (var context = new SplitListContext(options))
             {
-                ShoppingListRepository repo = new ShoppingListRepository(context);
-                repo.UpdateShoppingList(list);
-                Assert.AreEqual("ShoppingList1", context.ShoppingLists.FirstOrDefault().Name);
-                Assert.AreEqual(1, context.ShoppingLists.Count());
+                context.Database.EnsureCreated();
+                IService<ShoppingListDTO, int> slService = new ShoppingListService(context, mapper);
+                IService<GroupDTO, int> groupService = new GroupService(context, mapper);
+                IService<ItemDTO, int> itemService = new ItemService(context, mapper);
 
-                list.Items.RemoveAt(1);
+                GroupDTO groupDto = new GroupDTO()
+                {
+                    Name = "Group1",
+                    OwnerID = "1"
+                };
 
-                repo.UpdateShoppingList(list);
+                groupDto = groupService.Create(groupDto);
+
+                List<ItemDTO> items = new List<ItemDTO>()
+                {
+                    new ItemDTO()
+                    {
+                        Name = "Banana",
+                        Type = "Fruit",
+                        Amount = 5
+                    },
+                    new ItemDTO()
+                    {
+                        Name = "Apple",
+                        Type = "Fruit",
+                        Amount = 2
+                    }
+                };
+
+                ShoppingListDTO slDto = new ShoppingListDTO()
+                {
+                    Name = "ShoppingList1",
+                    Group = groupDto,
+                    Items = items
+                };
+
+                var slFromDb = slService.Create(slDto);
+
+                ItemDTO cashew = new ItemDTO
+                {
+                    Name = "Cashew",
+                    Type = "Nut",
+                    Amount = 67
+                };
+                slFromDb.Items[0] = cashew;
+                slFromDb = slService.Update(slFromDb);
+                ItemDTO cashewFromDb = slFromDb.Items[0];
+                
+                Assert.AreEqual(2, context.ShoppingListItems.Count());
+                Assert.AreEqual(2, slFromDb.Items.Count);
+                Assert.AreEqual(3, context.Items.Count());
+                Assert.AreEqual(cashew.Name, cashewFromDb.Name);
+                Assert.AreEqual(cashew.Amount, cashewFromDb.Amount);
+                Assert.AreEqual(cashew.Type, cashewFromDb.Type);
+            }
+        }
+
+        [Test]
+        public void UpdateSLUpdatesPorperties()
+        {
+            using (var context = new SplitListContext(options))
+            {
+                context.Database.EnsureCreated();
+                ShoppingListService slService = new ShoppingListService(context, mapper);
+                GroupService groupService = new GroupService(context, mapper);
+
+                GroupDTO groupDto = new GroupDTO()
+                {
+                    Name = "Group1",
+                    OwnerID = "1"
+                };
+
+                groupDto = groupService.Create(groupDto);
+
+                ShoppingListDTO dto = new ShoppingListDTO()
+                {
+                    Name = "TestList",
+                    Group = groupDto
+                };
+
+                ShoppingListDTO dbList = slService.Create(dto);
+
+                dbList.Name = "ListTest";
+                dbList = slService.Update(dbList);
+
+                Assert.AreNotEqual(context.ShoppingLists.FirstOrDefault().Name, dto.Name);
+                Assert.AreEqual(context.ShoppingLists.FirstOrDefault().Name, dbList.Name);
+            }
+        }
+
+        [Test]
+        public void DeleteItemInSLRemovesItem()
+        {
+            using (var context = new SplitListContext(options))
+            {
+                context.Database.EnsureCreated();
+                ShoppingListService slService = new ShoppingListService(context, mapper);
+                GroupService groupService = new GroupService(context, mapper);
+
+                GroupDTO groupDto = new GroupDTO()
+                {
+                    Name = "Group1",
+                    OwnerID = "1"
+                };
+
+                groupDto = groupService.Create(groupDto);
+
+                List<ItemDTO> items = new List<ItemDTO>()
+                {
+                    new ItemDTO()
+                    {
+                        Name = "Banana",
+                        Type = "Fruit",
+                        Amount = 5
+                    },
+                    new ItemDTO()
+                    {
+                        Name = "Apple",
+                        Type = "Fruit",
+                        Amount = 2
+                    }
+                };
+
+                ShoppingListDTO slDTO = new ShoppingListDTO()
+                {
+                    Name = "ShoppingListTest",
+                    Group = groupDto,
+                    Items = items
+                };
+
+                var slFromDb = slService.Create(slDTO);
+
+                slFromDb.Items.RemoveAt(0);
+                slFromDb = slService.Update(slFromDb);
+                ItemDTO newItem0 = slFromDb.Items[0];
 
                 Assert.AreEqual(1, context.ShoppingListItems.Count());
+                Assert.AreEqual(1, slFromDb.Items.Count);
+                Assert.AreEqual(2, context.Items.Count());
+                Assert.AreEqual(newItem0.Name, "Apple");
+            }
+        }
+
+        [Test]
+        public void AddExistingItemToSLUsesItemInDb()
+        {
+            using (var context = new SplitListContext(options))
+            {
+                context.Database.EnsureCreated();
+                GroupService groupService = new GroupService(context, mapper);
+                ShoppingListService slService= new ShoppingListService(context, mapper);
+                ItemService itemService = new ItemService(context, mapper);
+
+                GroupDTO groupDto = new GroupDTO()
+                {
+                    Name = "Group1",
+                    OwnerID = "1"
+                };
+
+                groupDto = groupService.Create(groupDto);
+
+                ItemDTO appleItem = itemService.Create(new ItemDTO()
+                {
+                    Name = "Apple",
+                    Amount = 2,
+                    Type = "Fruit"
+                });
+
+
+                List<ItemDTO> items = new List<ItemDTO>()
+                {
+                    new ItemDTO()
+                    {
+                        Name = "Banana",
+                        Type = "Fruit",
+                        Amount = 5
+                    }
+                };
+
+                ShoppingListDTO slDTO = new ShoppingListDTO()
+                {
+                    Name = "slTest",
+                    Group = groupDto,
+                    Items = items
+                };
+
+                var slFromDb = slService.Create(slDTO);
+
+                slFromDb.Items.Add(appleItem);
+                slFromDb = slService.Update(slFromDb);
+                ItemDTO appleItemFromDb = slFromDb.Items[1];
+
+                Assert.AreEqual(2, context.ShoppingListItems.Count());
+                Assert.AreEqual(2, slFromDb.Items.Count);
+                Assert.AreEqual(2, context.Items.Count());
+                Assert.AreEqual(appleItemFromDb.ModelId, appleItem.ModelId);
             }
         }
     }
 }
+

@@ -4,11 +4,11 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using ApiFormat;
+using ApiFormat.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using SplitListWebApi.Models;
 
 namespace SplitListWebApi.Controllers
 {
@@ -16,11 +16,11 @@ namespace SplitListWebApi.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private UserManager<User> _userManager;
-        private SignInManager<User> _signInManager;
+        private readonly UserManager<UserModel> _userManager;
+        private readonly SignInManager<UserModel> _signInManager;
 
-        public AccountController(UserManager<User> userManager,
-            SignInManager<User> signInManager)
+        public AccountController(UserManager<UserModel> userManager,
+            SignInManager<UserModel> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -28,7 +28,7 @@ namespace SplitListWebApi.Controllers
 
         [AllowAnonymous]
         [Route("[action]")]
-        public IActionResult GoogleLogin()
+        public IActionResult Login()
         {
             var redirectUrl = Url.Action(nameof(GoogleResponse), "Account");
             var properties = _signInManager.ConfigureExternalAuthenticationProperties("Google", redirectUrl);
@@ -41,19 +41,13 @@ namespace SplitListWebApi.Controllers
         {
             var info = await _signInManager.GetExternalLoginInfoAsync();
 
-            var user = new User
+            var user = new UserModel
             {
                 Name = info.Principal.FindFirst(ClaimTypes.Name).Value,
                 Email = info.Principal.FindFirst(ClaimTypes.Email).Value,
                 UserName = info.Principal.FindFirst(ClaimTypes.Email).Value,
                 Id = info.Principal.FindFirst(ClaimTypes.NameIdentifier).Value,
                 EmailConfirmed = true
-            };
-
-            var userDto = new UserDTO()
-            {
-                Id = user.Id,
-                Name = user.Name
             };
 
             var loginInfo = new UserLoginInfo(info.LoginProvider, info.ProviderKey, info.Principal.FindFirst(ClaimTypes.Name).Value);
@@ -72,7 +66,7 @@ namespace SplitListWebApi.Controllers
                 if (!identityResult.Succeeded) return Forbid();
                 await _signInManager.SignInAsync(user, false);
 
-                return Ok(userDto);
+                return Redirect("splitlist://#access_token=" + user.Id);
             }
         }
     }

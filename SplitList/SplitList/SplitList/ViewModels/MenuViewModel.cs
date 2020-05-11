@@ -19,4 +19,5 @@ namespace SplitList.ViewModels
         }
 
     }
+
 }

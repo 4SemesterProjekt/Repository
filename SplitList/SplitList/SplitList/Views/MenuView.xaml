@@ -13,38 +13,79 @@
              Title="MenuPage"
              x:Class="SplitList.Views.MenuView">
 
-    <ListView x:Name="ListView" RowHeight="70" x:FieldModifier="public">
-        <ListView.ItemsSource>
-            <x:Array Type="{x:Type models:MenuViewItem}">
-                <models:MenuViewItem Title="Shopping list" ImageSource="{utility:ImageResource SplitList.EmbeddedResources.checklist.png}" TargetType="{x:Type view:MultiShopListView}"/>
-                <models:MenuViewItem Title="Pantry" ImageSource="{utility:ImageResource SplitList.EmbeddedResources.fridge.png}" TargetType="{x:Type view:PantryView}"/>
-                <models:MenuViewItem Title="Recipe" ImageSource="{utility:ImageResource SplitList.EmbeddedResources.recipe.png}" TargetType="{x:Type view:RecipeView}"/>
-            </x:Array>
-        </ListView.ItemsSource>
-        <ListView.ItemTemplate>
-            <DataTemplate>
-                <ViewCell>
-                    <Grid HeightRequest="60">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="60"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Image Source="{Binding ImageSource}"
-                               WidthRequest="40"
-                               Margin="10"
-                               VerticalOptions="Center"
-                               HorizontalOptions="Center"
-                               Grid.Column="0"/>
-                        <Label Text="{Binding Title}"
-                               FontSize="20"
-                               TextColor="Gray"
-                               Grid.Column="1"
-                               VerticalOptions="Center"
-                               HorizontalOptions="Center"/>
-                    </Grid>
-                </ViewCell>
-            </DataTemplate>
-        </ListView.ItemTemplate>
-    </ListView>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <ListView x:Name="ListView" RowHeight="70" x:FieldModifier="public" Grid.Row="0">
+            <ListView.ItemsSource>
+                <x:Array Type="{x:Type models:MenuViewItem}">
+                    <models:MenuViewItem Title="Shopping list" ImageSource="{utility:ImageResource SplitList.EmbeddedResources.checklist.png}" TargetType="{x:Type view:MultiShopListView}"/>
+                    <models:MenuViewItem Title="Pantry" ImageSource="{utility:ImageResource SplitList.EmbeddedResources.fridge.png}" TargetType="{x:Type view:PantryView}"/>
+                    <models:MenuViewItem Title="Recipe" ImageSource="{utility:ImageResource SplitList.EmbeddedResources.recipe.png}" TargetType="{x:Type view:MultiRecipesView}"/>
+                </x:Array>
+            </ListView.ItemsSource>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Grid HeightRequest="60">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="60"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Image Source="{Binding ImageSource}"
+                                   WidthRequest="40"
+                                   Margin="10"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Center"
+                                   Grid.Column="0"/>
+                            <Label Text="{Binding Title}"
+                                   FontSize="20"
+                                   TextColor="Gray"
+                                   Grid.Column="1"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Center"/>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <ListView x:Name="ListView1" RowHeight="70" x:FieldModifier="public" Grid.Row="2">
+            <ListView.ItemsSource>
+                <x:Array Type="{x:Type models:MenuViewItem}">
+                    <models:MenuViewItem Title="User" ImageSource="{utility:ImageResource SplitList.EmbeddedResources.user.png}" TargetType="{x:Type view:UserView}"/>
+                    <models:MenuViewItem Title="Log Out" ImageSource="{utility:ImageResource SplitList.EmbeddedResources.exit.png}" TargetType="{x:Type view:LoginView}"/>
+                </x:Array>
+            </ListView.ItemsSource>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Grid HeightRequest="60">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="60"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Image Source="{Binding ImageSource}"
+                                   WidthRequest="40"
+                                   Margin="10"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Center"
+                                   Grid.Column="0"/>
+                            <Label Text="{Binding Title}"
+                                   FontSize="20"
+                                   TextColor="Gray"
+                                   Grid.Column="1"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Center"/>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
 </ContentPage>
+    

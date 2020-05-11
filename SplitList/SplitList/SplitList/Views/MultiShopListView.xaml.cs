@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Threading.Tasks;
-using SplitList.ViewModels;
+﻿using SplitList.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -12,10 +7,10 @@ namespace SplitList.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MultiShopListView : ContentPage
     {
-        public MultiShopListView()
+        public MultiShopListView(int groupId, string userId)
         {
             InitializeComponent();
-            BindingContext = new MultiShopListViewModel(Navigation,this,1);
+            BindingContext = new MultiShopListViewModel(Navigation,this, groupId, userId);
         }
     }
 }

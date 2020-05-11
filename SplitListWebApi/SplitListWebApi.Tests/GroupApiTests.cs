@@ -1,12 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ApiFormat;
+using ApiFormat.Group;
+using ApiFormat.ShoppingList;
+using ApiFormat.User;
+using AutoMapper;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
+using SplitListWebApi.Areas.AutoMapper;
 using SplitListWebApi.Areas.Identity.Data;
-using SplitListWebApi.Models;
-using SplitListWebApi.Repository;
+using SplitListWebApi.Repositories.Implementation;
+using SplitListWebApi.Services;
+using SplitListWebApi.Utilities;
 
 namespace SplitListWebApi.Tests
 {
@@ -15,6 +22,7 @@ namespace SplitListWebApi.Tests
     {
         private DbContextOptions<SplitListContext> options;
         private SqliteConnection connection;
+        private IMapper mapper;
 
         [SetUp]
         public void Setup()
@@ -25,6 +33,15 @@ namespace SplitListWebApi.Tests
             options = new DbContextOptionsBuilder<SplitListContext>()
                 .UseSqlite(connection)
                 .Options;
+
+            var config = new MapperConfiguration(cfg => {
+                cfg.AddProfile<GroupProfile>();
+                cfg.AddProfile<PantryProfile>();
+                cfg.AddProfile<UserProfile>();
+                cfg.AddProfile<ShoppingListProfile>();
+                cfg.AddProfile<ItemProfile>();
+            });
+            mapper = config.CreateMapper();
         }
 
         [TearDown]
@@ -33,282 +50,346 @@ namespace SplitListWebApi.Tests
             connection.Close();
         }
 
-
-
         [Test]
-        public void UpdateGroupAddsToDatabase()
+        public void GetFromDatabaseGetsGroup()
         {
             using (var context = new SplitListContext(options))
             {
-                IGroupRepository groupRepo = new GroupRepository(context);
-
                 context.Database.EnsureCreated();
+                GroupService service = new GroupService(context, mapper);
 
                 GroupDTO group = new GroupDTO()
                 {
-                    Name = "Group1",
-                    OwnerID = "1"
+                    Name = "TestGroup",
+                    OwnerID = "45"
                 };
-                groupRepo.UpdateGroup(group);
 
-                Assert.AreEqual(1, context.Groups.Count());
-                Assert.AreEqual("Group1", context.Groups.FirstOrDefault().Name);
-                Assert.AreEqual("1", context.Groups.FirstOrDefault().OwnerID);
-                Assert.AreEqual(1, context.Groups.FirstOrDefault().GroupID);
+                GroupDTO dbGroupDto = service.Create(group);
+
+                Assert.AreEqual(group.Name, dbGroupDto.Name);
             }
         }
 
         [Test]
-        public void DeleteGroupDeletesGroupFromDatabase()
+        public void UpdateGroupUpdatesGroupProperties()
         {
             using (var context = new SplitListContext(options))
             {
-                IGroupRepository groupRepo = new GroupRepository(context);
-
                 context.Database.EnsureCreated();
+                GroupService service = new GroupService(context, mapper);
 
                 GroupDTO group = new GroupDTO()
                 {
-                    Name = "Group1",
-                    OwnerID = "1"
+                    Name = "TestGroup",
+                    OwnerID = "45"
                 };
-                groupRepo.UpdateGroup(group);
-                groupRepo.DeleteGroup(group);
+
+                GroupDTO dbGroupDto = service.Create(group);
+                Assert.AreEqual(group.Name, dbGroupDto.Name);
+                Assert.AreEqual(group.OwnerID, dbGroupDto.OwnerID);
+
+                dbGroupDto.Name = "GroupTest";
+                dbGroupDto.OwnerID = "54";
+                GroupDTO updatedGroup = service.Update(dbGroupDto);
+
+                Assert.AreEqual(updatedGroup.OwnerID, dbGroupDto.OwnerID);
+                Assert.AreEqual(updatedGroup.Name, dbGroupDto.Name);
+            }
+        }
+
+
+        [Test]
+        public void GroupWithUsersCreatesUserGroups()
+        {
+            using (var context = new SplitListContext(options))
+            {
+
+                context.Database.EnsureCreated();
+                GroupService service = new GroupService(context, mapper);
+                UserService userService = new UserService(context, mapper);
+
+                UserDTO jordkim = new UserDTO()
+                {
+                    Name = "Jordkim",
+                    Id = "1234567890"
+                };
+
+                context.Users.Add(mapper.Map<UserModel>(jordkim));
+                context.SaveChanges();
+                
+
+                UserDTO theBetterJordkim = new UserDTO()
+                {
+                    Name = "Jordkim The Master of EVERYTHING",
+                    Id = "etellerandetlort-nikolaj2020"
+                };
+
+                context.Users.Add(mapper.Map<UserModel>(theBetterJordkim));
+                context.SaveChanges();
+                
+
+                GroupDTO group = new GroupDTO()
+                {
+                    Name = "TestGroup",
+                    OwnerID = "45",
+                    Users = new List<UserDTO>()
+                    {
+                        jordkim,
+                        theBetterJordkim
+                    }
+                };
+
+                GroupDTO dbGroupDto = service.Create(group);
+
+                Assert.AreEqual(dbGroupDto.Users.Count, group.Users.Count);
+            }
+
+        }
+
+        [Test]
+        public void UpdateGroupUpdatesUsers()
+        {
+            using (var context = new SplitListContext(options))
+            {
+                context.Database.EnsureCreated();
+                GroupService service = new GroupService(context, mapper);
+
+                UserDTO jordkim = new UserDTO()
+                {
+                    Name = "Jordkim",
+                    Id = "1234567890"
+                };
+
+                context.Users.Add(mapper.Map<UserModel>(jordkim));
+                context.SaveChanges();
+
+                GroupDTO group = new GroupDTO()
+                {
+                    Name = "TestGroup",
+                    OwnerID = "45",
+                    Users = new List<UserDTO>()
+                    {
+                        jordkim
+                    }
+                };
+
+                var groupFromDB = service.Create(group);
+
+                Assert.AreEqual(1, groupFromDB.Users.Count);
+
+                UserDTO theBetterJordkim = new UserDTO()
+                {
+                    Name = "Jordkim The Master of EVERYTHING",
+                    Id = "etellerandetlort-nikolaj2020"
+                };
+
+                context.Users.Add(mapper.Map<UserModel>(theBetterJordkim));
+                context.SaveChanges();
+
+                groupFromDB.Users.Add(theBetterJordkim);
+
+                groupFromDB = service.Update(groupFromDB);
+
+                Assert.AreEqual(2, groupFromDB.Users.Count);
+                Assert.AreEqual("Jordkim The Master of EVERYTHING", groupFromDB.Users[1].Name);
+            }
+        }
+
+        [Test]
+        public void UpdateGroupCalledOnNotExistingGroup()
+        {
+            using (var context = new SplitListContext(options))
+            {
+                context.Database.EnsureCreated();
+                GroupService service = new GroupService(context, mapper);
+
+                GroupDTO group = new GroupDTO()
+                {
+                    Name = "TestGroup",
+                    OwnerID = "45"
+                };
+
+                var groupFromDB = service.Update(group);
+
+                Assert.AreEqual(1, context.Groups.Count());
+                Assert.AreEqual(groupFromDB.Name, group.Name);
+                Assert.AreEqual(groupFromDB.OwnerID, group.OwnerID);
+                Assert.AreEqual(1, groupFromDB.ModelId);
+            }
+        }
+
+        [Test]
+        public void DeleteGroupDeletesGroup()
+        {
+            using (var context = new SplitListContext(options))
+            {
+                context.Database.EnsureCreated();
+                GroupService service = new GroupService(context, mapper);
+
+                GroupDTO group = new GroupDTO()
+                {
+                    Name = "TestGroup",
+                    OwnerID = "45"
+                };
+
+                var groupFromDB = service.Create(group);
+
+                Assert.AreEqual(1, context.Groups.Count());
+
+                service.Delete(groupFromDB);
 
                 Assert.AreEqual(0, context.Groups.Count());
             }
         }
 
         [Test]
-        public void GetUsersInGroupReturnsUsers()
+        public void DeleteGroupTriesToDeleteNotExistingGroup()
         {
             using (var context = new SplitListContext(options))
             {
-                IGroupRepository groupRepo = new GroupRepository(context);
-
                 context.Database.EnsureCreated();
+                GroupService service = new GroupService(context, mapper);
 
                 GroupDTO group = new GroupDTO()
                 {
-                    Name = "Group1",
-                    OwnerID = "1"
-                };
-                groupRepo.UpdateGroup(group);
-
-                User user1 = new User()
-                {
-                    Name = "User1",
-                    Id = "1"
+                    Name = "TestGroup",
+                    OwnerID = "45"
                 };
 
-                context.Users.Add(user1);
-                context.SaveChanges();
-
-                User user2 = new User()
-                {
-                    Name = "User2",
-                    Id = "2"
-                };
-
-                context.Users.Add(user2);
-                context.SaveChanges();
-
-                UserGroup userGroup1 = new UserGroup()
-                {
-                    GroupID = 1,
-                    Id = "1"
-                };
-
-                UserGroup userGroup2 = new UserGroup()
-                {
-                    GroupID = 1,
-                    Id = "2"
-                };
-
-                List<User> users = new List<User>()
-                {
-                    user1, user2
-                };
-
-                context.UserGroups.Add(userGroup1);
-                context.UserGroups.Add(userGroup2);
-                context.SaveChanges();
-
-                GroupDTO GroupFromDb = groupRepo.GetGroupByGroupID(group.GroupID);
-                Assert.AreEqual(2, users.Count);
-
-                for (int i = 0; i < 2; i++)
-                {
-                    Assert.AreEqual(users[i].Name, GroupFromDb.Users[i].Name);
-                    Assert.AreEqual(users[i].Id, GroupFromDb.Users[i].Id);
-                }
+                Assert.Throws(typeof(NullReferenceException), () => service.Delete(group));
             }
         }
 
         [Test]
-        public void UpdateGroupUpdatesGroupOnly()
+        public void UpdateGroupRemovesUsers()
         {
             using (var context = new SplitListContext(options))
             {
-                IGroupRepository groupRepo = new GroupRepository(context);
-
                 context.Database.EnsureCreated();
+                GroupService service = new GroupService(context, mapper);
+
+                UserDTO jordkim = new UserDTO()
+                {
+                    Name = "Jordkim",
+                    Id = "1234567890"
+                };
+
+                context.Users.Add(mapper.Map<UserModel>(jordkim));
+                context.SaveChanges();
+
+                UserDTO theBetterJordkim = new UserDTO()
+                {
+                    Name = "Jordkim The Master of EVERYTHING",
+                    Id = "etellerandetlort-nikolaj2020"
+                };
+
+                context.Users.Add(mapper.Map<UserModel>(theBetterJordkim));
+                context.SaveChanges();
 
                 GroupDTO group = new GroupDTO()
                 {
-                    Name = "Group1",
-                    OwnerID = "1"
+                    Name = "TestGroup",
+                    OwnerID = "45",
+                    Users = new List<UserDTO>()
+                    {
+                        jordkim,
+                        theBetterJordkim
+                    }
                 };
-                groupRepo.UpdateGroup(group);
 
-                group.Name = "GroupUpdated";
-                group.OwnerID = "2";
-                groupRepo.UpdateGroup(group);
+                var groupFromDB = service.Create(group);
 
-                Assert.AreEqual("GroupUpdated", context.Groups.FirstOrDefault().Name);
-                Assert.AreEqual("2", context.Groups.FirstOrDefault().OwnerID);
+                groupFromDB.Users.RemoveAt(1);
+
+                groupFromDB = service.Update(groupFromDB);
+
+                Assert.AreEqual(1, groupFromDB.Users.Count);
+                Assert.AreEqual("Jordkim", groupFromDB.Users[0].Name);
             }
         }
 
         [Test]
-        public void UpdateGroupAddsUsersToGroup()
+        public void CreateGroupCreatesBelongingPantry()
         {
             using (var context = new SplitListContext(options))
             {
-                IGroupRepository groupRepo = new GroupRepository(context);
-
                 context.Database.EnsureCreated();
+                GroupService service = new GroupService(context, mapper);
 
                 GroupDTO group = new GroupDTO()
                 {
-                    Name = "Group1",
-                    OwnerID = "1"
-                };
-                groupRepo.UpdateGroup(group);
-
-                group.Users = new List<UserDTO>()
-                {
-                    new UserDTO() { Name = "User1", Id = "1"}
+                    Name = "TestGroup",
+                    OwnerID = "45"
                 };
 
-                groupRepo.UpdateGroup(group);
-                Assert.AreEqual("User1", context.UserGroups.FirstOrDefault().User.Name);
-                Assert.AreEqual("Group1", context.UserGroups.FirstOrDefault().Group.Name);
+                GroupDTO dbGroupDto = service.Create(group);
 
-                group.Users.Add(new UserDTO()
+                Assert.AreEqual(dbGroupDto.Pantry.Name, "New Pantry");
+                Assert.AreEqual(1, context.Pantries.Count());
+            }
+        }
+
+        [Test]
+        public void CreateSLInGroupUpdatesGroupSL()
+        {
+            using (var context = new SplitListContext(options))
+            {
+                context.Database.EnsureCreated();
+                GroupService service = new GroupService(context, mapper);
+                ShoppingListService slService = new ShoppingListService(context, mapper);
+
+                GroupDTO group = new GroupDTO()
                 {
-                    Name = "User2", Id = "2"
+                    Name = "TestGroup",
+                    OwnerID = "45"
+                };
+
+                GroupDTO dbGroupDto = service.Create(group);
+
+                ShoppingListDTO slInDb = slService.Create(new ShoppingListDTO()
+                {
+                    Name = "TestGroup's List",
+                    Group = dbGroupDto
                 });
 
-                groupRepo.UpdateGroup(group);
+                dbGroupDto = service.GetById(dbGroupDto.ModelId);
 
-                List<UserGroup> userGroups = context.UserGroups.ToList();
-
-                for (int i = 0; i < 2; i++)
-                {
-                    Assert.AreEqual(group.Users[i].Name, userGroups[i].User.Name);
-                    Assert.AreEqual("Group1", userGroups[i].Group.Name);
-                }
+                Assert.AreEqual(dbGroupDto.ShoppingLists.Count, 1);
             }
         }
 
         [Test]
-        public void UpdateGroupRemovesUsersFromGroup()
+        public void DeleteSLInGroupUpdatesGroupSL()
         {
             using (var context = new SplitListContext(options))
             {
-                IGroupRepository groupRepo = new GroupRepository(context);
-
                 context.Database.EnsureCreated();
+                GroupService service = new GroupService(context, mapper);
+                ShoppingListService slService = new ShoppingListService(context, mapper);
 
                 GroupDTO group = new GroupDTO()
                 {
-                    Name = "Group1",
-                    OwnerID = "1"
+                    Name = "TestGroup",
+                    OwnerID = "45"
                 };
-                groupRepo.UpdateGroup(group);
 
-                group.Users = new List<UserDTO>()
+                GroupDTO dbGroupDto = service.Create(group);
+
+                ShoppingListDTO slInDb = slService.Create(new ShoppingListDTO()
                 {
-                    new UserDTO() { Name = "User1", Id = "1"},
-                    new UserDTO() { Name = "User2", Id = "2"}
-                };
+                    Name = "TestGroup's List",
+                    Group = dbGroupDto
+                });
 
-                groupRepo.UpdateGroup(group);
+                slService.Delete(slInDb);
+                dbGroupDto = service.GetById(dbGroupDto.ModelId);
 
-                Assert.AreEqual(2, context.UserGroups.Count());
+                Assert.IsEmpty(dbGroupDto.ShoppingLists);
 
-                group.Users.RemoveAt(1);
-                groupRepo.UpdateGroup(group);
-
-                Assert.AreEqual(1, context.UserGroups.Count());
-                Assert.AreEqual(2, context.Users.Count());
             }
         }
 
-        [Test]
-        public void GetOwnerOfGroupReturnsOwner()
-        {
-            using (var context = new SplitListContext(options))
-            {
-                IGroupRepository groupRepo = new GroupRepository(context);
-
-                context.Database.EnsureCreated();
-
-                GroupDTO group = new GroupDTO()
-                {
-                    Name = "Group1",
-                    OwnerID = "1"
-                };
-                groupRepo.UpdateGroup(group);
-
-                group.Users = new List<UserDTO>()
-                {
-                    new UserDTO() {Name = "User1", Id = "1"},
-                    new UserDTO() {Name = "User2", Id = "2"}
-                };
-
-                groupRepo.UpdateGroup(group);
-
-                UserDTO owner = groupRepo.GetOwnerOfGroup(group);
-
-                Assert.AreEqual("User1", owner.Name);
-                Assert.AreEqual("1", owner.Id);
-            }
-        }
-
-        [Test]
-        public void GetGroupByIDReturnsGroup()
-        {
-            using (var context = new SplitListContext(options))
-            {
-                IGroupRepository groupRepo = new GroupRepository(context);
-
-                context.Database.EnsureCreated();
-
-                GroupDTO group = new GroupDTO()
-                {
-                    Name = "Group1",
-                    OwnerID = "1"
-                };
-                groupRepo.UpdateGroup(group);
-
-                group.Users = new List<UserDTO>()
-                {
-                    new UserDTO() {Name = "User1", Id = "1"},
-                    new UserDTO() {Name = "User2", Id = "2"}
-                };
-
-                groupRepo.UpdateGroup(group);
-
-                GroupDTO correctGroup = groupRepo.GetGroupByGroupID(1);
-
-                Assert.AreEqual("Group1", correctGroup.Name);
-                Assert.AreEqual(1, correctGroup.GroupID);
-                Assert.AreEqual("1", correctGroup.OwnerID);
-                Assert.AreEqual(2, correctGroup.Users.Count);
-            }
-
-        }
     }
 }
+
+
