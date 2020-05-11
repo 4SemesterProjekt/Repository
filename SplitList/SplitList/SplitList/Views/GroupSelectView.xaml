@@ -17,7 +17,11 @@
             Command="{Binding OnDisappearingCommand}"/>
     </ContentPage.Behaviors>
     <ContentPage.Content>
-        <ListView x:Name="GroupList" ItemsSource="{Binding Groups}" SelectionMode="None">
+        <ListView 
+            x:Name="GroupList" 
+            ItemsSource="{Binding Groups}" 
+            SelectionMode="None"
+            AutomationId="ListViewGroupSelect">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
@@ -25,7 +29,8 @@
                                VerticalOptions="Center"
                                HorizontalOptions="Center"
                                FontSize="20"
-                               Margin="10"/>
+                               Margin="10"
+                               AutomationId="ViewCell"/>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>

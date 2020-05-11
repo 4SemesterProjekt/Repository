@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
+using Xamarin.Forms;
 using Xamarin.UITest;
 using Xamarin.UITest.Queries;
 
@@ -28,7 +29,7 @@ namespace SplitList.Test
         public void IsDisplayed_LoginBtn()
         {
             app.Repl();
-            AppResult[] results = app.Query(view => view.Marked("LoginBtn"));
+            AppResult[] results = app.Query(view => view.Marked("ListViewGroupSelect"));
             Assert.IsTrue(results.Any());
         }
     }
