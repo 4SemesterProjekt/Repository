@@ -34,18 +34,50 @@ namespace ClientLibAPI.Tests
         [Test]
         public void CreateGroupReturnsCreatedGroup()
         {
+            var group = new GroupDTO()
+            {
+                Name = "Group Test",
+                OwnerID = "123"
+            };
+
+            var groupCreated = SerializerGroup.CreateGroup(group).Result;
+            Assert.AreEqual(group.Name, groupCreated.Name);
+            Assert.AreEqual(group.OwnerID, groupCreated.OwnerID);
+            var result = SerializerGroup.DeleteGroup(group).Result;
+            Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
 
         }
 
         [Test]
         public void UpdateGroupReturnsUpdatedGroup()
         {
+            var group = SerializerGroup.CreateGroup(new GroupDTO()
+            {
+                Name = "Group Test",
+                OwnerID = "123"
+            }).Result;
+            group.Name = "Group Test123";
+            var groupUpdated = SerializerGroup.UpdateGroup(group).Result;
+            Assert.AreEqual(group.Name, groupUpdated.Name);
+            Assert.AreEqual(group.OwnerID, groupUpdated.OwnerID);
+            Assert.AreEqual(group.ModelId, groupUpdated.ModelId);
+            var result = SerializerGroup.DeleteGroup(group).Result;
+            Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
 
         }
 
         [Test]
         public void DeleteGroupReturnsHttpResponseOk()
         {
+            var group = SerializerGroup.CreateGroup(new GroupDTO()
+            {
+                Name = "Group Test",
+                OwnerID = "123"
+            }).Result;
+
+            var result = SerializerGroup.DeleteGroup(group).Result;
+   
+            Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
 
         }
     }
