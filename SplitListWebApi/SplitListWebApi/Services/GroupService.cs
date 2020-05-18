@@ -65,24 +65,22 @@ namespace SplitListWebApi.Services
             var dbModel = GetModels(source => source.ModelId == model.ModelId, false)
                 .FirstOrDefault();
 
-            if (dbModel == null)
+            if (dbModel != null) return _mapper.Map<GroupDTO>(dbModel);
+
+            dbModel = groupRepo.Create(model);
+            dbModel.PantryModel = _mapper.Map<PantryModel>(pantryService.Create(new PantryDTO()
             {
-                dbModel = groupRepo.Create(model);
-                dbModel.PantryModel = _mapper.Map<PantryModel>(pantryService.Create(new PantryDTO()
-                {
-                    Group = _mapper.Map<GroupDTO>(dbModel),
-                    Name = "New Pantry"
-                }));
+                Group = _mapper.Map<GroupDTO>(dbModel),
+                Name = "New Pantry"
+            }));
 
-                _ugRepo.CreateUserGroups(dbModel, dto.Users);
-                dbModel.UserGroups = GetModels(source => source.ModelId == model.ModelId, false)
-                    .FirstOrDefault()
-                    ?.UserGroups;
-
-                return _mapper.Map<GroupDTO>(dbModel);
-            }
+            _ugRepo.CreateUserGroups(dbModel, dto.Users);
+            dbModel.UserGroups = GetModels(source => source.ModelId == model.ModelId, false)
+                .FirstOrDefault()
+                ?.UserGroups;
 
             return _mapper.Map<GroupDTO>(dbModel);
+
         }
 
         public GroupDTO Update(GroupDTO dto)
