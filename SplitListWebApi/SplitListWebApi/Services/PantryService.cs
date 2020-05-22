@@ -11,6 +11,7 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using SplitListWebApi.Areas.Identity.Data;
 using SplitListWebApi.Repositories.Implementation;
+using SplitListWebApi.Repositories.Interfaces;
 using SplitListWebApi.Services.Interfaces;
 
 namespace SplitListWebApi.Services
@@ -19,8 +20,8 @@ namespace SplitListWebApi.Services
     {
         private SplitListContext _context;
         private readonly IMapper _mapper;
-        private readonly GenericRepository<PantryModel> _pantryRepository;
-        private readonly GenericRepository<GroupModel> _groupRepository;
+        private readonly IRepository<PantryModel> _pantryRepository;
+        private readonly IRepository<GroupModel> _groupRepository;
         private readonly PantryItemRepository _pantryItemRepo;
         private readonly IPublicService<ItemDTO, ItemModel> _itemService;
         public PantryService(SplitListContext context, IMapper mapper)

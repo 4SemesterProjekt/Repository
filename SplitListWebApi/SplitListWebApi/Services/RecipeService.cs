@@ -10,6 +10,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using SplitListWebApi.Areas.Identity.Data;
 using SplitListWebApi.Repositories.Implementation;
+using SplitListWebApi.Repositories.Interfaces;
 using SplitListWebApi.Services.Interfaces;
 
 namespace SplitListWebApi.Services
@@ -17,7 +18,7 @@ namespace SplitListWebApi.Services
     public class RecipeService : IPublicService<RecipeDTO, RecipeModel>, IModelService<RecipeDTO, RecipeModel>
     {
         private IMapper _mapper;
-        private GenericRepository<RecipeModel> _recipeRepository;
+        private IRepository<RecipeModel> _recipeRepository;
         private RecipeItemRepository _repiRepo;
         private IPublicService<ItemDTO, ItemModel> _itemService;
 

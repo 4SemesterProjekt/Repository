@@ -13,6 +13,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using SplitListWebApi.Areas.Identity.Data;
 using SplitListWebApi.Repositories.Implementation;
+using SplitListWebApi.Repositories.Interfaces;
 using SplitListWebApi.Services.Interfaces;
 using SQLitePCL;
 
@@ -22,7 +23,7 @@ namespace SplitListWebApi.Services
     {
         private SplitListContext _context;
         private IMapper _mapper;
-        private GenericRepository<GroupModel> groupRepo;
+        private IRepository<GroupModel> groupRepo;
         private UserGroupRepository _ugRepo;
         private IPublicService<PantryDTO, PantryModel> pantryService;
 

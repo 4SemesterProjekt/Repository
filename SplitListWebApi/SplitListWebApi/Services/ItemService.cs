@@ -8,16 +8,16 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using ApiFormat.Item;
+using SplitListWebApi.Repositories.Interfaces;
 using SplitListWebApi.Services.Interfaces;
 
 namespace SplitListWebApi.Services
 {
     public class ItemService : IPublicService<ItemDTO, ItemModel>, IModelService<ItemDTO, ItemModel>
-
     {
         private SplitListContext _context;
         private IMapper _mapper;
-        private GenericRepository<ItemModel> itemRepo;
+        private IRepository<ItemModel> itemRepo;
 
         public ItemService(SplitListContext context, IMapper mapper)
         {

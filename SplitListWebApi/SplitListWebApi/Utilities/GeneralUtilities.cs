@@ -13,6 +13,14 @@ namespace SplitListWebApi.Utilities
 {
     public static class GeneralUtilities
     {
+        /// <summary>
+        /// Modifies database with function dbFunc, and wraps it in a transaction.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="dbFunc"></param>
+        /// <param name="db"></param>
+        /// <returns></returns>
         //Encapsulate Db-funcitions into transactions.
         public static T WriteToDatabase<T>(this T source, Func<T, EntityEntry<T>> dbFunc, SplitListContext db) where T : class, IModel
         {
@@ -33,6 +41,20 @@ namespace SplitListWebApi.Utilities
             }
         }
 
+
+        /// <summary>
+        /// Retrieves TResult (bound to selector) from database using a predicate. Can be modified to order the output, and include navigational properties.
+        /// This function was taken from stackoverflow: https://stackoverflow.com/questions/46374252/how-to-write-repository-method-for-theninclude-in-ef-core-2
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="db"></param>
+        /// <param name="selector"></param>
+        /// <param name="predicate"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="include"></param>
+        /// <param name="disableTracking"></param>
+        /// <returns>List of TResult </returns>
         public static List<TResult> GetFromDatabase<TResult, TEntity>(
             SplitListContext db,
             Expression<Func<TEntity, TResult>> selector,
