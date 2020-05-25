@@ -9,6 +9,7 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using SplitListWebApi.Areas.Identity.Data;
 using SplitListWebApi.Repositories.Implementation;
+using SplitListWebApi.Repositories.Interfaces;
 using SplitListWebApi.Services.Interfaces;
 
 namespace SplitListWebApi.Services
@@ -17,7 +18,7 @@ namespace SplitListWebApi.Services
     {
         private SplitListContext _context;
         private IMapper _mapper;
-        private GenericRepository<UserModel> _userRepo;
+        private IRepository<UserModel> _userRepo;
         private UserGroupRepository _ugRepo;
         public UserService(SplitListContext context, IMapper mapper)
         {

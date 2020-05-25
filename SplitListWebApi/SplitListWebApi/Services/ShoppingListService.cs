@@ -10,21 +10,20 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using SplitListWebApi.Areas.Identity.Data;
 using SplitListWebApi.Repositories.Implementation;
+using SplitListWebApi.Repositories.Interfaces;
 using SplitListWebApi.Services.Interfaces;
 
 namespace SplitListWebApi.Services
 {
     public class ShoppingListService : IPublicService<ShoppingListDTO, ShoppingListModel>, IModelService<ShoppingListDTO, ShoppingListModel>
     {
-        private SplitListContext _context;
         private readonly IMapper _mapper;
-        private readonly GenericRepository<ShoppingListModel> _shoppingListRepository;
-        private readonly GenericRepository<GroupModel> _groupRepository;
+        private readonly IRepository<ShoppingListModel> _shoppingListRepository;
+        private readonly IRepository<GroupModel> _groupRepository;
         private readonly ShoppingListItemRepository _shoppingListItemRepo;
         private readonly IPublicService<ItemDTO, ItemModel> _itemService;
         public ShoppingListService(SplitListContext context, IMapper mapper)
         {
-            _context = context;
             _mapper = mapper;
             _shoppingListRepository = new GenericRepository<ShoppingListModel>(context);
             _groupRepository = new GenericRepository<GroupModel>(context);

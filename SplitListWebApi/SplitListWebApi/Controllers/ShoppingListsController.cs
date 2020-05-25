@@ -17,12 +17,10 @@ namespace SplitListWebApi.Controllers
     [ApiController]
     public class ShoppingListsController : ControllerBase
     {
-        private readonly SplitListContext _context;
         private IPublicService<ShoppingListDTO, ShoppingListModel> service;
 
         public ShoppingListsController(SplitListContext context, IMapper mapper)
         {
-            _context = context;
             service = new ShoppingListService(context, mapper);
         }
 
